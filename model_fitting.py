@@ -5,7 +5,7 @@ import liblinearutil
 import re
 
 train_data_path = '/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt'
-predict_data_path = '/Users/wumengling/PycharmProjects/kaggle/unit_test_data/model_fitting_predict.txt'
+predict_data_path = '/Users/wumengling/PycharmProjects/kaggle/predict_output_data/model_fitting_predict.txt'
 
 
 def training(y_train, x_train):
