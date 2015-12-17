@@ -1,9 +1,9 @@
 from collections import namedtuple
 
 
-def real_label_id_map(test_data_path):
+def true_id_per_label(test_data_path):
     """Convert test data with id-true_label into a map with label as its key and id set as value."""
-    label_id = dict()
+    true_id = dict()
     with open(test_data_path, 'r') as true_label:
         for document_id, line in enumerate(true_label.readlines()):
             element_list = line.strip().split(' ')
@@ -11,15 +11,15 @@ def real_label_id_map(test_data_path):
                 if ':' in label:
                     continue
                 label = label.strip(',')
-                label_id.setdefault(label, set())
-                label_id[label].add(document_id)
-    return label_id
+                true_id.setdefault(label, set())
+                true_id[label].add(document_id)
+    return true_id
 
 
-def each_label_metric(predict_data_path, true_label_id):
+def confusion_matrix_per_label(predict_data_path, true_label_id):
     """Calculate each label's evaluation metric."""
     measure = namedtuple('measure', 'true_pos false_pos true_neg false_neg')
-    label_measure = dict()
+    confusion_matrix = dict()
     with open(predict_data_path, 'r') as predict_data:
         all_line = predict_data.readlines()[1:]
         for label in true_label_id.keys():
@@ -37,30 +37,24 @@ def each_label_metric(predict_data_path, true_label_id):
                         false_neg += 1
                     else:
                         true_neg += 1
-            label_measure.setdefault(label, measure(true_pos, false_pos, true_neg, false_neg))
-    return label_measure
+            confusion_matrix.setdefault(label, measure(true_pos, false_pos, true_neg, false_neg))
+    return confusion_matrix
 
 
-def macro_metric(each_label_measure):
+def macro_metric(test_data_path, predict_data_path):
     """Calculate macro metric for multi-class classification."""
     tmp_macro_precision = 0.0
     tmp_macro_recall = 0.0
-    for label in each_label_measure.keys():
-        pos_count = each_label_measure[label].true_pos + each_label_measure[label].false_pos
-        true_count = each_label_measure[label].true_pos + each_label_measure[label].false_neg
+    true_id_map = true_id_per_label(test_data_path)
+    confusion_mat = confusion_matrix_per_label(predict_data_path, true_id_map)
+    for label in confusion_mat.keys():
+        pos_count = confusion_mat[label].true_pos + confusion_mat[label].false_pos
+        true_count = confusion_mat[label].true_pos + confusion_mat[label].false_neg
         # todo: skip the zero division problem may cause wrong.
         if (pos_count == 0) or (true_count == 0):
             continue
-        each_precision = each_label_measure[label].true_pos / pos_count
-        each_recall = each_label_measure[label].true_pos / true_count
+        each_precision = confusion_mat[label].true_pos / pos_count
+        each_recall = confusion_mat[label].true_pos / true_count
         tmp_macro_precision += each_precision
         tmp_macro_recall += each_recall
-    return tmp_macro_precision / len(each_label_measure), tmp_macro_recall / len(each_label_measure)
-
-
-if __name__ == '__main__':
-    r_label_id_map = real_label_id_map('/Users/wumengling/kaggle/unit_test_data/sample.txt')
-    label_measure = each_label_metric('/Users/wumengling/kaggle/unit_test_data/predict.txt', r_label_id_map)
-    print(r_label_id_map)
-    print(label_measure)
-    print(0 in r_label_id_map['416827'])
+    return tmp_macro_precision / len(confusion_mat), tmp_macro_recall / len(confusion_mat)

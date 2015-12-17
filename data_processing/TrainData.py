@@ -12,6 +12,20 @@ class TrainData:
         self.label_mapping_relation = self._label_mapping()
         self.feature_set = self._get_feature_set()
 
+    def y_remapped(self):
+        remapped_y = dict()
+        for instance_index in self.y.keys():
+            remapped_y[instance_index] = set()
+            for label in self.y[instance_index]:
+                remapped_y[instance_index].add(self.label_mapping_relation[label])
+        return remapped_y
+
+    def _label_mapping(self):
+        mapping_res = dict()
+        for mapped_label, original_label in enumerate(self.label):
+            mapping_res[original_label] = mapped_label
+        return mapping_res
+
     # ------- methods used for initiation ---------
     def _get_instance_count(self):
         return len(self.dat)
@@ -38,12 +52,6 @@ class TrainData:
             for label in each_y:
                 label_set_res.add(label)
         return label_set_res
-
-    def _label_mapping(self):
-        mapping_res = dict()
-        for mapped_label, original_label in enumerate(self.label):
-            mapping_res[original_label] = mapped_label
-        return mapping_res
 
     def _get_feature_set(self):
         feature_set = set()

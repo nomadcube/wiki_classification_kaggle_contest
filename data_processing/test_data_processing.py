@@ -7,8 +7,10 @@ class TestTrainData:
     def pytest_funcarg__sample_path(self):
         return '/Users/wumengling/kaggle/unit_test_data/sample.txt'
 
-    def test_init(self, sample_path):
-        tr = TrainData.TrainData(sample_path)
+    def pytest_funcarg__tr(self, sample_path):
+        return TrainData.TrainData(sample_path)
+
+    def test_init(self, tr):
         assert len(tr.dat) == 3
         assert tr.instance_count == 3
         assert tr.y == {0: set([314523, 165538, 416827]),
@@ -21,6 +23,13 @@ class TestTrainData:
         assert len(tr.label) == 6
         assert len(tr.label_mapping_relation) == 6
         assert len(tr.feature_set) == 4
+
+    def test_label_remapped(self, tr):
+        new_y = tr.y_remapped()
+        assert len(new_y) == 3
+        assert new_y == {0: set([tr.label_mapping_relation[314523], tr.label_mapping_relation[165538], tr.label_mapping_relation[416827]]),
+                        1: set([tr.label_mapping_relation[21631]]),
+                        2: set([tr.label_mapping_relation[76255], tr.label_mapping_relation[335416]])}
 
 
 class TestTfidf:
