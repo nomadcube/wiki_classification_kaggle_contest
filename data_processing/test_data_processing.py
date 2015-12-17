@@ -13,23 +13,26 @@ class TestTrainData:
     def test_init(self, tr):
         assert len(tr.dat) == 3
         assert tr.instance_count == 3
-        assert tr.y == {0: set([314523, 165538, 416827]),
-                        1: set([21631]),
-                        2: set([76255, 335416])}
+        assert tr.y == {0: [314523, 165538, 416827],
+                        1: [21631],
+                        2: [76255, 335416]}
         assert len(tr.x) == 3
         assert tr.x == {0: {1250536: 1},
                         1: {634175: 1, 1095476: 4, 805104: 1},
                         2: {1250536: 1, 805104: 1}}
         assert len(tr.label) == 6
-        assert len(tr.label_mapping_relation) == 6
+        assert len(tr.y_mapping_relation) == 3
         assert len(tr.feature_set) == 4
+        assert tr.y_mapping_relation == {'314523, 165538, 416827': 0,
+                                         '21631': 1,
+                                         '76255, 335416': 2}
 
     def test_label_remapped(self, tr):
         new_y = tr.y_remapped()
         assert len(new_y) == 3
-        assert new_y == {0: set([tr.label_mapping_relation[314523], tr.label_mapping_relation[165538], tr.label_mapping_relation[416827]]),
-                        1: set([tr.label_mapping_relation[21631]]),
-                        2: set([tr.label_mapping_relation[76255], tr.label_mapping_relation[335416]])}
+        assert new_y == {0: 0,
+                         1: 1,
+                         2: 2}
 
 
 class TestTfidf:
@@ -56,5 +59,6 @@ class TestTfidf:
         res = tf_idf.dim_reduction_with_tf_idf(x, feature_set, 0.0)
         assert len(res) == 3
         assert res[0][1250536] == 1.0 * math.log(3.0 / 2.0) \
-               and res[1][634175] == (1.0 / 6.0) * math.log(3.0 / 1.0) and res[1][1095476] == (4.0 / 6.0) * math.log(3.0 / 1.0) and res[1][805104] == (1.0 / 6.0) * math.log(3.0 / 2.0) \
+               and res[1][634175] == (1.0 / 6.0) * math.log(3.0 / 1.0) and res[1][1095476] == (4.0 / 6.0) * math.log(
+            3.0 / 1.0) and res[1][805104] == (1.0 / 6.0) * math.log(3.0 / 2.0) \
                and res[2][1250536] == 0.5 * math.log(3.0 / 2.0) and res[2][805104] == 0.5 * math.log(3.0 / 2.0)

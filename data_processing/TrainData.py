@@ -9,22 +9,24 @@ class TrainData:
         self.instance_count = self._get_instance_count()
         self.y, self.x = self._get_y_x()
         self.label = self._get_label_set()
-        self.label_mapping_relation = self._label_mapping()
+        self.y_mapping_relation = self._get_y_mapping_relation()
         self.feature_set = self._get_feature_set()
 
     def y_remapped(self):
-        remapped_y = dict()
+        y_remapped_res = dict()
         for instance_index in self.y.keys():
-            remapped_y[instance_index] = set()
-            for label in self.y[instance_index]:
-                remapped_y[instance_index].add(self.label_mapping_relation[label])
-        return remapped_y
+            y_remapped_res[instance_index] = self.y_mapping_relation[', '.join([str(label)
+                                                                               for label in self.y[instance_index]])]
+        return y_remapped_res
 
-    def _label_mapping(self):
-        mapping_res = dict()
-        for mapped_label, original_label in enumerate(self.label):
-            mapping_res[original_label] = mapped_label
-        return mapping_res
+    def _get_y_mapping_relation(self):
+        res = dict()
+        original_y_set = list()
+        for label_set in self.y.values():
+            original_y_set.append(', '.join([str(label) for label in label_set]))
+        for remapped_y, original_y in enumerate(original_y_set):
+            res[original_y] = remapped_y
+        return res
 
     # ------- methods used for initiation ---------
     def _get_instance_count(self):
@@ -34,11 +36,11 @@ class TrainData:
         y_res = dict()
         x_res = dict()
         for index, line in enumerate(self.dat):
-            y_res[index] = set()
+            y_res[index] = list()
             x_res[index] = dict()
             for column in line.strip().split(' '):
                 if ':' not in column:
-                    y_res[index].add(int(column.strip(',')))
+                    y_res[index].append(int(column.strip(',')))
                 else:
                     feat, val = column.split(':')
                     feat = int(feat)
@@ -63,4 +65,4 @@ class TrainData:
 
 if __name__ == '__main__':
     tr = TrainData('/Users/wumengling/kaggle/unit_test_data/sample.txt')
-    print(tr.label_mapping_relation)
+    print(tr.y_mapping_relation)

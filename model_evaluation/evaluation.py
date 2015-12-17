@@ -21,7 +21,7 @@ def confusion_matrix_per_label(predict_data_path, true_label_id):
     measure = namedtuple('measure', 'true_pos false_pos true_neg false_neg')
     confusion_matrix = dict()
     with open(predict_data_path, 'r') as predict_data:
-        all_line = predict_data.readlines()[1:]
+        all_line = predict_data.readlines()
         for label in true_label_id.keys():
             true_pos, false_pos, true_neg, false_neg = [0.0] * 4
             for line in all_line:
