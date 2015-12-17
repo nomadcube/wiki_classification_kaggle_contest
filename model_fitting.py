@@ -1,15 +1,19 @@
 from data_processing.TrainData import TrainData
 from model_evaluation.evaluation import macro_metric
+from data_processing.tf_idf import dim_reduction_with_tf_idf
+
 
 import liblinearutil
 import re
+import sys
 
-train_data_path = '/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt'
+
+train_data_path = sys.argv[1]
 predict_data_path = '/Users/wumengling/PycharmProjects/kaggle/predict_output_data/model_fitting_predict.txt'
 
 
 def training(y_train, x_train):
-    return liblinearutil.train(y_train, x_train, '-s 0 -c 1')
+    return liblinearutil.train(y_train, x_train, '-s 0 -c 1 -q')
 
 
 def predicting(y_test, x_test, model, predict_path, y_remapped_rel):
@@ -24,14 +28,15 @@ def predicting(y_test, x_test, model, predict_path, y_remapped_rel):
 
 def learning_utils(train_path, predict_path):
     train_dat = TrainData(train_path)
+    dim_reduction_x = dim_reduction_with_tf_idf(train_dat.x, train_dat.feature_set, 0)
     y = [y_val for y_val in train_dat.y_remapped().values()]
     print(y)
-    x = [x_val for x_val in train_dat.x.values()]
+    x = [x_val for x_val in dim_reduction_x.values()]
     print(x)
     m = training(y, x)
     predicting(y, x, m, predict_path, train_dat.y_mapping_relation)
     return macro_metric(train_path, predict_path)
 
 
-if __name__ == '__main__':
-    print(learning_utils(train_data_path, predict_data_path))
+print(learning_utils(train_data_path, predict_data_path))
+

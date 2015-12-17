@@ -23,7 +23,10 @@ class TrainData:
         res = dict()
         original_y_set = list()
         for label_set in self.y.values():
-            original_y_set.append(', '.join([str(label) for label in label_set]))
+            tmp_label_str = ', '.join([str(label) for label in label_set])
+            if tmp_label_str in original_y_set:
+                continue
+            original_y_set.append(tmp_label_str)
         for remapped_y, original_y in enumerate(original_y_set):
             res[original_y] = remapped_y
         return res
