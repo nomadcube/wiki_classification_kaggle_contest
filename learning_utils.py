@@ -1,5 +1,5 @@
-from rearrange_training_data.tf_idf import term_frequency, log_inverse_doc_frequency
-from rearrange_training_data.libsvm_train_data import training_label, dimension_reduction_instance
+from data_processing.tf_idf import term_frequency, log_inverse_doc_frequency
+from data_processing.libsvm_train_data import training_label, dimension_reduction_instance
 from fit_model import training, predicting
 from model_evaluation.evaluation import macro_metric, each_label_metric, real_label_id_map
 

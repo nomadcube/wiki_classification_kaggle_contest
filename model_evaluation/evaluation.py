@@ -5,7 +5,7 @@ def real_label_id_map(test_data_path):
     """Convert test data with id-true_label into a map with label as its key and id set as value."""
     label_id = dict()
     with open(test_data_path, 'r') as true_label:
-        for document_id, line in enumerate(true_label.readlines()[1:]):
+        for document_id, line in enumerate(true_label.readlines()):
             element_list = line.strip().split(' ')
             for label in element_list:
                 if ':' in label:

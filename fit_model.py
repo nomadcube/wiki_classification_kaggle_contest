@@ -1,7 +1,7 @@
 import liblinearutil
 
-from rearrange_training_data.libsvm_train_data import training_label, dimension_reduction_instance
-from rearrange_training_data.tf_idf import term_frequency, log_inverse_doc_frequency
+from data_processing.libsvm_train_data import training_label, dimension_reduction_instance
+from data_processing.tf_idf import term_frequency, log_inverse_doc_frequency
 
 
 def training(y_train, x_train):
