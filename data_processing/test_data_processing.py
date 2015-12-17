@@ -5,7 +5,7 @@ import math
 
 class TestTrainData:
     def pytest_funcarg__sample_path(self):
-        return '/Users/wumengling/kaggle/unit_test_data/sample.txt'
+        return '/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt'
 
     def pytest_funcarg__tr(self, sample_path):
         return TrainData.TrainData(sample_path)

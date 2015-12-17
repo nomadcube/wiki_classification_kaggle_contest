@@ -5,10 +5,10 @@ class TestEvaluation:
     """Unit test for evaluation module."""
 
     def pytest_funcarg__test_data_path(self):
-        return '/Users/wumengling/kaggle/unit_test_data/sample.txt'
+        return '/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt'
 
     def pytest_funcarg__predict_data_path(self):
-        return '/Users/wumengling/kaggle/unit_test_data/predict.txt'
+        return '/Users/wumengling/PycharmProjects/kaggle/unit_test_data/predict.txt'
 
     def test_real_label_id_map(self, test_data_path):
         label_id = evaluation.true_id_per_label(test_data_path)

@@ -4,8 +4,8 @@ from model_evaluation.evaluation import macro_metric
 import liblinearutil
 import re
 
-train_data_path = '/Users/wumengling/kaggle/unit_test_data/sample.txt'
-predict_data_path = '/Users/wumengling/kaggle/unit_test_data/model_fitting_predict.txt'
+train_data_path = '/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt'
+predict_data_path = '/Users/wumengling/PycharmProjects/kaggle/unit_test_data/model_fitting_predict.txt'
 
 
 def training(y_train, x_train):
