@@ -12,20 +12,20 @@ class TestTrainData:
 
     def test_init(self, tr):
         assert len(tr.dat) == 3
-        assert tr.instance_count == 3
-        assert tr.y == {0: [314523, 165538, 416827],
-                        1: [21631],
-                        2: [76255, 335416]}
+        assert tr.instance_count() == 3
+        assert tr.y == {0: '314523,165538,416827',
+                        1: '21631',
+                        2: '76255,335416'}
         assert len(tr.x) == 3
         assert tr.x == {0: {1250536: 1},
                         1: {634175: 1, 1095476: 4, 805104: 1},
                         2: {1250536: 1, 805104: 1}}
-        assert len(tr.label) == 6
-        assert len(tr.y_mapping_relation) == 3
-        assert len(tr.feature_set) == 4
-        assert tr.y_mapping_relation == {'314523, 165538, 416827': 0,
+        assert len(tr.label_set()) == 6
+        assert len(tr._get_y_mapping_relation()) == 3
+        assert len(tr.feature_set()) == 4
+        assert tr._get_y_mapping_relation() == {'314523,165538,416827': 0,
                                          '21631': 1,
-                                         '76255, 335416': 2}
+                                         '76255,335416': 2}
 
     def test_label_remapped(self, tr):
         new_y = tr.y_remapped()
@@ -40,7 +40,7 @@ class TestTfidf:
         return TrainData.TrainData('/Users/wumengling/kaggle/unit_test_data/sample.txt').x
 
     def pytest_funcarg__feature_set(self):
-        return TrainData.TrainData('/Users/wumengling/kaggle/unit_test_data/sample.txt').feature_set
+        return TrainData.TrainData('/Users/wumengling/kaggle/unit_test_data/sample.txt').feature_set()
 
     def test_term_frequency(self, x):
         res = tf_idf.term_frequency(x)
