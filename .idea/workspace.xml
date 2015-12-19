@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b8aeb2c8-a84f-4641-b373-9ab2724160ba" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test_model_fitting.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data_processing/TrainData.py" afterPath="$PROJECT_DIR$/data_processing/TrainData.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model_evaluation/evaluation.py" afterPath="$PROJECT_DIR$/model_evaluation/evaluation.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.cache/v/cache/lastfailed" afterPath="$PROJECT_DIR$/.cache/v/cache/lastfailed" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model_fitting.py" afterPath="$PROJECT_DIR$/model_fitting.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data_analysis/test_data_analysis.py" afterPath="$PROJECT_DIR$/data_analysis/test_data_analysis.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data_processing/test_data_processing.py" afterPath="$PROJECT_DIR$/data_processing/test_data_processing.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model_evaluation/test_evaluation.py" afterPath="$PROJECT_DIR$/model_evaluation/test_evaluation.py" />
+    <list default="true" id="b8aeb2c8-a84f-4641-b373-9ab2724160ba" name="Default" comment="commit unit test data">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/classification/Classifier.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/classification/__init__.py" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/model_fitting.py" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test_model_fitting.py" afterPath="$PROJECT_DIR$/classification/test_classification.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data_analysis/description.py" afterPath="$PROJECT_DIR$/data_analysis/description.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/record.md" afterPath="$PROJECT_DIR$/record.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="kaggle.iws" />
@@ -31,43 +29,26 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="TrainData.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/data_processing/TrainData.py">
+      <file leaf-file-name="Classifier.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/classification/Classifier.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="58" column="18" selection-start-line="58" selection-start-column="18" selection-end-line="58" selection-end-column="18" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="test_evaluation.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/model_evaluation/test_evaluation.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="8" column="92" selection-start-line="8" selection-start-column="26" selection-end-line="8" selection-end-column="92" />
+            <state vertical-scroll-proportion="0.76047903">
+              <caret line="65" column="0" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
               <folding>
-                <element signature="e#0#17#0" expanded="true" />
+                <element signature="e#0#20#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="model_fitting.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/model_fitting.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.67729086">
-              <caret line="39" column="28" selection-start-line="39" selection-start-column="28" selection-end-line="39" selection-end-column="28" />
-              <folding />
-            </state>
+      <file leaf-file-name="record.md" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/record.md">
+          <provider editor-type-id="MarkdownPreviewEditor">
+            <state />
           </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="test_model_fitting.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test_model_fitting.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+            <state vertical-scroll-proportion="-12.137931">
+              <caret line="54" column="0" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -114,13 +95,19 @@
         <option value="$PROJECT_DIR$/unit_test_data/sample.txt" />
         <option value="$PROJECT_DIR$/data_processing/test_data_processing.py" />
         <option value="$PROJECT_DIR$/data_analysis/description.py" />
-        <option value="$PROJECT_DIR$/record.md" />
         <option value="$PROJECT_DIR$/data_analysis/test_data_analysis.py" />
         <option value="$PROJECT_DIR$/model_evaluation/evaluation.py" />
         <option value="$PROJECT_DIR$/model_evaluation/test_evaluation.py" />
         <option value="$PROJECT_DIR$/test_model_fitting.py" />
         <option value="$PROJECT_DIR$/data_processing/TrainData.py" />
         <option value="$PROJECT_DIR$/model_fitting.py" />
+        <option value="$PROJECT_DIR$/Classifier.py" />
+        <option value="$PROJECT_DIR$/classification/test_classification.py" />
+        <option value="$PROJECT_DIR$/classification/classifier_utils.py" />
+        <option value="$PROJECT_DIR$/classification/main.py" />
+        <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/classification/Classifier.py" />
+        <option value="$PROJECT_DIR$/record.md" />
       </list>
     </option>
   </component>
@@ -184,7 +171,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="unit_test_data" />
+              <option name="myItemId" value="output_data" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -198,7 +185,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="training_data" />
+              <option name="myItemId" value="input_data" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -212,35 +199,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="model_evaluation" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kaggle" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kaggle" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="data_processing" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kaggle" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kaggle" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="data_analysis" />
+              <option name="myItemId" value="classification" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -259,12 +218,13 @@
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/classification" />
       <recent name="$PROJECT_DIR$/training_data" />
       <recent name="$PROJECT_DIR$/model_avaluation" />
       <recent name="$PROJECT_DIR$/rearrange_training_data" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.model_fitting (1)">
+  <component name="RunManager" selected="Python.Classifier">
     <configuration default="false" name="model_fitting (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -299,50 +259,6 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
     </configuration>
-    <configuration default="false" name="Unittests in test_data_analysis" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/data_analysis" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="kaggle" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/data_analysis/test_data_analysis.py" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PUREUNITTEST" value="true" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="Unittest TestTfidf.test_term_frequency" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/data_processing" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="kaggle" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/data_processing/test_data_processing.py" />
-      <option name="CLASS_NAME" value="TestTfidf" />
-      <option name="METHOD_NAME" value="test_term_frequency" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_METHOD" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PUREUNITTEST" value="true" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
-      <method />
-    </configuration>
     <configuration default="false" name="TrainData" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -356,6 +272,40 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="kaggle" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/data_processing/TrainData.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Classifier" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="kaggle" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/classification/Classifier.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="classifier_utils" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/classification" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="kaggle" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/classification/classifier_utils.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -496,17 +446,17 @@
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Python.model_fitting (1)" />
       <item index="1" class="java.lang.String" itemvalue="Python.description" />
-      <item index="2" class="java.lang.String" itemvalue="Python tests.Unittests in test_data_analysis" />
-      <item index="3" class="java.lang.String" itemvalue="Python tests.Unittest TestTfidf.test_term_frequency" />
-      <item index="4" class="java.lang.String" itemvalue="Python.TrainData" />
+      <item index="2" class="java.lang.String" itemvalue="Python.TrainData" />
+      <item index="3" class="java.lang.String" itemvalue="Python.Classifier" />
+      <item index="4" class="java.lang.String" itemvalue="Python.classifier_utils" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.model_fitting (1)" />
-        <item index="1" class="java.lang.String" itemvalue="Python.description" />
-        <item index="2" class="java.lang.String" itemvalue="Python.TrainData" />
-        <item index="3" class="java.lang.String" itemvalue="Python tests.Unittest TestTfidf.test_term_frequency" />
-        <item index="4" class="java.lang.String" itemvalue="Python tests.Unittests in test_data_analysis" />
+        <item index="0" class="java.lang.String" itemvalue="Python.Classifier" />
+        <item index="1" class="java.lang.String" itemvalue="Python.classifier_utils" />
+        <item index="2" class="java.lang.String" itemvalue="Python.model_fitting (1)" />
+        <item index="3" class="java.lang.String" itemvalue="Python.description" />
+        <item index="4" class="java.lang.String" itemvalue="Python.TrainData" />
       </list>
     </recent_temporary>
   </component>
@@ -599,7 +549,13 @@
       <option name="project" value="LOCAL" />
       <updated>1450432711656</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="commit unit test data">
+      <created>1450502232702</created>
+      <option name="number" value="00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1450502232702</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TodoView" selected-index="1">
@@ -615,20 +571,20 @@
     <frame x="69" y="23" width="1371" height="877" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16518518" sideWeight="0.49242425" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32909784" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3278272" sideWeight="0.50592595" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32401526" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32866243" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3299363" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32655653" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32611465" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28025478" sideWeight="0.49407408" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16518518" sideWeight="0.49242425" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32356688" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24962963" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28208387" sideWeight="0.49407408" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16518518" sideWeight="0.50757575" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3987261" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -789,13 +745,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/training_data/train_100.csv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.505618">
-          <caret line="9" column="45" selection-start-line="9" selection-start-column="45" selection-end-line="9" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/unit_test_data/sample.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.07926024">
@@ -817,17 +766,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.32">
           <caret line="8" column="37" selection-start-line="8" selection-start-column="37" selection-end-line="8" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/record.md">
-      <provider editor-type-id="MarkdownPreviewEditor">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.30136988">
-          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -858,35 +796,77 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/model_evaluation/test_evaluation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state vertical-scroll-proportion="0.32">
           <caret line="8" column="92" selection-start-line="8" selection-start-column="26" selection-end-line="8" selection-end-column="92" />
           <folding>
-            <element signature="e#0#17#0" expanded="true" />
+            <element signature="e#0#17#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/data_processing/TrainData.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="58" column="18" selection-start-line="58" selection-start-column="18" selection-end-line="58" selection-end-column="18" />
+        <state vertical-scroll-proportion="0.55888224">
+          <caret line="54" column="22" selection-start-line="54" selection-start-column="22" selection-end-line="54" selection-end-column="22" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test_model_fitting.py">
+    <entry file="file://$PROJECT_DIR$/output_data/model_fitting_predict.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.3992016">
+          <caret line="10" column="42" selection-start-line="10" selection-start-column="42" selection-end-line="10" selection-end-column="42" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model_fitting.py">
+    <entry file="file://$PROJECT_DIR$/classification/test_classification.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.67729086">
-          <caret line="39" column="28" selection-start-line="39" selection-start-column="28" selection-end-line="39" selection-end-column="28" />
+        <state vertical-scroll-proportion="0.4790419">
+          <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#17#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/input_data/test_sample.csv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="4" column="33" selection-start-line="4" selection-start-column="33" selection-end-line="4" selection-end-column="33" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/input_data/train_sample.csv">
+      <provider editor-type-id="LargeFileEditor">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-2.9121757">
+          <caret line="8" column="44" selection-start-line="8" selection-start-column="44" selection-end-line="8" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/record.md">
+      <provider editor-type-id="MarkdownPreviewEditor">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-12.137931">
+          <caret line="54" column="0" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/classification/Classifier.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.76047903">
+          <caret line="65" column="0" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -27,7 +27,7 @@ if __name__ == '__main__':
     import time
     y_group = list()
     start_time = time.time()
-    tr = TrainData('/Users/wumengling/PycharmProjects/kaggle/training_data/train.csv')
+    tr = TrainData('/Users/wumengling/PycharmProjects/kaggle/input_data/train.csv')
     print(time.time() - start_time)
     print(len(tr.y))
     s_time = time.time()
