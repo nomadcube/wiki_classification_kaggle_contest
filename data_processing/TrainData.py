@@ -43,12 +43,12 @@ class TrainData:
     # ------- methods used for remapping y as of type int ---------
     def y_remapped(self):
         y_remapped_res = dict()
-        remapped_relation = self._get_y_mapping_relation()
+        remapped_relation = self.y_mapping_relation()
         for instance_index in self.y.keys():
             y_remapped_res[instance_index] = remapped_relation[self.y[instance_index]]
         return y_remapped_res
 
-    def _get_y_mapping_relation(self):
+    def y_mapping_relation(self):
         res = dict()
         remapped_y = 0
         for each_y in self.y.values():

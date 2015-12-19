@@ -10,9 +10,9 @@ class TestDescription:
     def test_y_distribution(self, y_dict):
         res = description.y_distribution(y_dict)
         assert len(res) == 3
-        assert res == {'314523,165538,416827': set([0]),
-                       '21631': set([1]),
-                       '76255,335416': set([2])}
+        assert res == {'314523,165538,416827': 1.0,
+                       '21631': 1.0,
+                       '76255,335416': 1.0}
 
     def test_descriptive_analysis(self):
         test_dat_list = [3, 4, 19, 1]

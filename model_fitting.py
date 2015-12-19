@@ -8,7 +8,8 @@ import re
 import sys
 
 
-train_data_path = sys.argv[1]
+train_data_path = sys.argv[1] if len(sys.argv) > 1 \
+    else '/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt'
 predict_data_path = '/Users/wumengling/PycharmProjects/kaggle/predict_output_data/model_fitting_predict.txt'
 
 
@@ -22,21 +23,23 @@ def predicting(y_test, x_test, model, predict_path, y_remapped_rel):
     p_label, p_acc, p_val = liblinearutil.predict(y_test, x_test, model)
     with open(predict_path, 'w') as predict_data:
         for index, predicted_label in enumerate(p_label):
-            predict_data.write(str(index) + ',' + re.sub(',', '', inverse_y_remapped_rel[predicted_label]) + '\n')
+            predict_data.write(str(index) + ',' + re.sub(',', ' ', inverse_y_remapped_rel[predicted_label]) + '\n')
             predict_data.flush()
 
 
 def learning_utils(train_path, predict_path):
     train_dat = TrainData(train_path)
-    dim_reduction_x = dim_reduction_with_tf_idf(train_dat.x, train_dat.feature_set, 0)
+    dim_reduction_x = dim_reduction_with_tf_idf(train_dat.x, train_dat.feature_set(), 0)
     y = [y_val for y_val in train_dat.y_remapped().values()]
     print(y)
     x = [x_val for x_val in dim_reduction_x.values()]
     print(x)
     m = training(y, x)
-    predicting(y, x, m, predict_path, train_dat.y_mapping_relation)
-    return macro_metric(train_path, predict_path)
+    print(m)
+    predicting(y, x, m, predict_path, train_dat.y_mapping_relation())
+    return macro_metric(train_dat.y, predict_path)
 
 
-print(learning_utils(train_data_path, predict_data_path))
+if __name__ == '__main__':
+    print(learning_utils(train_data_path, predict_data_path))
 

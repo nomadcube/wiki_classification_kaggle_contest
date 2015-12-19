@@ -21,9 +21,9 @@ class TestTrainData:
                         1: {634175: 1, 1095476: 4, 805104: 1},
                         2: {1250536: 1, 805104: 1}}
         assert len(tr.label_set()) == 6
-        assert len(tr._get_y_mapping_relation()) == 3
+        assert len(tr.y_mapping_relation()) == 3
         assert len(tr.feature_set()) == 4
-        assert tr._get_y_mapping_relation() == {'314523,165538,416827': 0,
+        assert tr.y_mapping_relation() == {'314523,165538,416827': 0,
                                          '21631': 1,
                                          '76255,335416': 2}
 

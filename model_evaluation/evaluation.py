@@ -1,18 +1,13 @@
 from collections import namedtuple
 
 
-def true_id_per_label(test_data_path):
+def true_id_per_label(test_y):
     """Convert test data with id-true_label into a map with label as its key and id set as value."""
     true_id = dict()
-    with open(test_data_path, 'r') as true_label:
-        for document_id, line in enumerate(true_label.readlines()):
-            element_list = line.strip().split(' ')
-            for label in element_list:
-                if ':' in label:
-                    continue
-                label = label.strip(',')
-                true_id.setdefault(label, set())
-                true_id[label].add(document_id)
+    for instance_index, y_str in test_y.items():
+        for label in y_str.split(','):
+            true_id.setdefault(label, set())
+            true_id[label].add(instance_index)
     return true_id
 
 
@@ -41,11 +36,11 @@ def confusion_matrix_per_label(predict_data_path, true_label_id):
     return confusion_matrix
 
 
-def macro_metric(test_data_path, predict_data_path):
+def macro_metric(test_y, predict_data_path):
     """Calculate macro metric for multi-class classification."""
     tmp_macro_precision = 0.0
     tmp_macro_recall = 0.0
-    true_id_map = true_id_per_label(test_data_path)
+    true_id_map = true_id_per_label(test_y)
     confusion_mat = confusion_matrix_per_label(predict_data_path, true_id_map)
     for label in confusion_mat.keys():
         pos_count = confusion_mat[label].true_pos + confusion_mat[label].false_pos
