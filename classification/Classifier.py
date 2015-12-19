@@ -24,22 +24,24 @@ class Classifier:
             self.model = liblinearutil.train(y_train.values(), x_train.values(), '-s 0 -c 1')
         return self.model
 
-    def make_prediction(self):
+    def evaluation(self, on_test=True):
         y_remapped_rel = self._train_data.y_mapping_relation()
         inverse_y_remapped_rel = {v: k for (k, v) in y_remapped_rel.items()}
-        x_test = dim_reduction_with_tf_idf(self._test_data.x, self._test_data.feature_set(), 0) if self._dim_reduction \
-            else self._test_data.x
-        y_test = self._test_data.y_remapped() if self._y_remapped else self._test_data.y
-        predicted_y, p_acc, p_val = liblinearutil.predict(y_test.values(), x_test.values(), self.model)
+        dat = self._test_data if on_test else self._train_data
+        x_test = dim_reduction_with_tf_idf(dat.x, dat.feature_set(), 0) if self._dim_reduction \
+            else dat.x
+        y_test = dat.y_remapped() if self._y_remapped else dat.y
+        self._make_prediction(y_test.values(), x_test.values(), inverse_y_remapped_rel)
+        self.evaluation_metric = macro_metric(dat.y, self._prediction_path)
+
+    def _make_prediction(self, y, x, remapped_rel):
+        predicted_y, p_acc, p_val = liblinearutil.predict(y, x, self.model)
         with open(self._prediction_path, 'w') as predict_data:
             for index, each_predicted_y in enumerate(predicted_y):
-                new_each_predicted_y = re.sub(',', ' ', inverse_y_remapped_rel[each_predicted_y]) if self._y_remapped \
+                new_each_predicted_y = re.sub(',', ' ', remapped_rel[each_predicted_y]) if self._y_remapped \
                     else each_predicted_y
                 predict_data.write(str(index) + ',' + str(new_each_predicted_y) + '\n')
                 predict_data.flush()
-
-    def make_evaluation(self):
-        self.evaluation_metric = macro_metric(self._test_data.y, self._prediction_path)
 
 
 if __name__ == '__main__':
@@ -60,6 +62,7 @@ if __name__ == '__main__':
                     '/Users/wumengling/PycharmProjects/kaggle/output_data/model_fitting_predict.txt',
                     TrainData(test_data_path))
     c1.learn()
-    c1.make_prediction()
-    c1.make_evaluation()
+    c1.evaluation()
+    print(c1.evaluation_metric)
+    c1.evaluation(False)
     print(c1.evaluation_metric)
