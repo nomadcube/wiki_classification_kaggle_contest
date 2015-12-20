@@ -22,4 +22,3 @@ term_val_t log_inverse_doc_frequency(doc_term_val_t&);
 doc_term_val_t tf_idf(doc_term_val_t&);
 
 #endif /* TF_IDF_H */
-
