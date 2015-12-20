@@ -17,3 +17,7 @@ d = {0: {1: 1.0, 2: 2.0, 3: 3.0}, 1: {1: 1.0, 2: 2.0, 3: 3.0}}
 start_time = time.time()
 e = term_frequency(d)
 print(time.time() - start_time)
+
+x_tf_idf = tf_idf.tf_idf(b)
+print(dict(x_tf_idf[0]))
+print(dict(x_tf_idf[1]))
