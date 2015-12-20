@@ -16,5 +16,6 @@ typedef std::map<int, float> term_val_t;
 typedef std::map<int, term_val_t> doc_term_val_t;
 
 float val_sum(term_val_t&);
+doc_term_val_t term_frequency(doc_term_val_t&);
 #endif /* TF_IDF_H */
 
