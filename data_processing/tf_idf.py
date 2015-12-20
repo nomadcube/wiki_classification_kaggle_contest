@@ -1,4 +1,5 @@
 from math import log
+from data_analysis.x_description import x_feature_set
 
 
 def term_frequency(x):
@@ -24,16 +25,14 @@ def log_inverse_doc_frequency(term_set, x):
     return res
 
 
-def dim_reduction_with_tf_idf(x, term_set, threshold):
-    """Yield each instance in dimension reduction training data using tf-idf."""
+def tf_idf(x):
+    """Calculate final tf-idf value."""
+    tf_idf_x = dict()
     tf = term_frequency(x)
+    term_set = x_feature_set(x)
     idf = log_inverse_doc_frequency(term_set, x)
-    dim_reduction_x = dict()
     for instance_index in x.keys():
-        dim_reduction_x[instance_index] = dict()
+        tf_idf_x[instance_index] = dict()
         for term in tf[instance_index].keys():
-            updated_val = idf[term] * tf[instance_index][term]
-            if updated_val <= threshold:
-                continue
-            dim_reduction_x[instance_index][term] = updated_val
-    return dim_reduction_x
+            tf_idf_x[instance_index][term] = idf[term] * tf[instance_index][term]
+    return tf_idf_x

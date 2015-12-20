@@ -55,8 +55,8 @@ class TestTfidf:
         assert res[1250536] == math.log(3.0 / 2.0) and res[634175] == math.log(3.0 / 1.0) and \
                res[1095476] == math.log(3.0 / 1.0) and res[805104] == math.log(3.0 / 2.0)
 
-    def test_dim_reduction_with_tf_idf(self, x, feature_set):
-        res = tf_idf.dim_reduction_with_tf_idf(x, feature_set, 0.0)
+    def test_tf_idf(self, x):
+        res = tf_idf.tf_idf(x)
         assert len(res) == 3
         assert res[0][1250536] == 1.0 * math.log(3.0 / 2.0) \
                and res[1][634175] == (1.0 / 6.0) * math.log(3.0 / 1.0) and res[1][1095476] == (4.0 / 6.0) * math.log(

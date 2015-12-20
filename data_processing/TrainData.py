@@ -1,5 +1,7 @@
 import io
 
+from data_analysis.x_description import x_feature_set
+
 
 class TrainData:
     """Represent training data of machine learning."""
@@ -20,11 +22,7 @@ class TrainData:
         return label_set_res
 
     def feature_set(self):
-        feature_set = set()
-        for each_instance in self.x.values():
-            for feature in each_instance.keys():
-                feature_set.add(feature)
-        return feature_set
+        return x_feature_set(self.x)
 
     def _get_y_x(self):
         y_res = dict()
