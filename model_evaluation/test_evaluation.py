@@ -1,12 +1,12 @@
 import evaluation
-from data_processing.TrainData import TrainData
+from Data.TrainData import TrainData
 
 
 class TestEvaluation:
     """Unit test for evaluation module."""
 
     def pytest_funcarg__test_y(self):
-        return TrainData('/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt').y
+        return TrainData('/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt').y.data
 
     def pytest_funcarg__predict_data_path(self):
         return '/Users/wumengling/PycharmProjects/kaggle/unit_test_data/predict.txt'
