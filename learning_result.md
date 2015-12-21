@@ -46,9 +46,11 @@ basic_statistics(min_val=1, max_val=1344, median=20, mean_val=27.61187490936296)
 
 ### 模型效果
 取数据的前100行作为训练集，第101到200行作为测试集。
-在训练集和测试集上分别用tf-idf作降维。
-用降维后的x作为分类器的输入数据。
+在训练集用tf-idf作降维，用降维后的x作为分类器的输入数据，tf-idf阈值是0.1 
 首先尝试的是liblinear的线性分类器，具体参数是'-s 0 -c 1'，即正则化系数为1，模型为带l2正则项的logistic回归，用原问题作为最优化求解的目标函数。
-求解结束时的输出是```iter  3 act 7.720e-07 pre 7.720e-07 delta 3.574e+00 f 6.144e+01 |g| 1.420e-03 CG   2```, 即当|w_(t+1) - w_t|为3.574e+00，|f_(t+1) - f_t|为6.144e+01，梯度差为1.420e-03时结束迭代。
-分类的效果是非常地过拟合：在训练集上准确率达到100％，即macro precision和macro recall都为1，但在测试集上准确率只有1％，而且macro precision和macro recall分别为0.008和0.017. 
+训练集上的整体准确率达到96.9697%， 即99个样本中有96个分类正确，macro precision和macro recall分别是0.535和0.532.
 
+### 将训练数据取前10000行时，报异常，内存泄漏
+Python(1407,0x7fff7b156000) malloc: *** mach_vm_map(size=18446744068723740672) failed (error code=3)
+*** error: can't allocate region
+*** set a breakpoint in malloc_error_break to debug

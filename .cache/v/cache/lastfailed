@@ -1,10 +1,1 @@
-{
-  "TrainData/test_train_data.py::TestTrainData::()::test_init": true, 
-  "classification/test_classification.py::test_classifier": true, 
-  "data_processing/test_data_processing.py::TestTfidf::()::test_log_inverse_doc_frequency": true, 
-  "data_processing/test_data_processing.py::TestTrainData::()::test_init": true, 
-  "data_processing/test_data_processing.py::TestTrainData::()::test_label_remapped": true, 
-  "model_evaluation/test_evaluation.py::TestEvaluation::()::test_each_label_metric": true, 
-  "model_evaluation/test_evaluation.py::TestEvaluation::()::test_macro_metric": true, 
-  "model_evaluation/test_evaluation.py::TestEvaluation::()::test_real_label_id_map": true
-}
+{}

@@ -18,13 +18,12 @@ class TestTrainData:
                                  805104: 1}}
 
     def test_train_data_y_remapped(self, TR):
-        TR.y.remap()
-        assert TR.y._remapping_relation == {'314523,165538,416827': hash('314523,165538,416827'),
-                                            '21631': hash('21631'),
-                                            '76255,335416': hash('76255,335416')}
-        assert TR.y.remapped_data == {0: hash('314523,165538,416827'),
-                                      1: hash('21631'),
-                                      2: hash('76255,335416')}
+        assert TR.y.remapping_relation == {'314523,165538,416827': 0,
+                                            '21631': 1,
+                                            '76255,335416': 2}
+        assert TR.y.remapped_data == {0: 0,
+                                      1: 1,
+                                      2: 2}
 
     def test_train_data_x_dim_reduction(self, TR):
         TR.x.dim_reduction(0.0)

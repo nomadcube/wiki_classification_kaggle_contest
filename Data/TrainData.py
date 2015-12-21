@@ -10,15 +10,15 @@ class _Response:
             raise TypeError('Y must be of type dict.')
         self.data = data
         self.remapped_data = dict()
-        self._remapping_relation = dict()
+        self.remapping_relation = dict()
+        self.remap()
 
     def remap(self):
         """Map original y value to its hash code."""
-        for y_key in self.data.keys():
+        for y_index, y_key in enumerate(self.data.keys()):
             original_y = self.data[y_key]
-            updated_y = hash(original_y)
-            self.remapped_data[y_key] = updated_y
-            self._remapping_relation[original_y] = updated_y
+            self.remapped_data[y_key] = y_index
+            self.remapping_relation[original_y] = y_index
 
 
 class _Variable:
