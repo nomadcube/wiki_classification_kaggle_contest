@@ -11,14 +11,20 @@ class _Response:
         self.data = data
         self.remapped_data = dict()
         self.remapping_relation = dict()
-        self.remap()
 
-    def remap(self):
+    def remap(self, train_remapping_rel=None):
         """Map original y value to its hash code."""
-        for y_index, y_key in enumerate(self.data.keys()):
-            original_y = self.data[y_key]
-            self.remapped_data[y_key] = y_index
-            self.remapping_relation[original_y] = y_index
+        if not train_remapping_rel:
+            for y_index, y_key in enumerate(self.data.keys()):
+                original_y = self.data[y_key]
+                self.remapped_data[y_key] = y_index
+                self.remapping_relation[original_y] = y_index
+        else:
+            for y_key in self.data.keys():
+                original_y = self.data[y_key]
+                self.remapped_data[y_key] = train_remapping_rel[original_y]
+                self.remapping_relation = train_remapping_rel
+        return self
 
 
 class _Variable:
@@ -35,6 +41,18 @@ class _Variable:
         self.dim_reduction_data = dict(tf_idf(doc_term_val_t(self.data), threshold))
         for k in self.dim_reduction_data:
             self.dim_reduction_data[k] = dict(self.dim_reduction_data[k])
+        return self
+
+    def _feature_count(self):
+        """Count distinct features in the training data."""
+        feature_set = set()
+        for instance_index in self.dim_reduction_data.keys():
+            for feature in self.dim_reduction_data[instance_index].keys():
+                feature_set.add(feature)
+        return len(feature_set)
+
+    def __len__(self):
+        return len(self.data)
 
 
 class TrainData:
@@ -59,3 +77,7 @@ class TrainData:
                 val = float(val)
                 x_res[index][feat] = val
         return y_res, x_res
+
+    def description(self):
+        return len(self.x), self.x._feature_count()
+
