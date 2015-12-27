@@ -2,10 +2,11 @@
 import sys
 
 
-line_index = 0
+vec = [7, 8, 9]
 for line in sys.stdin:
-    line = line.strip()
-    words = line.split(' ')
-    for word in words:
-        print '%s\t%s' % (str(line_index), str(float(word) * 0.5))
-    line_index += 1
+    row_index, col_index, val = line.strip().split(",")
+    row_index = int(row_index)
+    col_index = int(col_index)
+    val = float(val)
+    res = val * vec[col_index]
+    print('{0},{1}'.format(row_index, res))

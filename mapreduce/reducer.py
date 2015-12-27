@@ -1,28 +1,13 @@
 #!/usr/bin/env python
 import sys
 
-# maps words to their counts
-word2count = {}
-
-# input comes from STDIN
+# multiplication between matrix and vector
+row_sum = dict()
 for line in sys.stdin:
-    # remove leading and trailing whitespace
-    line = line.strip()
+    row_index, val = line.strip().split(',')
+    val = float(val)
+    row_sum.setdefault(row_index, 0.0)
+    row_sum[row_index] += val
 
-    # parse the input we got from mapper.py
-    word, count = line.split('\t', 1)
-    # convert count (currently a string) to int
-    try:
-        count = float(count)
-    except ValueError:
-        continue
-
-    try:
-        word2count[word] += count
-    except:
-        word2count[word] = count
-
-# write the tuples to stdout
-# Note: they are unsorted
-for word in word2count.keys():
-    print '%s\t%s' % (word, word2count[word])
+for k, v in row_sum.items():
+    print '%s\t%s' % (k, v)
