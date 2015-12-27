@@ -45,17 +45,19 @@ class Data:
         return self
 
     def dim_reduction(self, threshold):
-        """Use tf-idf to perform dimension reduction, update x."""
+        """Use tf-idf to perform dimension reduction, update x and y."""
         self.x = dict(tf_idf(doc_term_val_t(self.x), threshold))
         for k in self.x:
             self.x[k] = dict(self.x[k])
+        self.y = {k: v for (k, v) in self.y.items() if k in self.x.keys()}
         return self
 
-    def sample_split(self, train_count):
+    def sample_split(self, train_prop):
         """Generate train and test sample from total data."""
+        train_count = int(len(self) * train_prop)
         sample = self._sampling(train_count)
-        self.train_y = [self.y[i] for i in sample]
-        self.train_x = [self.x[i] for i in sample]
+        self.train_y = [self.y[i] for i in self.y.keys() if i in sample]
+        self.train_x = [self.x[i] for i in self.y.keys() if i in sample]
         self.test_y = [self.y[j] for j in self.y.keys() if j not in sample]
         self.test_x = [self.x[j] for j in self.x.keys() if j not in sample]
 
@@ -77,3 +79,12 @@ class Data:
     def description(self):
         """Describe total data."""
         return len(self), self._feature_count()
+
+
+if __name__ == '__main__':
+    TR = Data('/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt')
+    TR.sample_split(1)
+    print(TR.train_x)
+    print(TR.train_y)
+    print(TR.test_x)
+    print(TR.test_y)

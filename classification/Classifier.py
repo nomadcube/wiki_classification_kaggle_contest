@@ -1,35 +1,34 @@
 import re
 import liblinearutil
 from model_evaluation.evaluation import macro_metric
-from Data.TrainData import TrainData
 
 
 class Classifier:
     """Represent one classifier, with certain model and learning algorithm."""
 
-    def __init__(self, train_y, train_x, prediction_path):
+    def __init__(self, train_y, train_x, y_remap_rel):
+        """Initiate a Classifier object with train data and remapping relationship."""
         self.y = train_y
         self.x = train_x
-        self.y_remapping_rel = train.y.remapping_relation
+        self.y_remapping_rel = y_remap_rel
         self.model = None
-        self.evaluation_metric = tuple()
-        self._prediction_path = prediction_path
 
     def learn(self):
-        y = [self.y[key] for key in self.y.keys() if key in self.x.keys()]
-        x = [dict(v) for v in self.x.values()]
-        self.model = liblinearutil.train(y, x, '-s 0 -c 1')
+        """Learn linear model using liblinear."""
+        self.model = liblinearutil.train(self.y, self.x, '-s 0 -c 1')
+        return self
 
-    def predict(self):
+    def _predict(self, y_to_predict, x_to_predict):
+        """Make prediction on y_to_predict and x_to_predict."""
+        predict_res = list()
         reverse_y_remapping_rel = {v: k for (k, v) in self.y_remapping_rel.items()}
-        test_y = [self.y[key] for key in self.y.keys() if key in self.x.keys()]
-        test_x = [dict(v) for v in self.x.values()]
-        predicted_y = liblinearutil.predict(test_y, test_x, self.model)[0]
-        with open(self._prediction_path, 'w') as predict_data:
-            for index, each_predicted_y in enumerate(predicted_y):
-                predict_data.write(str(index) + ',' +
-                                   re.sub(',', ' ', str(reverse_y_remapping_rel[each_predicted_y])) + '\n')
-                predict_data.flush()
+        predicted_y = liblinearutil.predict(y_to_predict, x_to_predict, self.model)[0]
+        for each_predicted_y in predicted_y:
+            predict_res.append(re.sub(',', ' ', str(reverse_y_remapping_rel[each_predicted_y])))
+        return predict_res
 
-    def evaluation(self):
-        self.evaluation_metric = macro_metric(self.original_y, self._prediction_path)
+    def evaluation(self, y_to_evaluate, x_to_evaluate):
+        """Make evaluation on y and x."""
+        return self._predict(y_to_evaluate, x_to_evaluate)[1]
+        # original_y = [self.y_remapping_rel[mapped_y] for mapped_y in y_to_evaluate]
+        # return macro_metric(original_y, predicted_y)

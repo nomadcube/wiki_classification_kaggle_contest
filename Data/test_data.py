@@ -39,3 +39,4 @@ class TestTrainData:
     def test_split(self, TR):
         TR.remap().dim_reduction(-1.0).sample_split(1)
         assert len(TR.train_y) == 1
+        assert len(TR.test_y) == 2

@@ -1,30 +1,23 @@
-from Classifier import Classifier
-from Data.TrainData import TrainData
-from Data.generate_train_sample import generate_train_sample
+from classification import Classifier
+from Data.Data import Data
+import sys
 
 
-# generate train_sample and test_sample
-generate_train_sample(100, 100)
+tf_idf_threshold = 1.0
+train_count = 0.8
 
-# read train data from path
-TR = TrainData('/Users/wumengling/PycharmProjects/kaggle/input_data/train_sample.csv')
-# remapped train_y
-train_y = TR.y.remap().remapped_data
-# dimension reduction train_x
-train_x = TR.x.dim_reduction(1.0).dim_reduction_data
-# y mapping relationship
-y_remapping_rel = TR.y.remapping_relation
-
-# test data
-TE = TrainData('/Users/wumengling/PycharmProjects/kaggle/input_data/test_sample.csv')
-test_y = TE.y.remap(y_remapping_rel).remapped_data
-test_x = TE.x.dim_reduction(1.0).dim_reduction_data
+# read data, remapping and split into train and test samples
+dat = Data('/Users/wumengling/PycharmProjects/kaggle/input_data/train_sample.csv')
+print(dat.description())
+dat.remap()
+dat.dim_reduction(tf_idf_threshold)
+dat.sample_split(train_count)
+print(dat.description())
+print(sys.getsizeof(dat))
+print(sys.getsizeof(dat.train_y))
+print(sys.getsizeof(dat.train_x))
 
 # learning
-# c1 = Classifier(TR, '/Users/wumengling/PycharmProjects/kaggle/output_data/model_fitting_predict.txt', 1.0)
-# print(TR.description())
-# c1.learn()
-# c1.predict()
-# c1.evaluation()
-# print(c1.evaluation_metric)
-
+c1 = Classifier.Classifier(dat.train_y, dat.train_x, dat.y_remapping_rel)
+c1.learn()
+print(c1.evaluation(dat.test_y, dat.test_x))
