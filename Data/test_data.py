@@ -37,6 +37,12 @@ class TestTrainData:
         assert round(TR.x[2][805104], 2) == 0.20
 
     def test_split(self, TR):
-        TR.remap().dim_reduction(-1.0).sample_split(1)
+        TR.remap().dim_reduction(-1.0).sample_split(0.4)
         assert len(TR.train_y) == 1
         assert len(TR.test_y) == 2
+
+    def test_convert_to_binary_class(self, TR):
+        TR.convert_to_binary_class('76255')
+        assert TR.y == {0: 0,
+                        1: 0,
+                        2: 1}

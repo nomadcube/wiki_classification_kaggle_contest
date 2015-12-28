@@ -20,12 +20,15 @@ class Classifier:
 
     def _predict(self, y_to_predict, x_to_predict):
         """Make prediction on y_to_predict and x_to_predict."""
-        predict_res = list()
-        reverse_y_remapping_rel = {v: k for (k, v) in self.y_remapping_rel.items()}
-        predicted_y = liblinearutil.predict(y_to_predict, x_to_predict, self.model)[0]
-        for each_predicted_y in predicted_y:
-            predict_res.append(re.sub(',', ' ', str(reverse_y_remapping_rel[each_predicted_y])))
-        return predict_res
+        predicted_y, total_accuracy = liblinearutil.predict(y_to_predict, x_to_predict, self.model)[:2]
+        if len(self.y_remapping_rel) > 0:
+            predict_res = list()
+            reverse_y_remapping_rel = {v: k for (k, v) in self.y_remapping_rel.items()}
+            for each_predicted_y in predicted_y:
+                predict_res.append(re.sub(',', ' ', str(reverse_y_remapping_rel[each_predicted_y])))
+            return predict_res, total_accuracy
+        else:
+            return predicted_y, total_accuracy
 
     def evaluation(self, y_to_evaluate, x_to_evaluate):
         """Make evaluation on y and x."""

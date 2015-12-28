@@ -1,5 +1,6 @@
 from tf_idf_swig.tf_idf import tf_idf, doc_term_val_t
 from random import randrange
+from collections import namedtuple
 import io
 
 
@@ -78,12 +79,24 @@ class Data:
 
     def description(self):
         """Describe total data."""
-        return len(self), self._feature_count()
+        data_desc = namedtuple("DataDesc", "sample_size feature_size label_size")
+        return data_desc(len(self), self._feature_count(), len(set(self.y.values())))
+
+    def convert_to_binary_class(self, positive_class):
+        """
+        Convert y from multi-class to binary-class.
+        If one label contains ```positive_class``` then it would be converted to 1, 0 otherwise.
+        """
+        if not isinstance(positive_class, str):
+            raise TypeError('Positive class should be of type str.')
+        for y_key in self.y.keys():
+            converted_y = 1 if (positive_class in self.y[y_key].split(',')) else 0
+            self.y[y_key] = converted_y
 
 
 if __name__ == '__main__':
     TR = Data('/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt')
-    TR.sample_split(1)
+    TR.sample_split(0.4)
     print(TR.train_x)
     print(TR.train_y)
     print(TR.test_x)
