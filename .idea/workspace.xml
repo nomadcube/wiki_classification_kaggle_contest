@@ -2,24 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b8aeb2c8-a84f-4641-b373-9ab2724160ba" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Data/label_profiling.sh" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/perceptron/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/perceptron/perceptron.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/perceptron/test_perceptron.py" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Data/data_processing.sh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sparse_vector/_sparse_vector.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sparse_vector/sparse_vector.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sparse_vector/sparse_vector_wrap.cxx" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/Data/Data.py" afterPath="$PROJECT_DIR$/Data/Sample.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/Data/test_data.py" afterPath="$PROJECT_DIR$/Data/test_sample.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Data/Sample.py" afterPath="$PROJECT_DIR$/Data/Sample.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/classification/Classifier.py" afterPath="$PROJECT_DIR$/classification/Classifier.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/classification/main.py" afterPath="$PROJECT_DIR$/classification/main.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/learning_result.md" afterPath="$PROJECT_DIR$/learning_result.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model_evaluation/evaluation.py" afterPath="$PROJECT_DIR$/model_evaluation/evaluation.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparse_vector/sparse_vector.cpp" afterPath="$PROJECT_DIR$/sparse_vector/sparse_vector.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparse_vector/sparse_vector.h" afterPath="$PROJECT_DIR$/sparse_vector/sparse_vector.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparse_vector/sparse_vector_run.py" afterPath="$PROJECT_DIR$/sparse_vector/sparse_vector_run.py" />
     </list>
     <ignored path="kaggle.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -43,8 +29,8 @@
       <file leaf-file-name="Sample.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Data/Sample.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.4743083">
-              <caret line="69" column="34" selection-start-line="69" selection-start-column="34" selection-end-line="69" selection-end-column="34" />
+            <state vertical-scroll-proportion="-0.23778072">
+              <caret line="9" column="30" selection-start-line="9" selection-start-column="30" selection-end-line="9" selection-end-column="30" />
               <folding>
                 <element signature="e#0#53#0" expanded="true" />
               </folding>
@@ -56,7 +42,7 @@
         <entry file="file://$PROJECT_DIR$/classification/Classifier.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+              <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -66,7 +52,7 @@
         <entry file="file://$PROJECT_DIR$/classification/main.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="9" column="14" selection-start-line="9" selection-start-column="14" selection-end-line="9" selection-end-column="14" />
+              <caret line="18" column="24" selection-start-line="18" selection-start-column="24" selection-end-line="18" selection-end-column="24" />
               <folding>
                 <element signature="e#0#37#0" expanded="true" />
               </folding>
@@ -134,10 +120,10 @@
         <option value="$PROJECT_DIR$/perceptron/perceptron.py" />
         <option value="$PROJECT_DIR$/perceptron/test_perceptron.py" />
         <option value="$PROJECT_DIR$/Data/data_processing.sh" />
-        <option value="$PROJECT_DIR$/classification/Classifier.py" />
         <option value="$PROJECT_DIR$/learning_result.md" />
         <option value="$PROJECT_DIR$/Data/Data.py" />
         <option value="$PROJECT_DIR$/Data/test_sample.py" />
+        <option value="$PROJECT_DIR$/classification/Classifier.py" />
         <option value="$PROJECT_DIR$/classification/main.py" />
         <option value="$PROJECT_DIR$/Data/Sample.py" />
       </list>
@@ -684,7 +670,13 @@
       <option name="project" value="LOCAL" />
       <updated>1451295599509</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="commit unit test data">
+      <created>1451401219175</created>
+      <option name="number" value="00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1451401219175</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -702,6 +694,7 @@
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21481481" sideWeight="0.49242425" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32866243" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31082803" sideWeight="0.5074074" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.317662" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32611465" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
@@ -710,7 +703,6 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26496816" sideWeight="0.4911111" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16518518" sideWeight="0.50757575" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
@@ -746,7 +738,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="48" />
+      <option name="time" value="49" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
@@ -1075,6 +1067,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.049586777">
           <caret line="75" column="11" selection-start-line="75" selection-start-column="11" selection-end-line="75" selection-end-column="11" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1082,6 +1075,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.116959065">
           <caret line="3" column="8" selection-start-line="3" selection-start-column="8" selection-end-line="3" selection-end-column="8" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1089,6 +1083,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.23391813">
           <caret line="6" column="16" selection-start-line="6" selection-start-column="16" selection-end-line="6" selection-end-column="16" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1107,28 +1102,28 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/classification/Classifier.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/classification/main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="9" column="14" selection-start-line="9" selection-start-column="14" selection-end-line="9" selection-end-column="14" />
+          <caret line="18" column="24" selection-start-line="18" selection-start-column="24" selection-end-line="18" selection-end-column="24" />
           <folding>
             <element signature="e#0#37#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/classification/Classifier.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Data/Sample.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.4743083">
-          <caret line="69" column="34" selection-start-line="69" selection-start-column="34" selection-end-line="69" selection-end-column="34" />
+        <state vertical-scroll-proportion="-0.23778072">
+          <caret line="9" column="30" selection-start-line="9" selection-start-column="30" selection-end-line="9" selection-end-column="30" />
           <folding>
             <element signature="e#0#53#0" expanded="true" />
           </folding>

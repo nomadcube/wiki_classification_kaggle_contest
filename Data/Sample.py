@@ -4,15 +4,12 @@ import io
 
 
 class Sample:
-    """Represent sample data."""
-
     def __init__(self):
         self.y = dict()
         self.x = dict()
         self.y_remapping_rel = dict()
 
     def size(self):
-        """Sample size."""
         if len(self.y) != len(self.x):
             raise ValueError('The size of y and x must agree.')
         return len(self.y)
@@ -53,7 +50,6 @@ class Sample:
             self.x[j] for j in test_keys]
 
     def feature_dimension(self):
-        """Count distinct features in the current sample."""
         feature_set = set()
         for instance_index in self.x.keys():
             for feature in self.x[instance_index].keys():
@@ -61,7 +57,6 @@ class Sample:
         return len(feature_set)
 
     def description(self):
-        """Describe the sample."""
         sample_desc = namedtuple("DataDesc", "sample_size feature_dimension class_number")
         return sample_desc(self.size(), self.feature_dimension(), len(set(self.y.values())))
 
@@ -80,7 +75,10 @@ class Sample:
         return self
 
     def label_string_disassemble(self):
-        """Disassemble compounded label string to single label, while the corresponding x becomes duplicated."""
+        """
+        Disassemble compounded label string to single label,
+        while the corresponding x becomes duplicated.
+        """
         new_y = dict()
         new_x = dict()
         new_key = 0

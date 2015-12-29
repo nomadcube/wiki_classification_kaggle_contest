@@ -4,7 +4,7 @@ from Data.Sample import Sample, sample_reader
 
 TF_IDF_THRESHOLD = 0.5
 TRAIN_PROP = 0.8
-MOST_FREQ_LABLE = '24177'
+MOST_FREQ_LABEL = '24177'
 
 # read data
 dat = sample_reader('/Users/wumengling/PycharmProjects/kaggle/input_data/train_sample.csv')
