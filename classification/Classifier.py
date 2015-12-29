@@ -1,6 +1,6 @@
 import re
 import liblinearutil
-from model_evaluation.evaluation import macro_metric
+from perceptron import perceptron
 
 
 class Classifier:
@@ -13,9 +13,12 @@ class Classifier:
         self.y_remapping_rel = y_remap_rel
         self.model = None
 
-    def learn(self):
+    def learn(self, algorithm):
         """Learn linear model using liblinear."""
-        self.model = liblinearutil.train(self.y, self.x, '-s 0 -c 1')
+        if algorithm == 'liblinear':
+            self.model = liblinearutil.train(self.y, self.x, '-s 0 -c 1')
+        if algorithm == 'perceptron':
+            self.model = perceptron.learning(100, 0.3, self.x, self.y, len(self.x.values()))
         return self
 
     def _predict(self, y_to_predict, x_to_predict):

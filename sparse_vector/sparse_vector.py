@@ -291,6 +291,12 @@ class SparseVector(_object):
 
     def dot_multiplication(self, *args):
         return _sparse_vector.SparseVector_dot_multiplication(self, *args)
+
+    def inner_product(self, arg2):
+        return _sparse_vector.SparseVector_inner_product(self, arg2)
+
+    def __add__(self, arg2):
+        return _sparse_vector.SparseVector___add__(self, arg2)
 SparseVector_swigregister = _sparse_vector.SparseVector_swigregister
 SparseVector_swigregister(SparseVector)
 

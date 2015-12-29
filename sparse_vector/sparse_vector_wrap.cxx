@@ -7310,6 +7310,84 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_SparseVector_inner_product(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SparseVector *arg1 = (SparseVector *) 0 ;
+  SwigValueWrapper< SparseVector > arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  float result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SparseVector_inner_product",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_SparseVector, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SparseVector_inner_product" "', argument " "1"" of type '" "SparseVector *""'"); 
+  }
+  arg1 = reinterpret_cast< SparseVector * >(argp1);
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_SparseVector,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SparseVector_inner_product" "', argument " "2"" of type '" "SparseVector""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SparseVector_inner_product" "', argument " "2"" of type '" "SparseVector""'");
+    } else {
+      SparseVector * temp = reinterpret_cast< SparseVector * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  result = (float)(arg1)->inner_product(arg2);
+  resultobj = SWIG_From_float(static_cast< float >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SparseVector___add__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SparseVector *arg1 = (SparseVector *) 0 ;
+  SwigValueWrapper< SparseVector > arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  SwigValueWrapper< SparseVector > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SparseVector___add__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_SparseVector, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SparseVector___add__" "', argument " "1"" of type '" "SparseVector *""'"); 
+  }
+  arg1 = reinterpret_cast< SparseVector * >(argp1);
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_SparseVector,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SparseVector___add__" "', argument " "2"" of type '" "SparseVector""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SparseVector___add__" "', argument " "2"" of type '" "SparseVector""'");
+    } else {
+      SparseVector * temp = reinterpret_cast< SparseVector * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  result = (arg1)->operator +(arg2);
+  resultobj = SWIG_NewPointerObj((new SparseVector(static_cast< const SparseVector& >(result))), SWIGTYPE_p_SparseVector, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *SparseVector_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
@@ -7374,6 +7452,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_SparseVector", _wrap_new_SparseVector, METH_VARARGS, NULL},
 	 { (char *)"delete_SparseVector", _wrap_delete_SparseVector, METH_VARARGS, NULL},
 	 { (char *)"SparseVector_dot_multiplication", _wrap_SparseVector_dot_multiplication, METH_VARARGS, NULL},
+	 { (char *)"SparseVector_inner_product", _wrap_SparseVector_inner_product, METH_VARARGS, NULL},
+	 { (char *)"SparseVector___add__", _wrap_SparseVector___add__, METH_VARARGS, NULL},
 	 { (char *)"SparseVector_swigregister", SparseVector_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };

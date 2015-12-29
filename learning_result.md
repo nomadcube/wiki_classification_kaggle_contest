@@ -58,3 +58,37 @@ basic_statistics(min_val=1, max_val=1344, median=20, mean_val=27.61187490936296)
 Python(1407,0x7fff7b156000) malloc: *** mach_vm_map(size=18446744068723740672) failed (error code=3)
 *** error: can't allocate region
 *** set a breakpoint in malloc_error_break to debug
+
+### 转成2元分类问题之后
+取前1000行做实验，降维后只有266行，其中212行被分为训练样本，54行被分为测试样本。
+训练样本中有4个正样本，测试样本中没有正样本。
+这时候模型会倾向于将样本都预测为负样本，以logistic回归为例，如果样本的特征值都是正数，那么这时候训练出来的参数向量会大多数分量都是负值或0，这样就会使得sigmoid后的w*x非常小，接近于0，即预测值为－1
+这样做会使训练集和测试集上的效果都非常好，通常都在90％以上。
+但这可以认为是训练样本不具有代表性，不能代表数据的真实分布，因此在算法求解时的目标函数"结构风险函数"中的一项"经验风险函数"无法很好地对期望风险函数进行估计，因此以其为目标函数迭代出来的解也是与真实值相差甚远的。
+
+但当取前10万行时，效果似乎也还是不错的：
+
+DataDesc(sample_size=100000, feature_size=197496, label_size=76595, train_size=0, test_size=0)
+DataDesc(sample_size=59747, feature_size=49417, label_size=2, train_size=0, test_size=0)
+DataDesc(sample_size=59747, feature_size=49417, label_size=2, train_size=47797, test_size=11950)
+
+iter  1 act 1.082e+04 pre 1.011e+04 delta 8.669e+01 f 3.313e+04 |g| 3.926e+02 CG   8
+iter  2 act 4.873e+02 pre 4.332e+02 delta 8.669e+01 f 2.231e+04 |g| 8.574e+01 CG   6
+iter  3 act 4.622e+01 pre 4.060e+01 delta 8.669e+01 f 2.182e+04 |g| 2.495e+01 CG   4
+iter  4 act 4.653e+00 pre 4.284e+00 delta 8.669e+01 f 2.178e+04 |g| 6.336e+00 CG   4
+iter  5 act 1.235e-01 pre 1.201e-01 delta 8.669e+01 f 2.177e+04 |g| 9.526e-01 CG   3
+
+训练样本中的正样本数：741
+
+训练集上的分类效果：
+Accuracy = 99.4058% (47513/47797) (classification)
+(99.40582044898215, 0.023767182040713854, 0.7266794438081764)
+
+测试集上的分类效果：
+Accuracy = 93.1464% (11131/11950) (classification)
+(93.14644351464435, 0.27414225941422593, 0.01120445052678307)
+
+看来仅对单个label, 如24177来分类，效果还是不错的。那是不是说将所有的单label抽离出来作为正样本，训练 ```#label``` 个分类器
+在预测时将各个样本被预测为正的label组合起来，就是它的真实label串？
+接下来可以将label串拆成多个label，这样一条样本就对应新的多条样本，然后进行多元分类。但在这之前首先重构一下代码嗯。
+

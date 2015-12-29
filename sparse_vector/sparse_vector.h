@@ -21,6 +21,8 @@ public:
 	~SparseVector(){};
 	SparseVector dot_multiplication(float);
 	SparseVector dot_multiplication(SparseVector);
+	float inner_product(SparseVector);
+	SparseVector operator+(SparseVector);
 };
 
 

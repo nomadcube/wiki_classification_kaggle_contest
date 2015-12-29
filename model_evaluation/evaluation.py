@@ -5,7 +5,7 @@ def true_id_per_label(test_y):
     """Convert test data with id-true_label into a map with label as its key and id set as value."""
     true_id = dict()
     for instance_index, y_str in test_y.items():
-        for label in y_str.sample_split(','):
+        for label in y_str.split_train_test(','):
             true_id.setdefault(label, set())
             true_id[label].add(instance_index)
     return true_id
