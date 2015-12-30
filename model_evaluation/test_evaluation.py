@@ -1,38 +1,58 @@
 import evaluation
-from Data.TrainData import TrainData
 
 
 class TestEvaluation:
     """Unit test for evaluation module."""
 
-    def pytest_funcarg__test_y(self):
-        return TrainData('/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt').y.data
+    def pytest_funcarg__y(self):
+        return {0: u'314523',
+                1: u'165538',
+                2: u'416827',
+                3: u'21631',
+                4: u'76255',
+                5: u'335416'}
 
-    def pytest_funcarg__predict_data_path(self):
-        return '/Users/wumengling/PycharmProjects/kaggle/unit_test_data/predict.txt'
+    def pytest_funcarg__rel(self):
+        return {0: 0,
+                1: 0,
+                2: 0,
+                3: 1,
+                4: 2,
+                5: 2}
 
-    def test_real_label_id_map(self, test_y):
-        label_id = evaluation.true_id_per_label(test_y)
+    def test_generate_fact(self, y, rel):
+        label_id = evaluation.generate_fact(y, rel)
         assert isinstance(label_id, dict)
         assert len(label_id) == 6
-        assert label_id['314523'] == {0} and label_id['165538'] == {0} and label_id['416827'] == {0} \
-               and label_id['21631'] == {1} \
-               and label_id['76255'] == {2} and label_id['335416'] == {2}
+        assert label_id[u'314523'] == {0} and label_id[u'165538'] == {0} and label_id[u'416827'] == {0} \
+               and label_id[u'21631'] == {1} \
+               and label_id[u'76255'] == {2} and label_id[u'335416'] == {2}
 
-    def pytest_funcarg__real_label_id_map(self, test_y):
-        return evaluation.true_id_per_label(test_y)
+    def pytest_funcarg__fact(self, y, rel):
+        return evaluation.generate_fact(y, rel)
 
-    def test_each_label_metric(self, predict_data_path, real_label_id_map):
-        label_measure = evaluation.confusion_matrix_per_label(predict_data_path, real_label_id_map)
-        assert isinstance(label_measure, dict)
-        assert len(label_measure) == 6
-        assert label_measure['314523'].true_pos == 1.0
-        assert label_measure['314523'].false_pos == 0.0
-        assert label_measure['314523'].true_neg == 2.0
-        assert label_measure['314523'].false_neg == 0.0
+    def test_collect_whole_index(self, fact):
+        whole_index = evaluation.collect_whole_index(fact)
+        assert isinstance(whole_index, set)
+        assert whole_index == {0, 1, 2, 3, 4, 5}
 
-    def test_macro_metric(self, test_y, predict_data_path):
-        res = evaluation.macro_metric(test_y, predict_data_path)
-        assert isinstance(res, tuple)
-        assert len(res) == 2
-        assert res == (2.5 / 6.0, 0.5)
+    def pytest_funcarg__whole_index(self, fact):
+        return evaluation.collect_whole_index(fact)
+
+    def test_confusion_matrix(self, whole_index):
+        true_index = {0, 1, 2}
+        predict_index = {0, 1, 3}
+        mat = evaluation.confusion_matrix(true_index, predict_index, whole_index)
+        assert mat.true_pos == 2
+        assert mat.false_pos == 1
+        assert mat.true_neg == 2
+        assert mat.false_neg == 1
+
+    def pytest_funcarg__conf_mat(self, whole_index):
+        true_index = {0, 1, 2}
+        predict_index = {0, 1, 3}
+        return evaluation.confusion_matrix(true_index, predict_index, whole_index)
+
+    def test_precision_and_recall(self, conf_mat):
+        res = evaluation.precision_and_recall(conf_mat)
+        assert res == (2.0 / 3.0, 2.0 / 3.0)

@@ -1,3 +1,4 @@
+# coding=utf-8
 from tf_idf_swig.tf_idf import tf_idf, doc_term_val_t
 from collections import namedtuple
 import io
@@ -7,20 +8,31 @@ class Sample:
     def __init__(self):
         self.y = dict()
         self.x = dict()
-        self.y_remapping_rel = dict()
+        self.binary_y = dict()
+        self.index_mapping_relation = dict()
 
     def size(self):
         if len(self.y) != len(self.x):
             raise ValueError('The size of y and x must agree.')
         return len(self.y)
 
-    def label_string_remap(self):
-        """Mapping original y value to its first index, return mapping relation and remapped y."""
-        for y_index, y_str in enumerate(self.y.values()):
-            if y_str not in self.y_remapping_rel:
-                self.y_remapping_rel[y_str] = y_index
-        for y_key in self.y.keys():
-            self.y[y_key] = self.y_remapping_rel[self.y[y_key]]
+    def label_string_disassemble(self):
+        """
+        Disassemble compounded label string to single label,
+        while the corresponding x becomes duplicated.
+        """
+        new_y = dict()
+        new_x = dict()
+        new_key = 0
+        for k in self.y.keys():
+            original_x = self.x[k]
+            for single_label in self.y[k].split(','):
+                self.index_mapping_relation[new_key] = k
+                new_y[new_key] = single_label
+                new_x[new_key] = original_x
+                new_key += 1
+        self.y = new_y
+        self.x = new_x
         return self
 
     def dimension_reduction(self, threshold):
@@ -46,8 +58,10 @@ class Sample:
         train_count = int(self.size() * train_proportion)
         train_keys = self.y.keys()[:train_count]
         test_keys = self.y.keys()[train_count:]
-        return [self.y[i] for i in train_keys], [self.x[i] for i in train_keys], [self.y[j] for j in test_keys], [
-            self.x[j] for j in test_keys]
+        return [self.binary_y[i] for i in train_keys], \
+               [self.x[i] for i in train_keys], \
+               [self.binary_y[j] for j in test_keys], \
+               [self.x[j] for j in test_keys], train_keys, test_keys
 
     def feature_dimension(self):
         feature_set = set()
@@ -67,29 +81,9 @@ class Sample:
         :param positive_flag: str
         :return: Sample
         """
-        if not isinstance(positive_flag, str):
-            raise TypeError('Positive flag should be of type str.')
         for y_key in self.y.keys():
-            converted_y = 1 if (positive_flag in self.y[y_key].split(',')) else -1
-            self.y[y_key] = converted_y
-        return self
-
-    def label_string_disassemble(self):
-        """
-        Disassemble compounded label string to single label,
-        while the corresponding x becomes duplicated.
-        """
-        new_y = dict()
-        new_x = dict()
-        new_key = 0
-        for k in self.y.keys():
-            original_x = self.x[k]
-            for single_label in self.y[k].split(','):
-                new_y[new_key] = single_label
-                new_x[new_key] = original_x
-                new_key += 1
-        self.y = new_y
-        self.x = new_x
+            converted_y = 1 if positive_flag == str(self.y[y_key]) else -1
+            self.binary_y[y_key] = converted_y
         return self
 
 
@@ -111,8 +105,3 @@ def sample_reader(data_file_path):
             val = float(val)
             sample.x[index][feat] = val
     return sample
-
-
-if __name__ == '__main__':
-    TR = sample_reader('/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt')
-    TR.split_train_test(0.4)

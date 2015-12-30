@@ -1,55 +1,85 @@
 from collections import namedtuple
 
 
-def true_id_per_label(test_y):
-    """Convert test data with id-true_label into a map with label as its key and id set as value."""
-    true_id = dict()
-    for instance_index, y_str in test_y.items():
-        for label in y_str.split_train_test(','):
-            true_id.setdefault(label, set())
-            true_id[label].add(instance_index)
-    return true_id
+def generate_fact(y, index_mapping_rel):
+    res = dict()
+    for instance_index, label in y.items():
+        res.setdefault(label, set())
+        res[label].add(index_mapping_rel[instance_index])
+    return res
 
 
-def confusion_matrix_per_label(predict_data_path, true_label_id):
-    """Calculate each label's evaluation metric."""
+def collect_whole_index(fact):
+    res = set()
+    for index in fact.values():
+        for each_index in index:
+            res.add(each_index)
+    return res
+
+
+def confusion_matrix(true_index, predict_index, whole_index):
     measure = namedtuple('measure', 'true_pos false_pos true_neg false_neg')
-    confusion_matrix = dict()
-    with open(predict_data_path, 'r') as predict_data:
-        all_line = predict_data.readlines()
-        for label in true_label_id.keys():
-            true_pos, false_pos, true_neg, false_neg = [0.0] * 4
-            for line in all_line:
-                index = int(line.split(',')[0])
-                predict_label_set = set(line.strip().split(',')[1].split(' '))
-                if label in predict_label_set:
-                    if index in true_label_id[label]:
-                        true_pos += 1
-                    else:
-                        false_pos += 1
-                else:
-                    if index in true_label_id[label]:
-                        false_neg += 1
-                    else:
-                        true_neg += 1
-            confusion_matrix.setdefault(label, measure(true_pos, false_pos, true_neg, false_neg))
-    return confusion_matrix
+    true_pos, false_pos, true_neg, false_neg = [0.0] * 4
+    for each_index in whole_index:
+        if each_index in predict_index:
+            if each_index in true_index:
+                true_pos += 1
+            else:
+                false_pos += 1
+        else:
+            if each_index in true_index:
+                false_neg += 1
+            else:
+                true_neg += 1
+    return measure(true_pos, false_pos, true_neg, false_neg)
 
 
-def macro_metric(test_y, predict_data_path):
-    """Calculate macro metric for multi-class classification."""
-    tmp_macro_precision = 0.0
-    tmp_macro_recall = 0.0
-    true_id_map = true_id_per_label(test_y)
-    confusion_mat = confusion_matrix_per_label(predict_data_path, true_id_map)
-    for label in confusion_mat.keys():
-        pos_count = confusion_mat[label].true_pos + confusion_mat[label].false_pos
-        true_count = confusion_mat[label].true_pos + confusion_mat[label].false_neg
-        # todo: skip the zero division problem may cause wrong.
-        if (pos_count == 0) or (true_count == 0):
+def precision_and_recall(confusion_mat):
+    pos_num = confusion_mat.true_pos + confusion_mat.false_pos
+    true_num = confusion_mat.true_pos + confusion_mat.false_neg
+    if pos_num != 0 and true_num != 0:
+        precision = confusion_mat.true_pos / pos_num
+        recall = confusion_mat.true_pos / true_num
+        return precision, recall
+    else:
+        return 0.0, 0.0
+
+
+def macro_precision_and_recall(fact, prediction):
+    macro_precision = 0.0
+    macro_recall = 0.0
+    whole_index = collect_whole_index(fact)
+    for each_label in fact.keys():
+        if (each_label not in fact.keys()) or (each_label not in prediction.keys()):
             continue
-        each_precision = confusion_mat[label].true_pos / pos_count
-        each_recall = confusion_mat[label].true_pos / true_count
-        tmp_macro_precision += each_precision
-        tmp_macro_recall += each_recall
-    return tmp_macro_precision / len(confusion_mat), tmp_macro_recall / len(confusion_mat)
+        confusion_mat = confusion_matrix(fact[each_label], prediction[each_label], whole_index)
+        tmp_precision, tmp_recall = precision_and_recall(confusion_mat)
+        macro_precision += tmp_precision
+        macro_recall += tmp_recall
+    return macro_precision / len(fact.keys()), macro_recall / len(fact.keys())
+
+
+class Prediction:
+    def __init__(self):
+        self.dat = dict()
+
+    def update(self, target_label, predicting_sample_keys, predicted_label):
+        if len(predicting_sample_keys) != len(predicted_label):
+            raise ValueError('The length of predicting sample keys and predicted label must agree.')
+        for i in range(len(predicting_sample_keys)):
+            sample_key = predicting_sample_keys[i]
+            if predicted_label[i] > 0:
+                self.dat.setdefault(target_label, set())
+                self.dat[target_label].add(sample_key)
+        return self
+
+    def convert_to_original_index(self, index_mapping_rel):
+        for k in self.dat.keys():
+            new_index = set()
+            for index in self.dat[k]:
+                new_index.add(index_mapping_rel[index])
+            self.dat[k] = new_index
+        return self
+
+    def evaluation(self, fact):
+        return macro_precision_and_recall(fact, self.dat)
