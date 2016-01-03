@@ -16,7 +16,7 @@ hierarchy_f_path = '/Users/wumengling/PycharmProjects/kaggle/input_data/hierarch
 sample_f_path = '/Users/wumengling/PycharmProjects/kaggle/input_data/train_sample.csv'
 tf_idf_threshold = 1.0
 train_prop = 0.8
-num_labels_to_be_predicted = 30
+num_labels_to_be_predicted = 2
 hierarchy_upward_step = 100
 
 
@@ -49,7 +49,7 @@ for each_label in labels_to_be_predicted:
 # evaluating with macro metrics
 predict_result.convert_to_original_index(dat.index_mapping_relation)
 dat_fact = generate_real_class(dat.y, dat.index_mapping_relation)
-print(predict_result.evaluation(dat_fact))
+print(predict_result.evaluation(dat_fact, labels_to_be_predicted))
 # ---------------------------------- main part -------------------------- #
 
 
@@ -58,4 +58,4 @@ s = StringIO.StringIO()
 sort_key = 'cumulative'
 ps = pstats.Stats(pr, stream=s).sort_stats(sort_key)
 ps.print_stats()
-print s.getvalue()
+# print s.getvalue()

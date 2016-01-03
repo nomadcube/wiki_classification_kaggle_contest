@@ -45,18 +45,21 @@ def precision_and_recall(confusion_mat):
         return 0.0, 0.0
 
 
-def macro_precision_and_recall(fact, prediction):
+def macro_precision_and_recall(fact, prediction, predicted_labels):
     macro_precision = 0.0
     macro_recall = 0.0
     whole_index = all_index_in_real_class(fact)
-    for each_label in fact.keys():
-        if (each_label not in fact.keys()) or (each_label not in prediction.keys()):
-            continue
-        confusion_mat = confusion_matrix(fact[each_label], prediction[each_label], whole_index)
-        tmp_precision, tmp_recall = precision_and_recall(confusion_mat)
-        macro_precision += tmp_precision
-        macro_recall += tmp_recall
-    return macro_precision / len(fact.keys()), macro_recall / len(fact.keys())
+    valid_key = 0.0
+    try:
+        for each_label in predicted_labels:
+            confusion_mat = confusion_matrix(fact[each_label], prediction[each_label], whole_index)
+            tmp_precision, tmp_recall = precision_and_recall(confusion_mat)
+            macro_precision += tmp_precision
+            macro_recall += tmp_recall
+            valid_key += 1
+        return macro_precision / valid_key, macro_recall / valid_key
+    except KeyError:
+        return "Macro metrics could be infinity because some label are not included in prediction."
 
 
 class PredictResult:
@@ -81,5 +84,5 @@ class PredictResult:
             self.dat[k] = new_index
         return self
 
-    def evaluation(self, fact):
-        return macro_precision_and_recall(fact, self.dat)
+    def evaluation(self, fact, predicted_labels):
+        return macro_precision_and_recall(fact, self.dat, predicted_labels)
