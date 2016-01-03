@@ -1,9 +1,13 @@
 import Sample
+from Data.hierarchy import hierarchy
 
 
 class TestSample:
     def pytest_funcarg__TR(self):
         return Sample.sample_reader('/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt')
+
+    def pytest_funcarg__hierarchy_f_path(self):
+        return '/Users/wumengling/PycharmProjects/kaggle/unit_test_data/fake_hierarchy.txt'
 
     def test_train_data_init(self, TR):
         assert TR.y == {0: '314523,165538,416827',
@@ -74,3 +78,23 @@ class TestSample:
                                              3: 1,
                                              4: 2,
                                              5: 2}
+
+    def test_disassembled_label_upward(self, hierarchy_f_path, TR):
+        upwarded_hierarchy = hierarchy.HierarchyTable()
+        upwarded_hierarchy.read_data('/Users/wumengling/PycharmProjects/kaggle/unit_test_data/fake_hierarchy.txt')
+        upwarded_hierarchy.update(0)
+        TR.label_string_disassemble()
+        assert TR.y == {0: '314523',
+                        1: '165538',
+                        2: '416827',
+                        3: '21631',
+                        4: '76255',
+                        5: '335416'}
+        TR.disassembled_label_upward(upwarded_hierarchy)
+        assert len(TR.y) == 6
+        assert TR.y == {0: u'314523',
+                        1: u'165538',
+                        2: u'165538',
+                        3: u'416827',
+                        4: u'21631',
+                        5: u'233333'}

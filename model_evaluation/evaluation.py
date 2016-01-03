@@ -1,7 +1,7 @@
 from collections import namedtuple
 
 
-def generate_fact(y, index_mapping_rel):
+def generate_real_class(y, index_mapping_rel):
     res = dict()
     for instance_index, label in y.items():
         res.setdefault(label, set())
@@ -9,9 +9,9 @@ def generate_fact(y, index_mapping_rel):
     return res
 
 
-def collect_whole_index(fact):
+def all_index_in_real_class(real_class):
     res = set()
-    for index in fact.values():
+    for index in real_class.values():
         for each_index in index:
             res.add(each_index)
     return res
@@ -48,7 +48,7 @@ def precision_and_recall(confusion_mat):
 def macro_precision_and_recall(fact, prediction):
     macro_precision = 0.0
     macro_recall = 0.0
-    whole_index = collect_whole_index(fact)
+    whole_index = all_index_in_real_class(fact)
     for each_label in fact.keys():
         if (each_label not in fact.keys()) or (each_label not in prediction.keys()):
             continue
@@ -59,7 +59,7 @@ def macro_precision_and_recall(fact, prediction):
     return macro_precision / len(fact.keys()), macro_recall / len(fact.keys())
 
 
-class Prediction:
+class PredictResult:
     def __init__(self):
         self.dat = dict()
 

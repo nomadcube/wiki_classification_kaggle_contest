@@ -1,5 +1,0 @@
-{
-  "test_evaluation.py::TestEvaluation::()::test_collect_whole_index": true, 
-  "test_evaluation.py::TestEvaluation::()::test_confusion_matrix": true, 
-  "test_evaluation.py::TestEvaluation::()::test_precision_and_recall": true
-}

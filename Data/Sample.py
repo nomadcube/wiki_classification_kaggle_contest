@@ -1,7 +1,7 @@
-# coding=utf-8
-from tf_idf_swig.tf_idf import tf_idf, doc_term_val_t
-from collections import namedtuple
 import io
+from collections import namedtuple
+
+from Data.tf_idf.tf_idf import tf_idf
 
 
 class Sample:
@@ -42,10 +42,11 @@ class Sample:
         :param threshold: float
         :return: Sample
         """
-        self.x = dict(tf_idf(doc_term_val_t(self.x), threshold))
+        self.x = tf_idf(self.x, threshold)
+        new_y = dict()
         for k in self.x:
-            self.x[k] = dict(self.x[k])
-        self.y = {k: v for (k, v) in self.y.items() if k in self.x.keys()}
+            new_y[k] = self.y[k]
+        self.y = new_y
         return self
 
     def split_train_test(self, train_proportion):
@@ -86,6 +87,14 @@ class Sample:
             self.binary_y[y_key] = converted_y
         return self
 
+    def disassembled_label_upward(self, upwarded_hierarchy):
+        for y_key in self.y.keys():
+            try:
+                self.y[y_key] = str(upwarded_hierarchy.dat[int(self.y[y_key])].parent_id)
+            except IndexError:
+                self.y[y_key] = self.y[y_key]
+        return self
+
 
 def sample_reader(data_file_path):
     """
@@ -105,3 +114,9 @@ def sample_reader(data_file_path):
             val = float(val)
             sample.x[index][feat] = val
     return sample
+
+
+if __name__ == '__main__':
+    TR = sample_reader('/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt')
+    TR.label_string_disassemble()
+

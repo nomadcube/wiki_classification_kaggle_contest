@@ -21,23 +21,22 @@ class TestEvaluation:
                 5: 2}
 
     def test_generate_fact(self, y, rel):
-        label_id = evaluation.generate_fact(y, rel)
-        assert isinstance(label_id, dict)
-        assert len(label_id) == 6
-        assert label_id[u'314523'] == {0} and label_id[u'165538'] == {0} and label_id[u'416827'] == {0} \
-               and label_id[u'21631'] == {1} \
-               and label_id[u'76255'] == {2} and label_id[u'335416'] == {2}
+        real_class = evaluation.generate_real_class(y, rel)
+        assert isinstance(real_class, dict)
+        assert len(real_class) == 6
+        assert real_class[u'314523'] == {0} and real_class[u'165538'] == {0} and real_class[u'416827'] == {0} \
+               and real_class[u'21631'] == {1} \
+               and real_class[u'76255'] == {2} and real_class[u'335416'] == {2}
 
     def pytest_funcarg__fact(self, y, rel):
-        return evaluation.generate_fact(y, rel)
+        return evaluation.generate_real_class(y, rel)
 
     def test_collect_whole_index(self, fact):
-        whole_index = evaluation.collect_whole_index(fact)
+        whole_index = evaluation.all_index_in_real_class(fact)
         assert isinstance(whole_index, set)
-        assert whole_index == {0, 1, 2, 3, 4, 5}
 
     def pytest_funcarg__whole_index(self, fact):
-        return evaluation.collect_whole_index(fact)
+        return {0, 1, 2, 3, 4, 5}
 
     def test_confusion_matrix(self, whole_index):
         true_index = {0, 1, 2}
