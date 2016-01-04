@@ -1,11 +1,13 @@
-from Data.Sample import sample_reader
-from model_evaluation.evaluation import PredictResult, generate_real_class
-from Data.hierarchy import hierarchy
-from training import select_labels_for_prediction, train_and_collect_predict_result
-
+import StringIO
 import cProfile
 import pstats
-import StringIO
+
+import liblinearutil
+
+from Data.Sample import sample_reader
+from Data.hierarchy import hierarchy
+from model_evaluation.evaluation import PredictResult, generate_real_class
+from training import select_labels_for_prediction
 
 pr = cProfile.Profile()
 pr.enable()
@@ -16,7 +18,7 @@ hierarchy_f_path = '/Users/wumengling/PycharmProjects/kaggle/input_data/hierarch
 sample_f_path = '/Users/wumengling/PycharmProjects/kaggle/input_data/train_sample.csv'
 tf_idf_threshold = 1.0
 train_prop = 0.8
-num_labels_to_be_predicted = 2
+num_labels_to_be_predicted = 1
 hierarchy_upward_step = 100
 
 
@@ -33,23 +35,22 @@ predict_result = PredictResult()
 dat.dimension_reduction(tf_idf_threshold)
 print(dat.description())
 
-# disassemble label string
-dat.label_string_disassemble()
-print(dat.description())
-
 # label upward
-dat.disassembled_label_upward(hierarchy_table)
+dat.label_upward(hierarchy_table)
 print(dat.description())
 
 # training
 labels_to_be_predicted = select_labels_for_prediction(dat, num_labels_to_be_predicted)
+print("label " + repr(labels_to_be_predicted) + " is training.")
 for each_label in labels_to_be_predicted:
-    train_and_collect_predict_result(predict_result, dat, each_label, train_prop)
-
-# evaluating with macro metrics
-predict_result.convert_to_original_index(dat.index_mapping_relation)
-dat_fact = generate_real_class(dat.y, dat.index_mapping_relation)
-print(predict_result.evaluation(dat_fact, labels_to_be_predicted))
+    dat.convert_to_binary_class(each_label)
+    tr_y, tr_x, te_y, te_x, tr_keys, te_keys = dat.split_train_test(train_prop)
+    model = liblinearutil.train(tr_y, tr_x, '-s 0 -c 0.03')
+    predicted_y, accuracy, decision_value = liblinearutil.predict(te_y, te_x, model)
+    predict_result.update(each_label, te_keys, predicted_y)
+    te_sample_y = {te_keys[i]: te_y[i] for i in range(len(te_keys))}
+    dat_fact = generate_real_class(te_sample_y)
+    print(predict_result.evaluation(dat_fact, labels_to_be_predicted))
 # ---------------------------------- main part -------------------------- #
 
 

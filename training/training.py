@@ -1,13 +1,14 @@
 import liblinearutil
 
 
-def select_labels_for_prediction(sample, predicting_label_count):
+def select_labels_for_prediction(sample, max_label_count):
     distinct_labels = list()
+    num_included_label = 0
     for each_y in sample.y.values():
-        if len(distinct_labels) >= predicting_label_count:
-            break
-        if each_y not in distinct_labels:
-            distinct_labels.append(each_y)
+        for single_label in each_y.split(','):
+            if (num_included_label < max_label_count) and (single_label not in distinct_labels):
+                distinct_labels.append(single_label)
+                num_included_label += 1
     return distinct_labels
 
 

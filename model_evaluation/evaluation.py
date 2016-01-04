@@ -1,11 +1,11 @@
 from collections import namedtuple
 
 
-def generate_real_class(y, index_mapping_rel):
+def generate_real_class(y):
     res = dict()
     for instance_index, label in y.items():
         res.setdefault(label, set())
-        res[label].add(index_mapping_rel[instance_index])
+        res[label].add(instance_index)
     return res
 
 
@@ -53,6 +53,7 @@ def macro_precision_and_recall(fact, prediction, predicted_labels):
     try:
         for each_label in predicted_labels:
             confusion_mat = confusion_matrix(fact[each_label], prediction[each_label], whole_index)
+            print(confusion_mat)
             tmp_precision, tmp_recall = precision_and_recall(confusion_mat)
             macro_precision += tmp_precision
             macro_recall += tmp_recall
