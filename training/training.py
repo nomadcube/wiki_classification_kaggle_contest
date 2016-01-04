@@ -11,7 +11,6 @@ def select_labels_for_prediction(sample, max_label_count):
                 num_included_label += 1
     return distinct_labels
 
-
 def train_and_collect_predict_result(current_predict_result, whole_sample, target_label, train_proportion):
     whole_sample.convert_to_binary_class(target_label)
     tr_y, tr_x, te_y, te_x, tr_keys, te_keys = whole_sample.split_train_test(train_proportion)
