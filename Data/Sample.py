@@ -1,5 +1,5 @@
-import io
 from collections import namedtuple
+from random import random
 
 from scipy.sparse import csr_matrix
 
@@ -12,6 +12,7 @@ class Sample:
         self.x = dict()
         self.binary_y = dict()
         self.index_mapping_relation = dict()
+        self.all_feature = dict()
 
     def size(self):
         if len(self.y) != len(self.x):
@@ -27,16 +28,18 @@ class Sample:
         """
         self.x = tf_idf(self.x, threshold)
         new_y = dict()
-        for k in self.x:
+        for k in self.x.keys():
             new_y[k] = self.y[k]
         self.y = new_y
         return self
 
-    def feature_dimension(self):
+    def collect_all_feature_and_count(self):
         feature_set = set()
         for instance_index in self.x.keys():
             for feature in self.x[instance_index].keys():
                 feature_set.add(feature)
+        for i, feat in enumerate(feature_set):
+            self.all_feature[feat] = i
         return len(feature_set)
 
     def label_upward(self, upward_hierarchy):
@@ -53,7 +56,7 @@ class Sample:
 
     def description(self):
         sample_desc = namedtuple("DataDesc", "sample_size feature_dimension class_number")
-        return sample_desc(self.size(), self.feature_dimension(), len(set(self.y.values())))
+        return sample_desc(self.size(), self.collect_all_feature_and_count(), len(set(self.y.values())))
 
     def convert_to_binary_class(self, positive_flag):
         """
@@ -102,8 +105,16 @@ class Sample:
         self.x = new_x
         return self
 
+    def remap_feature_index_after_tfidf(self):
+        new_x = dict()
+        for k in self.x.keys():
+            new_x[k] = dict()
+            for feat, feat_val in self.x[k].items():
+                new_x[k][self.all_feature[feat]] = feat_val
+        self.x = new_x
 
-def sample_reader(data_file_path):
+
+def sample_reader(data_file_path, sample_prop=1.0):
     """
     Read data from data_file_path and convert it to a Sample object.
 
@@ -111,15 +122,22 @@ def sample_reader(data_file_path):
     :return: Sample
     """
     sample = Sample()
-    for index, line in enumerate(io.open(data_file_path, 'r').readlines()):
-        sample.x[index] = dict()
-        tmp_y, tmp_x = line.strip().split(' ', 1)
-        sample.y[index] = tmp_y
-        for column in tmp_x.split(' '):
-            feat, val = column.split(':')
-            feat = int(feat)
-            val = float(val)
-            sample.x[index][feat] = val
+    index = 0
+    with open(data_file_path, 'r') as f_stream:
+        line = f_stream.readline()
+        while line:
+            determine_number = random()
+            if determine_number <= sample_prop:
+                sample.x[index] = dict()
+                tmp_y, tmp_x = line.strip().split(' ', 1)
+                sample.y[index] = tmp_y
+                for column in tmp_x.split(' '):
+                    feat, val = column.split(':')
+                    feat = int(feat)
+                    val = float(val)
+                    sample.x[index][feat] = val
+            line = f_stream.readline()
+            index += 1
     return sample
 
 
@@ -152,6 +170,12 @@ def construct_csr(x_key, x_value, constraint_features=None):
 
 if __name__ == '__main__':
     TR = sample_reader('/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt')
-    csr_x = construct_csr(TR.x.keys(), TR.x.values())
-    print(csr_x)
-    print(csr_x.shape)
+    print(TR.x)
+    TR.dimension_reduction(0.1)
+    print(TR.x)
+    TR.collect_all_feature_and_count()
+    TR.remap_feature_index_after_tfidf()
+    print(TR.x)
+    # csr_x = construct_csr(TR.x.keys(), TR.x.values())
+    # print(csr_x)
+    # print(csr_x.shape)

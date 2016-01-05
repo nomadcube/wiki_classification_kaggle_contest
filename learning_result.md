@@ -67,6 +67,12 @@ basic_statistics(min_val=1, max_val=1344, median=20, mean_val=27.61187490936296)
 6. 总耗时21.064 seconds, 在单一label下的测试集误判率为 0/80
 结论：还不如不拆分单label 
 
+抽样比例0.01    DataDesc(sample_size=23422, feature_dimension=5112, class_number=21412) 57.795 seconds  22727/23422
+抽样比例0.1时，DataDesc(sample_size=237287, feature_dimension=409599, class_number=187152)
+用阈值为4.0的tf-idf降维后，DataDesc(sample_size=237287, feature_dimension=222, class_number=187152)
+程序崩溃。
+
+
 ---
 
 ### 一些可以尝试的新方法
