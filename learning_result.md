@@ -31,6 +31,8 @@ basic_statistics(min_val=1, max_val=1344, median=20, mean_val=27.61187490936296)
 
 ### 数据处理细节、模型训练过程及效果
 
+2016-01-03
+
 1. 取前10000行作为样本
 2. 对样本用tf-idf进行降维，阈值为1
 3. 将y中的多label转成单label, 对应的x有冗余
@@ -38,3 +40,36 @@ basic_statistics(min_val=1, max_val=1344, median=20, mean_val=27.61187490936296)
 5. 选取2个单label用来测试
 6. 用liblinear进行训练，参数为'-s 0 -c 0.03'. 
 7. 对选出来的2个单label做macro评估，结果如下为(0.4097222222222222, 0.010944131128044779)
+
+2016-01-03
+
+1. 取前10000行作为样本
+2. 对样本用tf-idf进行降维，阈值为1
+3. 将label串中的各个label沿层次有向图往上100层进行转换，输出仍是label串
+4. 选取label 2193976用作预测目标，label串中包含2193976的为正样本，否则为负样本
+5. 用liblinear进行训练，参数为'-s 0 -c 0.03'.
+6. 在2000个测试样本中，label 2193976的macro precision / recall 分别是 (0.44549763033175355, 0.2789317507418398), confusion matrix为measure(true_pos=94.0, false_pos=117.0, true_neg=1546.0, false_neg=243.0)
+
+2016-01-04
+
+1. 取前10行作为样本
+2. 对样本用tf-idf进行降维，阈值为1
+3. 将y中的多label转成单label, 对应的x有冗余
+4. 将x转为csr形式的稀疏矩阵（DataDesc(sample_size=70, feature_dimension=690, class_number=70)）
+5. 用sklearn.MultinomialNB对稀疏形式的x和array_like的y进行训练
+6. 总耗时12.003s, 在单一label下的测试集误判率为 49/56 （56 = 70 * 0.8）
+结论：慢且不准
+
+1. 取前80行作为样本
+2. 对样本用tf-idf进行降维，阈值为1
+3. 将x转为csr形式的稀疏矩阵（DataDesc(sample_size=100, feature_dimension=3421, class_number=100)）
+5. 用sklearn.MultinomialNB对稀疏形式的x和array_like的y进行训练
+6. 总耗时21.064 seconds, 在单一label下的测试集误判率为 0/80
+结论：还不如不拆分单label 
+
+---
+
+### 一些可以尝试的新方法
+
+- Multinomial Naive Bayes 
+

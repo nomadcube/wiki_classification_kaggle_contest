@@ -1,6 +1,8 @@
 import io
 from collections import namedtuple
 
+from scipy.sparse import csr_matrix
+
 from Data.tf_idf.tf_idf import tf_idf
 
 
@@ -39,13 +41,13 @@ class Sample:
 
     def label_upward(self, upward_hierarchy):
         for y_key in self.y.keys():
-            new_labels = list()
+            new_labels = set()
             for each_label in self.y[y_key].split(','):
                 try:
                     new_each_label = str(upward_hierarchy.dat[int(each_label)].parent_id)
                 except IndexError:
                     new_each_label = each_label
-                new_labels.append(new_each_label)
+                new_labels.add(new_each_label)
             self.y[y_key] = ','.join(new_labels)
         return self
 
@@ -75,10 +77,30 @@ class Sample:
         train_count = int(self.size() * train_proportion)
         train_keys = self.y.keys()[:train_count]
         test_keys = self.y.keys()[train_count:]
-        return [self.binary_y[i] for i in train_keys], \
+        # todo: modified self.binary_y -> self.y
+        return [self.y[i] for i in train_keys], \
                [self.x[i] for i in train_keys], \
-               [self.binary_y[j] for j in test_keys], \
+               [self.y[j] for j in test_keys], \
                [self.x[j] for j in test_keys], train_keys, test_keys
+
+    def label_string_disassemble(self):
+        """
+        Disassemble compounded label string to single label,
+        while the corresponding x becomes duplicated.
+        """
+        new_y = dict()
+        new_x = dict()
+        new_key = 0
+        for k in self.y.keys():
+            original_x = self.x[k]
+            for single_label in self.y[k].split(','):
+                self.index_mapping_relation[new_key] = k
+                new_y[new_key] = single_label
+                new_x[new_key] = original_x
+                new_key += 1
+        self.y = new_y
+        self.x = new_x
+        return self
 
 
 def sample_reader(data_file_path):
@@ -101,6 +123,35 @@ def sample_reader(data_file_path):
     return sample
 
 
+def construct_csr(x_key, x_value, constraint_features=None):
+    if constraint_features is None:
+        data = list()
+        row_ind = list()
+        col_ind = list()
+        col_num = 0
+        for i in range(len(x_key)):
+            for feature_index, feature_val in x_value[i].items():
+                data.append(feature_val)
+                row_ind.append(i)
+                col_ind.append(feature_index)
+                if feature_index > col_num:
+                    col_num = feature_index
+        return csr_matrix((data, (row_ind, col_ind)), shape=(len(x_key), col_num + 1))
+    else:
+        data = list()
+        row_ind = list()
+        col_ind = list()
+        for i in range(len(x_key)):
+            for each_constraint_feature in constraint_features:
+                feat_val = x_value[i][each_constraint_feature] if each_constraint_feature in x_value[i].keys() else 0.0
+                data.append(feat_val)
+                row_ind.append(i)
+                col_ind.append(each_constraint_feature)
+        return csr_matrix((data, (row_ind, col_ind)), shape=(len(x_key), max(constraint_features) + 1))
+
+
 if __name__ == '__main__':
     TR = sample_reader('/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt')
-
+    csr_x = construct_csr(TR.x.keys(), TR.x.values())
+    print(csr_x)
+    print(csr_x.shape)

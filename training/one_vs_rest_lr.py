@@ -19,7 +19,7 @@ sample_f_path = '/Users/wumengling/PycharmProjects/kaggle/input_data/train_sampl
 tf_idf_threshold = 1.0
 train_prop = 0.8
 num_labels_to_be_predicted = 1
-hierarchy_upward_step = 100
+hierarchy_upward_step = 0
 
 
 # construct upward hierarchy
@@ -36,8 +36,8 @@ dat.dimension_reduction(tf_idf_threshold)
 print(dat.description())
 
 # label upward
-dat.label_upward(hierarchy_table)
-print(dat.description())
+# dat.label_upward(hierarchy_table)
+# print(dat.description())
 
 # training
 labels_to_be_predicted = select_labels_for_prediction(dat, num_labels_to_be_predicted)
@@ -46,10 +46,10 @@ for each_label in labels_to_be_predicted:
     dat.convert_to_binary_class(each_label)
     tr_y, tr_x, te_y, te_x, tr_keys, te_keys = dat.split_train_test(train_prop)
     model = liblinearutil.train(tr_y, tr_x, '-s 0 -c 0.03')
-    predicted_y, accuracy, decision_value = liblinearutil.predict(te_y, te_x, model)
+    predicted_y = liblinearutil.predict(te_y, te_x, model)[0]
     predict_result.update(each_label, te_keys, predicted_y)
-    te_sample_y = {te_keys[i]: te_y[i] for i in range(len(te_keys))}
-    dat_fact = generate_real_class(te_sample_y)
+    test_y_sample = {k: dat.y[k] for k in te_keys}
+    dat_fact = generate_real_class(test_y_sample)
     print(predict_result.evaluation(dat_fact, labels_to_be_predicted))
 # ---------------------------------- main part -------------------------- #
 

@@ -3,9 +3,10 @@ from collections import namedtuple
 
 def generate_real_class(y):
     res = dict()
-    for instance_index, label in y.items():
-        res.setdefault(label, set())
-        res[label].add(instance_index)
+    for instance_index, labels in y.items():
+        for each_label in labels.split(','):
+            res.setdefault(each_label, set())
+            res[each_label].add(instance_index)
     return res
 
 
