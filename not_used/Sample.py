@@ -1,6 +1,6 @@
 from collections import namedtuple
 
-from data_processing.tf_idf.tf_idf import tf_idf
+from transformation.tf_idf import x_with_tf_idf
 
 
 class Sample:
@@ -23,7 +23,7 @@ class Sample:
         :param threshold: float
         :return: Sample
         """
-        self.x = tf_idf(self.x, threshold)
+        self.x = x_with_tf_idf(self.x, threshold)
         new_y = dict()
         for k in self.x.keys():
             new_y[k] = self.y[k]

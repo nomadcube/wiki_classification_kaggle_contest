@@ -1,27 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b8aeb2c8-a84f-4641-b373-9ab2724160ba" name="Default" comment="multinomial naive bayes终于特么跑起来">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data_processing/data_preparation.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data_processing/tf_idf/__init__.py" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Data/sampling.sh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Data/test_sample.py" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/Data/Sample.py" afterPath="$PROJECT_DIR$/data_processing/Sample.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/Data/__init__.py" afterPath="$PROJECT_DIR$/data_processing/test_train_data_preparation.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/Data/hierarchy/__init__.py" afterPath="$PROJECT_DIR$/data_processing/hierarchy/__init__.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/Data/hierarchy/hierarchy.cpp" afterPath="$PROJECT_DIR$/data_processing/hierarchy/hierarchy.cpp" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/Data/hierarchy/hierarchy.h" afterPath="$PROJECT_DIR$/data_processing/hierarchy/hierarchy.h" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/Data/hierarchy/hierarchy.i" afterPath="$PROJECT_DIR$/data_processing/hierarchy/hierarchy.i" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/Data/hierarchy/hierarchy_run.py" afterPath="$PROJECT_DIR$/data_processing/hierarchy/hierarchy_run.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/Data/hierarchy/setup.py" afterPath="$PROJECT_DIR$/data_processing/hierarchy/setup.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/Data/tf_idf/__init__.py" afterPath="$PROJECT_DIR$/data_processing/__init__.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/Data/tf_idf/tf_idf.py" afterPath="$PROJECT_DIR$/data_processing/tf_idf/tf_idf.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/training/multinomial_naive_bayes_csr.py" afterPath="$PROJECT_DIR$/not_used/multinomial_naive_bayes_csr.py" />
+    <list default="true" id="b8aeb2c8-a84f-4641-b373-9ab2724160ba" name="Default" comment="重构了数据处理的部分代码">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/test_tf_idf.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/test_transformation.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/tf_idf.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/transformation.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/model_evaluation/evaluation_metrics.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/not_used/test_Sample.py" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/data_processing/data_preparation.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/data_processing/test_train_data_preparation.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/data_processing/tf_idf/tf_idf.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/model_evaluation/evaluation.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/training/training.py" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/data_processing/Sample.py" afterPath="$PROJECT_DIR$/not_used/Sample.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/data_processing/__init__.py" afterPath="$PROJECT_DIR$/model_evaluation/cross_validation.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/data_processing/hierarchy/__init__.py" afterPath="$PROJECT_DIR$/learning/__init__.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/data_processing/hierarchy/hierarchy.cpp" afterPath="$PROJECT_DIR$/data/hierarchy/hierarchy.cpp" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/data_processing/hierarchy/hierarchy.h" afterPath="$PROJECT_DIR$/data/hierarchy/hierarchy.h" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/data_processing/hierarchy/hierarchy.i" afterPath="$PROJECT_DIR$/data/hierarchy/hierarchy.i" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/data_processing/hierarchy/hierarchy_run.py" afterPath="$PROJECT_DIR$/data/hierarchy/hierarchy_run.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/data_processing/hierarchy/setup.py" afterPath="$PROJECT_DIR$/data/hierarchy/setup.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/data_processing/tf_idf/__init__.py" afterPath="$PROJECT_DIR$/data/hierarchy/__init__.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/model_evaluation/test_evaluation.py" afterPath="$PROJECT_DIR$/model_evaluation/test_evaluation_metrics.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/training/__init__.py" afterPath="$PROJECT_DIR$/data/__init__.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/training/multinomial_naive_bayes.py" afterPath="$PROJECT_DIR$/learning/multinomial_naive_bayes.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/training/one_vs_rest_lr.py" afterPath="$PROJECT_DIR$/not_used/one_vs_rest_lr.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/learning_result.md" afterPath="$PROJECT_DIR$/learning_result.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/training/multinomial_naive_bayes.py" afterPath="$PROJECT_DIR$/training/multinomial_naive_bayes.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/training/one_vs_rest_lr.py" afterPath="$PROJECT_DIR$/training/one_vs_rest_lr.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/training/training.py" afterPath="$PROJECT_DIR$/training/training.py" />
     </list>
     <ignored path="kaggle.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -42,11 +47,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Sample.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/data_processing/Sample.py">
+      <file leaf-file-name="multinomial_naive_bayes.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/learning/multinomial_naive_bayes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.9235836">
-              <caret line="73" column="22" selection-start-line="73" selection-start-column="22" selection-end-line="73" selection-end-column="22" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="10" column="18" selection-start-line="10" selection-start-column="18" selection-end-line="10" selection-end-column="18" />
+              <folding>
+                <element signature="e#0#15#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="transformation.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/data/transformation.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.048877146">
+              <caret line="39" column="38" selection-start-line="39" selection-start-column="38" selection-end-line="39" selection-end-column="38" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
@@ -54,26 +71,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="data_preparation.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/data_processing/data_preparation.py">
+      <file leaf-file-name="cross_validation.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/model_evaluation/cross_validation.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="6" column="7" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
-              <folding>
-                <element signature="e#0#25#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="test_Sample.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/data_processing/test_Sample.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="51" column="31" selection-start-line="51" selection-start-column="31" selection-end-line="51" selection-end-column="31" />
-              <folding>
-                <element signature="e#0#23#0" expanded="true" />
-              </folding>
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -101,21 +104,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/classification/Classifier.py" />
-        <option value="$PROJECT_DIR$/input_data/train_sample.csv" />
-        <option value="$PROJECT_DIR$/classification/multi_classify.py" />
-        <option value="$PROJECT_DIR$/Data/hirarchy_processing.py" />
-        <option value="$PROJECT_DIR$/Data/test_hierarchy_processing.py" />
-        <option value="$PROJECT_DIR$/Data/hierarchy_processing.py" />
-        <option value="$PROJECT_DIR$/Data/tf_idf_swig/setup.py" />
-        <option value="$PROJECT_DIR$/Data/tf_idf_swig/run_tf_idf.py" />
-        <option value="$PROJECT_DIR$/Data/tf_idf_swig/tf_idf.i" />
-        <option value="$PROJECT_DIR$/Data/hierarchy/hierarchy.i" />
-        <option value="$PROJECT_DIR$/Data/hierarchy/setup.py" />
-        <option value="$PROJECT_DIR$/Data/hierarchy/hierarchy.h" />
-        <option value="$PROJECT_DIR$/Data/hierarchy/hierarchy.cpp" />
-        <option value="$PROJECT_DIR$/unit_test_data/fake_hierarchy.txt" />
-        <option value="$PROJECT_DIR$/Data/hierarchy/hierarchy_run.py" />
         <option value="$PROJECT_DIR$/unit_test_data/map_dict/map_dict.h.py" />
         <option value="$PROJECT_DIR$/unit_test_data/map_dict/map_dict.h" />
         <option value="$PROJECT_DIR$/unit_test_data/map_dict/map_dict.cpp" />
@@ -127,11 +115,9 @@
         <option value="$PROJECT_DIR$/map_dict/map_dict_run.py" />
         <option value="$PROJECT_DIR$/tf_idf/tf_idf.py" />
         <option value="$PROJECT_DIR$/data_processing.md" />
-        <option value="$PROJECT_DIR$/model_evaluation/test_evaluation.py" />
         <option value="$PROJECT_DIR$/classification/training.py" />
         <option value="$PROJECT_DIR$/classification/main.py" />
         <option value="$PROJECT_DIR$/cmp_result.md" />
-        <option value="$PROJECT_DIR$/model_evaluation/evaluation.py" />
         <option value="$PROJECT_DIR$/training/main.py" />
         <option value="$PROJECT_DIR$/training/test_multinomial_naive_bayes.py" />
         <option value="$PROJECT_DIR$/training/construct_csr.py" />
@@ -147,11 +133,28 @@
         <option value="$PROJECT_DIR$/training/multinomial_naive_bayes.py" />
         <option value="$PROJECT_DIR$/training/data_preparation.py" />
         <option value="$PROJECT_DIR$/training/one_vs_rest_lr.py" />
-        <option value="$PROJECT_DIR$/data_processing/Sample.py" />
         <option value="$PROJECT_DIR$/data_processing/test_train_data_preparation.py" />
         <option value="$PROJECT_DIR$/training/training.py" />
         <option value="$PROJECT_DIR$/data_processing/train_data_preparation.py" />
         <option value="$PROJECT_DIR$/data_processing/test_Sample.py" />
+        <option value="$PROJECT_DIR$/data_processing/Sample.py" />
+        <option value="$PROJECT_DIR$/data_processing/test_data_preparation.py" />
+        <option value="$PROJECT_DIR$/data_processing/data_preparation.py" />
+        <option value="$PROJECT_DIR$/data_processing/test_read_and_convert.py" />
+        <option value="$PROJECT_DIR$/data_processing/data_processing.py" />
+        <option value="$PROJECT_DIR$/data_processing/tf_idf/tf_idf.py" />
+        <option value="$PROJECT_DIR$/data_processing/tf_idf/test_tf_idf.py" />
+        <option value="$PROJECT_DIR$/data_processing/tf_idf.py" />
+        <option value="$PROJECT_DIR$/data_processing/test_tf_idf.py" />
+        <option value="$PROJECT_DIR$/data/test_tf_idf.py" />
+        <option value="$PROJECT_DIR$/data/data_processing.py" />
+        <option value="$PROJECT_DIR$/not_used/test_Sample.py" />
+        <option value="$PROJECT_DIR$/data/test_transformation.py" />
+        <option value="$PROJECT_DIR$/data/transformation.py" />
+        <option value="$PROJECT_DIR$/model_evaluation/evaluation.py" />
+        <option value="$PROJECT_DIR$/model_evaluation/test_evaluation.py" />
+        <option value="$PROJECT_DIR$/learning/multinomial_naive_bayes.py" />
+        <option value="$PROJECT_DIR$/model_evaluation/cross_validation.py" />
       </list>
     </option>
   </component>
@@ -215,7 +218,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="unit_test_data" />
+              <option name="myItemId" value="model_evaluation" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -229,7 +232,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="training" />
+              <option name="myItemId" value="learning" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -243,7 +246,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="data_processing" />
+              <option name="myItemId" value="data" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -277,14 +280,14 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/Data" />
       <recent name="$PROJECT_DIR$/not_used" />
+      <recent name="$PROJECT_DIR$/data_processing" />
+      <recent name="$PROJECT_DIR$/Data" />
       <recent name="$PROJECT_DIR$/not_uesed" />
       <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/input_data" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.multinomial_naive_bayes">
+  <component name="RunManager" selected="Python.multinomial_naive_bayes (1)">
     <configuration default="false" name="main (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -319,53 +322,53 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
     </configuration>
-    <configuration default="false" name="Sample" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration default="false" name="tf_idf (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Data" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/data_processing/tf_idf" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="kaggle" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Data/Sample.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/data_processing/tf_idf.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
     </configuration>
-    <configuration default="false" name="tf_idf" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration default="false" name="transformation" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Data/tf_idf" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/data" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="kaggle" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Data/tf_idf/tf_idf.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/data/transformation.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
     </configuration>
-    <configuration default="false" name="validation" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration default="false" name="multinomial_naive_bayes (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="/Library/Python/2.7/site-packages/sklearn/utils" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/learning" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="kaggle" />
-      <option name="SCRIPT_NAME" value="/Library/Python/2.7/site-packages/sklearn/utils/validation.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/learning/multinomial_naive_bayes.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -506,17 +509,17 @@
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Python.main (1)" />
       <item index="1" class="java.lang.String" itemvalue="Python.multinomial_naive_bayes" />
-      <item index="2" class="java.lang.String" itemvalue="Python.Sample" />
-      <item index="3" class="java.lang.String" itemvalue="Python.tf_idf" />
-      <item index="4" class="java.lang.String" itemvalue="Python.validation" />
+      <item index="2" class="java.lang.String" itemvalue="Python.tf_idf (1)" />
+      <item index="3" class="java.lang.String" itemvalue="Python.transformation" />
+      <item index="4" class="java.lang.String" itemvalue="Python.multinomial_naive_bayes (1)" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.multinomial_naive_bayes" />
-        <item index="1" class="java.lang.String" itemvalue="Python.main (1)" />
-        <item index="2" class="java.lang.String" itemvalue="Python.validation" />
-        <item index="3" class="java.lang.String" itemvalue="Python.Sample" />
-        <item index="4" class="java.lang.String" itemvalue="Python.tf_idf" />
+        <item index="0" class="java.lang.String" itemvalue="Python.multinomial_naive_bayes (1)" />
+        <item index="1" class="java.lang.String" itemvalue="Python.transformation" />
+        <item index="2" class="java.lang.String" itemvalue="Python.tf_idf (1)" />
+        <item index="3" class="java.lang.String" itemvalue="Python.multinomial_naive_bayes" />
+        <item index="4" class="java.lang.String" itemvalue="Python.main (1)" />
       </list>
     </recent_temporary>
   </component>
@@ -753,7 +756,13 @@
       <option name="project" value="LOCAL" />
       <updated>1451992177682</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="重构了数据处理的部分代码">
+      <created>1452057856360</created>
+      <option name="number" value="00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1452057856360</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -771,23 +780,23 @@
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20592593" sideWeight="0.49242425" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32866243" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31082803" sideWeight="0.5074074" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31130877" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3299363" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37961784" sideWeight="0.51185185" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31082803" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32401526" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3278272" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34394905" sideWeight="0.4925926" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24962963" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37992376" sideWeight="0.4911111" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37961784" sideWeight="0.48814815" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16518518" sideWeight="0.50757575" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38980892" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3299363" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34434563" sideWeight="0.4925926" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38980892" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -824,7 +833,8 @@
     <MESSAGE value="修改了training.py" />
     <MESSAGE value="对原样本进行随机抽样" />
     <MESSAGE value="multinomial naive bayes终于特么跑起来" />
-    <option name="LAST_COMMIT_MESSAGE" value="multinomial naive bayes终于特么跑起来" />
+    <MESSAGE value="重构了数据处理的部分代码" />
+    <option name="LAST_COMMIT_MESSAGE" value="重构了数据处理的部分代码" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -852,7 +862,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="108" />
+      <option name="time" value="110" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
@@ -861,13 +871,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/Library/Caches/PyCharm50/python_stubs/-2125986627/__builtin__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334">
-          <caret line="2578" column="8" selection-start-line="2578" selection-start-column="8" selection-end-line="2578" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/distutils/extension.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.11573237">
@@ -882,14 +885,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data_processing/hierarchy/hierarchy.h">
+    <entry file="file://$PROJECT_DIR$/data/hierarchy/hierarchy.h">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="32" column="14" selection-start-line="32" selection-start-column="9" selection-end-line="32" selection-end-column="14" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data_processing/hierarchy/hierarchy.cpp">
+    <entry file="file://$PROJECT_DIR$/data/hierarchy/hierarchy.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.42857143">
           <caret line="35" column="37" selection-start-line="35" selection-start-column="37" selection-end-line="35" selection-end-column="37" />
@@ -903,7 +906,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data_processing/hierarchy/hierarchy_run.py">
+    <entry file="file://$PROJECT_DIR$/data/hierarchy/hierarchy_run.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.23121387">
           <caret line="6" column="17" selection-start-line="6" selection-start-column="17" selection-end-line="6" selection-end-column="17" />
@@ -924,14 +927,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data_processing/hierarchy/hierarchy.i">
+    <entry file="file://$PROJECT_DIR$/data/hierarchy/hierarchy.i">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.26200873">
           <caret line="6" column="23" selection-start-line="6" selection-start-column="23" selection-end-line="6" selection-end-column="23" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data_processing/hierarchy/setup.py">
+    <entry file="file://$PROJECT_DIR$/data/hierarchy/setup.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.30567685">
           <caret line="7" column="26" selection-start-line="6" selection-start-column="6" selection-end-line="7" selection-end-column="26" />
@@ -994,7 +997,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data_processing/.cache/v/cache/lastfailed">
+    <entry file="file://$PROJECT_DIR$/data/.cache/v/cache/lastfailed">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="2" selection-start-line="0" selection-start-column="2" selection-end-line="0" selection-end-column="2" />
@@ -1008,14 +1011,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data_processing/tf_idf/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data_processing/hierarchy/hierarchy.py">
+    <entry file="file://$PROJECT_DIR$/data/hierarchy/hierarchy.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33333334">
           <caret line="311" column="8" selection-start-line="311" selection-start-column="8" selection-end-line="311" selection-end-column="8" />
@@ -1029,23 +1025,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model_evaluation/test_evaluation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.3435701">
-          <caret line="35" column="33" selection-start-line="35" selection-start-column="33" selection-end-line="35" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/input_data/train.csv">
       <provider selected="true" editor-type-id="LargeFileEditor">
         <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/model_evaluation/evaluation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="3" column="4" selection-start-line="3" selection-start-column="4" selection-end-line="3" selection-end-column="4" />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/cmp_result.md">
@@ -1066,13 +1048,6 @@
       </provider>
       <provider editor-type-id="MarkdownPreviewEditor">
         <state />
-      </provider>
-    </entry>
-    <entry file="file:///System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/scipy/sparse/csr.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.16872428">
-          <caret line="116" column="39" selection-start-line="116" selection-start-column="39" selection-end-line="116" selection-end-column="39" />
-        </state>
       </provider>
     </entry>
     <entry file="file:///System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/scipy/sparse/coo.py">
@@ -1118,13 +1093,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/unit_test_data/sample.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.12371134">
-          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dimension_reduction_record.md">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.21917808">
@@ -1149,13 +1117,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data_processing/tf_idf/tf_idf.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="9" column="14" selection-start-line="9" selection-start-column="14" selection-end-line="9" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///Library/Python/2.7/site-packages/sklearn/naive_bayes.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.23946784">
@@ -1168,6 +1129,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.47712418">
           <caret line="75" column="2" selection-start-line="75" selection-start-column="2" selection-end-line="75" selection-end-column="2" />
+          <folding />
         </state>
       </provider>
       <provider editor-type-id="MarkdownPreviewEditor">
@@ -1178,66 +1140,122 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/training/one_vs_rest_lr.py">
+    <entry file="file://$PROJECT_DIR$/unit_test_data/sample.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.71146244">
-          <caret line="28" column="41" selection-start-line="28" selection-start-column="41" selection-end-line="28" selection-end-column="41" />
+        <state vertical-scroll-proportion="0.13071896">
+          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/tf_idf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.05284016">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/test_tf_idf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.07926024">
+          <caret line="3" column="16" selection-start-line="3" selection-start-column="16" selection-end-line="3" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/not_used/Sample.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.29062086">
+          <caret line="11" column="19" selection-start-line="11" selection-start-column="19" selection-end-line="11" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#34#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/not_used/test_Sample.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.20739762">
+          <caret line="28" column="28" selection-start-line="28" selection-start-column="28" selection-end-line="28" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/test_transformation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.31704095">
+          <caret line="12" column="41" selection-start-line="10" selection-start-column="25" selection-end-line="12" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Library/Caches/PyCharm50/python_stubs/-2125986627/__builtin__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.4147844">
+          <caret line="2501" column="12" selection-start-line="2501" selection-start-column="12" selection-end-line="2501" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/not_used/one_vs_rest_lr.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5284016">
+          <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model_evaluation/test_evaluation_metrics.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="33" column="32" selection-start-line="33" selection-start-column="32" selection-end-line="33" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model_evaluation/evaluation_metrics.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.47556144">
+          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/learning/multinomial_naive_bayes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="18" selection-start-line="10" selection-start-column="18" selection-end-line="10" selection-end-column="18" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/training/multinomial_naive_bayes.py">
+    <entry file="file:///System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/scipy/sparse/csr.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.26350462">
-          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/training/training.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.13175231">
-          <caret line="5" column="26" selection-start-line="5" selection-start-column="26" selection-end-line="5" selection-end-column="26" />
+        <state vertical-scroll-proportion="0.28005284">
+          <caret line="309" column="32" selection-start-line="309" selection-start-column="32" selection-end-line="309" selection-end-column="32" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data_processing/test_train_data_preparation.py">
+    <entry file="file://$PROJECT_DIR$/model_evaluation/cross_validation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.26350462">
-          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data_processing/test_Sample.py">
+    <entry file="file://$PROJECT_DIR$/data/transformation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="51" column="31" selection-start-line="51" selection-start-column="31" selection-end-line="51" selection-end-column="31" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data_processing/data_preparation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="6" column="7" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data_processing/Sample.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.9235836">
-          <caret line="73" column="22" selection-start-line="73" selection-start-column="22" selection-end-line="73" selection-end-column="22" />
+        <state vertical-scroll-proportion="0.048877146">
+          <caret line="39" column="38" selection-start-line="39" selection-start-column="38" selection-end-line="39" selection-end-column="38" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>

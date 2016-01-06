@@ -3,9 +3,9 @@ import cProfile
 import pstats
 
 import liblinearutil
+from transformation.data_processing import preparation_for_train
 
-from data_processing.data_preparation import preparation_for_train
-from model_evaluation.evaluation import PredictResult, generate_real_class
+from model_evaluation.evaluation_metrics import PredictResult, index_for_each_label
 
 pr = cProfile.Profile()
 pr.enable()
@@ -33,7 +33,7 @@ for each_label in labels_to_be_predicted:
     predicted_y = liblinearutil.predict(te_y, te_x, model)[0]
     predict_result.update(each_label, te_keys, predicted_y)
     test_y_sample = {k: dat.y[k] for k in te_keys}
-    dat_fact = generate_real_class(test_y_sample)
+    dat_fact = index_for_each_label(test_y_sample)
     print(predict_result.evaluation(dat_fact, labels_to_be_predicted))
 # ---------------------------------- main part -------------------------- #
 

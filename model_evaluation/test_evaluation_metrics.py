@@ -1,38 +1,25 @@
-import evaluation
+import evaluation_metrics
 
 
 class TestEvaluation:
     """Unit test for evaluation module."""
 
     def pytest_funcarg__y(self):
-        return {0: u'314523',
-                1: u'165538',
-                2: u'416827',
-                3: u'21631',
-                4: u'76255',
-                5: u'335416'}
+        return ['314523,165538,416827', '21631', '76255,335416']
 
-    def pytest_funcarg__rel(self):
-        return {0: 0,
-                1: 0,
-                2: 0,
-                3: 1,
-                4: 2,
-                5: 2}
-
-    def test_generate_fact(self, y, rel):
-        real_class = evaluation.generate_real_class(y, rel)
+    def test_generate_fact(self, y):
+        real_class = evaluation_metrics.index_for_each_label(y)
         assert isinstance(real_class, dict)
         assert len(real_class) == 6
         assert real_class[u'314523'] == {0} and real_class[u'165538'] == {0} and real_class[u'416827'] == {0} \
                and real_class[u'21631'] == {1} \
                and real_class[u'76255'] == {2} and real_class[u'335416'] == {2}
 
-    def pytest_funcarg__fact(self, y, rel):
-        return evaluation.generate_real_class(y, rel)
+    def pytest_funcarg__fact(self, y):
+        return evaluation_metrics.index_for_each_label(y)
 
     def test_collect_whole_index(self, fact):
-        whole_index = evaluation.all_index_in_real_class(fact)
+        whole_index = evaluation_metrics.all_index(fact)
         assert isinstance(whole_index, set)
 
     def pytest_funcarg__whole_index(self, fact):
@@ -41,7 +28,7 @@ class TestEvaluation:
     def test_confusion_matrix(self, whole_index):
         true_index = {0, 1, 2}
         predict_index = {0, 1, 3}
-        mat = evaluation.confusion_matrix(true_index, predict_index, whole_index)
+        mat = evaluation_metrics.confusion_matrix(true_index, predict_index, whole_index)
         assert mat.true_pos == 2
         assert mat.false_pos == 1
         assert mat.true_neg == 2
@@ -50,8 +37,14 @@ class TestEvaluation:
     def pytest_funcarg__conf_mat(self, whole_index):
         true_index = {0, 1, 2}
         predict_index = {0, 1, 3}
-        return evaluation.confusion_matrix(true_index, predict_index, whole_index)
+        return evaluation_metrics.confusion_matrix(true_index, predict_index, whole_index)
 
     def test_precision_and_recall(self, conf_mat):
-        res = evaluation.precision_and_recall(conf_mat)
+        res = evaluation_metrics.precision_and_recall(conf_mat)
         assert res == (2.0 / 3.0, 2.0 / 3.0)
+
+    def test_macro_precision_and_recall(self, y):
+        prediction = ['314523,165538,416827', '21631', '76255,335416']
+        assert evaluation_metrics.macro_precision_and_recall(y, prediction) == (1, 1)
+        prediction = ['314523,165538,416827', '314523,165538,416827', '76255,335416']
+        assert evaluation_metrics.macro_precision_and_recall(y, prediction) == (3.5 / 6, 5.0 / 6)
