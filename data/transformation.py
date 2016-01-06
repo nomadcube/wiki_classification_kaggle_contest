@@ -40,27 +40,42 @@ def dimension_reduction(x, threshold):
     return x_with_tf_idf(x, threshold)
 
 
-def construct_csr_sample(base_x):
+def construct_csr_sample(base_x, feature_mapping_relation=None):
     """
     Convert to csr format with feature remapped to col index.
 
     :param base_x: list
+    :param feature_mapping_relation: {None, dict}
     :return csr_matrix
     """
-    feature_mapping = dict()
-    data = list()
-    row_ind = list()
-    col_ind = list()
-    for instance_id, instance in enumerate(base_x):
-        if len(instance) == 0:
-            continue
-        for feature, feature_val in instance.items():
-            row_ind.append(instance_id)
-            feature_num = len(feature_mapping)
-            feature_mapping.setdefault(feature, feature_num)
-            col_ind.append(feature_mapping[feature])
-            data.append(feature_val)
-    return csr_matrix((data, (row_ind, col_ind)), shape=(len(base_x), len(feature_mapping)))
+    if not feature_mapping_relation:
+        data = list()
+        row_ind = list()
+        col_ind = list()
+        feature_mapping = dict()
+        for instance_id, instance in enumerate(base_x):
+            if len(instance) == 0:
+                continue
+            for feature, feature_val in instance.items():
+                row_ind.append(instance_id)
+                feature_num = len(feature_mapping)
+                feature_mapping.setdefault(feature, feature_num)
+                col_ind.append(feature_mapping[feature])
+                data.append(feature_val)
+        return csr_matrix((data, (row_ind, col_ind)), shape=(len(base_x), len(feature_mapping))), feature_mapping
+    else:
+        data = list()
+        row_ind = list()
+        col_ind = list()
+        for instance_id, instance in enumerate(base_x):
+            if len(instance) == 0:
+                continue
+            for feature in feature_mapping_relation.keys():
+                row_ind.append(instance_id)
+                col_ind.append(feature_mapping_relation[feature])
+                val = instance[feature] if instance.get(feature) is not None else 0.0
+                data.append(val)
+        return csr_matrix((data, (row_ind, col_ind)), shape=(len(base_x), max(col_ind) + 1))
 
 
 if __name__ == '__main__':

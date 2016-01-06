@@ -24,5 +24,5 @@ def test_construct_csr_sample():
     x = [{'1250536': 1},
          {'634175': 1, '1095476': 4, '805104': 1},
          {'1250536': 1, '805104': 1}]
-    csr_1 = transformation.construct_csr_sample(x)
+    csr_1 = transformation.construct_csr_sample(x)[0]
     assert csr_1.shape == (3, 4)
