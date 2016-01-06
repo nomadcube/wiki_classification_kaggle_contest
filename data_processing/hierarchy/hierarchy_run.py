@@ -1,6 +1,6 @@
-import hierarchy
 from time import time
 
+import hierarchy
 
 start_time = time()
 ht = hierarchy.HierarchyTable()

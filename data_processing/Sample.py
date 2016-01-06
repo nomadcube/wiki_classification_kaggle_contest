@@ -1,9 +1,6 @@
 from collections import namedtuple
-from random import random
 
-from scipy.sparse import csr_matrix
-
-from Data.tf_idf.tf_idf import tf_idf
+from data_processing.tf_idf.tf_idf import tf_idf
 
 
 class Sample:
@@ -14,7 +11,7 @@ class Sample:
         self.index_mapping_relation = dict()
         self.all_feature = dict()
 
-    def size(self):
+    def __len__(self):
         if len(self.y) != len(self.x):
             raise ValueError('The size of y and x must agree.')
         return len(self.y)
@@ -56,7 +53,7 @@ class Sample:
 
     def description(self):
         sample_desc = namedtuple("DataDesc", "sample_size feature_dimension class_number")
-        return sample_desc(self.size(), self.collect_all_feature_and_count(), len(set(self.y.values())))
+        return sample_desc(self.__len__(), self.collect_all_feature_and_count(), len(set(self.y.values())))
 
     def convert_to_binary_class(self, positive_flag):
         """
@@ -77,13 +74,13 @@ class Sample:
         :param train_proportion: float
         :return: tuple
         """
-        train_count = int(self.size() * train_proportion)
+        train_count = int(self.__len__() * train_proportion)
         train_keys = self.y.keys()[:train_count]
         test_keys = self.y.keys()[train_count:]
         # todo: modified self.binary_y -> self.y
-        return [self.y[i] for i in train_keys], \
+        return [self.binary_y[i] for i in train_keys], \
                [self.x[i] for i in train_keys], \
-               [self.y[j] for j in test_keys], \
+               [self.binary_y[j] for j in test_keys], \
                [self.x[j] for j in test_keys], train_keys, test_keys
 
     def label_string_disassemble(self):
@@ -112,60 +109,6 @@ class Sample:
             for feat, feat_val in self.x[k].items():
                 new_x[k][self.all_feature[feat]] = feat_val
         self.x = new_x
-
-
-def sample_reader(data_file_path, sample_prop=1.0):
-    """
-    Read data from data_file_path and convert it to a Sample object.
-
-    :param data_file_path: str
-    :return: Sample
-    """
-    sample = Sample()
-    index = 0
-    with open(data_file_path, 'r') as f_stream:
-        line = f_stream.readline()
-        while line:
-            determine_number = random()
-            if determine_number <= sample_prop:
-                sample.x[index] = dict()
-                tmp_y, tmp_x = line.strip().split(' ', 1)
-                sample.y[index] = tmp_y
-                for column in tmp_x.split(' '):
-                    feat, val = column.split(':')
-                    feat = int(feat)
-                    val = float(val)
-                    sample.x[index][feat] = val
-            line = f_stream.readline()
-            index += 1
-    return sample
-
-
-def construct_csr(x_key, x_value, constraint_features=None):
-    if constraint_features is None:
-        data = list()
-        row_ind = list()
-        col_ind = list()
-        col_num = 0
-        for i in range(len(x_key)):
-            for feature_index, feature_val in x_value[i].items():
-                data.append(feature_val)
-                row_ind.append(i)
-                col_ind.append(feature_index)
-                if feature_index > col_num:
-                    col_num = feature_index
-        return csr_matrix((data, (row_ind, col_ind)), shape=(len(x_key), col_num + 1))
-    else:
-        data = list()
-        row_ind = list()
-        col_ind = list()
-        for i in range(len(x_key)):
-            for each_constraint_feature in constraint_features:
-                feat_val = x_value[i][each_constraint_feature] if each_constraint_feature in x_value[i].keys() else 0.0
-                data.append(feat_val)
-                row_ind.append(i)
-                col_ind.append(each_constraint_feature)
-        return csr_matrix((data, (row_ind, col_ind)), shape=(len(x_key), max(constraint_features) + 1))
 
 
 if __name__ == '__main__':

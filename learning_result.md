@@ -72,6 +72,8 @@ basic_statistics(min_val=1, max_val=1344, median=20, mean_val=27.61187490936296)
 用阈值为4.0的tf-idf降维后，DataDesc(sample_size=237287, feature_dimension=222, class_number=187152)
 程序崩溃。
 
+2016-01-06
+重构
 
 ---
 
