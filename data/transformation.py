@@ -78,6 +78,42 @@ def construct_csr_sample(base_x, feature_mapping_relation=None):
         return csr_matrix((data, (row_ind, col_ind)), shape=(len(base_x), max(col_ind) + 1))
 
 
+def flatting_multi_label(original_y, original_x):
+    if len(original_x) != len(original_y):
+        raise ValueError('Length of original_y and original_y must be the same.')
+    new_y = list()
+    new_x = list()
+    flatting_rel = dict()
+    new_instance_id = 0
+    for instance_id in range(len(original_y)):
+        flatting_rel.setdefault(instance_id, set())
+        each_original_y = original_y[instance_id]
+        each_original_x = original_x[instance_id]
+        labels = original_y[instance_id].split(',')
+        if len(labels) <= 1:
+            new_y.append(each_original_y)
+            new_x.append(each_original_x)
+            flatting_rel[instance_id].add(new_instance_id)
+            new_instance_id += 1
+        else:
+            for each_label in labels:
+                new_y.append(each_label)
+                new_x.append(each_original_x)
+                flatting_rel[instance_id].add(new_instance_id)
+                new_instance_id += 1
+    return new_y, new_x, flatting_rel
+
+
+def assemble_y(flat_y, flat_relation):
+    new_y = list()
+    for y_collection_index in flat_relation.values():
+        tmp_y = set()
+        for i in y_collection_index:
+            tmp_y.add(flat_y[i])
+        new_y.append(','.join(tmp_y))
+    return new_y
+
+
 if __name__ == '__main__':
     print(construct_csr_sample([{'1250536': 1},
                                 {},
