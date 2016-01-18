@@ -2,16 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b8aeb2c8-a84f-4641-b373-9ab2724160ba" name="Default" comment="优化数据读入代码">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data_processing/cs_tf_idf.py" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data_processing/csr_tf_idf.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data_processing/description.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data_processing/read_into_csr.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data_processing/test_description.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data_processing/test_tf_idf.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data_processing/tf_idf.py" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data_processing/transformation.py" afterPath="$PROJECT_DIR$/data_processing/transformation.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/multinomial_naive_bayes.py" afterPath="$PROJECT_DIR$/multinomial_naive_bayes.py" />
     </list>
     <ignored path="kaggle.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -47,7 +38,7 @@
       <file leaf-file-name="cs_tf_idf.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/data_processing/cs_tf_idf.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4266843">
+            <state vertical-scroll-proportion="0.640873">
               <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
@@ -91,7 +82,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/data_processing/test_train_data_preparation.py" />
         <option value="$PROJECT_DIR$/training/training.py" />
         <option value="$PROJECT_DIR$/data_processing/train_data_preparation.py" />
         <option value="$PROJECT_DIR$/data_processing/test_Sample.py" />
@@ -142,6 +132,7 @@
         <option value="$PROJECT_DIR$/multinomial_naive_bayes.py" />
         <option value="$PROJECT_DIR$/data_processing/csr_tf_idf.py" />
         <option value="$PROJECT_DIR$/data_processing/transformation.py" />
+        <option value="$PROJECT_DIR$/data_processing/cs_tf_idf.py" />
       </list>
     </option>
   </component>
@@ -551,12 +542,6 @@
       <option name="number" value="Default" />
       <updated>1450084973828</updated>
     </task>
-    <task id="LOCAL-00007" summary="the whole program can run correctly, but precision and recall are all too low, because label mapping  is not done right. Otherwise, program runs too slow to calculate tf-idf.">
-      <created>1450351830921</created>
-      <option name="number" value="00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1450351830921</updated>
-    </task>
     <task id="LOCAL-00008" summary="commit unit test data">
       <created>1450351984346</created>
       <option name="number" value="00008" />
@@ -845,7 +830,13 @@
       <option name="project" value="LOCAL" />
       <updated>1453120272004</updated>
     </task>
-    <option name="localTasksCounter" value="56" />
+    <task id="LOCAL-00056" summary="优化数据读入代码">
+      <created>1453123548243</created>
+      <option name="number" value="00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1453123548243</updated>
+    </task>
+    <option name="localTasksCounter" value="57" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -859,7 +850,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="69" y="23" width="1371" height="877" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22" sideWeight="0.49242425" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32866243" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -867,7 +858,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22771084" sideWeight="0.50951374" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3057325" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32168674" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32289156" sideWeight="0.49407408" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32229298" sideWeight="0.49407408" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37961784" sideWeight="0.49048626" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19097957" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2955414" sideWeight="0.48814815" order="11" side_tool="false" content_ui="tabs" />
@@ -1301,7 +1292,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/data_processing/cs_tf_idf.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4266843">
+        <state vertical-scroll-proportion="0.640873">
           <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
           <folding>
             <element signature="e#0#35#0" expanded="true" />
