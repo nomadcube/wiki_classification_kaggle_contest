@@ -4,7 +4,7 @@ from ndarray_sorting import top
 import numpy as np
 
 
-class MultiClassMultinomialNB(MultinomialNB):
+class MultiOutputMultinomialNB(MultinomialNB):
     def multi_predict(self, X, k):
         res = list()
         jll = self._joint_log_likelihood(X)

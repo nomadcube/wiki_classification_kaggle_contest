@@ -3,12 +3,15 @@ from random import random
 
 from scipy.sparse import csr_matrix
 
-from data.tf_idf import x_with_tf_idf
+from data_processing.tf_idf import x_with_tf_idf
+
+from memory_profiler import profile
 
 
+# @profile
 def base_sample_reader(data_file_path, sample_prop=1.0):
     """
-    Read data from data_file_path and convert it to a Sample object.
+    Read data_processing from data_file_path and convert it to a Sample object.
 
     :param data_file_path: str
     :param sample_prop: float
@@ -23,8 +26,12 @@ def base_sample_reader(data_file_path, sample_prop=1.0):
             determine_number = random()
             if determine_number <= sample_prop:
                 tmp_y, tmp_x = line.strip().split(' ', 1)
-                y.append(tmp_y)
-                x.append({column.split(':')[0]: float(column.split(':')[1]) for column in tmp_x.split(' ')})
+                y.append(int(tmp_y.split(',')))
+                instance = dict()
+                for column in tmp_x.split(' '):
+                    k, v = column.split(':')
+                    instance[int(k)] = int(v)
+                x.append(instance)
             line = f_stream.readline()
     return sample(y, x)
 
@@ -118,3 +125,7 @@ if __name__ == '__main__':
     print(construct_csr_sample([{'1250536': 1},
                                 {},
                                 {'1250536': 1, '805104': 1}]))
+    import numpy as np
+
+    X = np.random.random_sample([2, 10])
+    np.dot(X, X.T)

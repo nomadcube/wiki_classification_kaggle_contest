@@ -47,8 +47,8 @@ def precision_and_recall(confusion_mat):
 
 
 def macro_precision_and_recall(y, prediction):
-    macro_precision = 0.0
-    macro_recall = 0.0
+    all_precision = list()
+    all_recall = list()
     real_label_index = index_for_each_label(y)
     predict_label_index = index_for_each_label(prediction)
     whole_index = all_index(real_label_index)
@@ -57,6 +57,7 @@ def macro_precision_and_recall(y, prediction):
             continue
         confusion_mat = confusion_matrix(real_label_index[each_label], predict_label_index[each_label], whole_index)
         tmp_precision, tmp_recall = precision_and_recall(confusion_mat)
-        macro_precision += tmp_precision
-        macro_recall += tmp_recall
-    return macro_precision / len(real_label_index), macro_recall / len(real_label_index)
+        all_precision.append(tmp_precision)
+        all_recall.append(tmp_recall)
+    return float(sum(all_precision)) / len(all_precision), float(
+        sum(all_recall) / len(all_recall)), all_precision, all_recall

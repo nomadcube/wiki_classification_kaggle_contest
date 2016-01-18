@@ -1,4 +1,4 @@
-from data import tf_idf
+from data_processing import tf_idf
 
 
 def test_tf_idf():
