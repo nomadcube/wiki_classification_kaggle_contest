@@ -1,5 +1,6 @@
+import linecache
 from collections import namedtuple
-from random import random
+from random import random, randrange
 
 from scipy.sparse import csr_matrix
 
@@ -8,31 +9,37 @@ from data_processing.tf_idf import x_with_tf_idf
 from memory_profiler import profile
 
 
-# @profile
-def base_sample_reader(data_file_path, sample_prop=1.0):
+def sample_line_num(max_line_num, sample_size):
+    res = set()
+    while len(res) < sample_size:
+        new_line_num = randrange(max_line_num)
+        if new_line_num not in res:
+            res.add(new_line_num)
+    return res
+
+
+def sample_reader(data_file_path, max_line_num, sample_size):
     """
     Read data_processing from data_file_path and convert it to a Sample object.
 
     :param data_file_path: str
-    :param sample_prop: float
-    :return: dict
+    :param max_line_num: int
+    :param sample_size: int
+    :return: sample
     """
     sample = namedtuple('sample', 'y x')
     y = list()
     x = list()
-    with open(data_file_path, 'r') as f_stream:
-        line = f_stream.readline()
-        while line:
-            determine_number = random()
-            if determine_number <= sample_prop:
-                tmp_y, tmp_x = line.strip().split(' ', 1)
-                y.append(int(tmp_y.split(',')))
-                instance = dict()
-                for column in tmp_x.split(' '):
-                    k, v = column.split(':')
-                    instance[int(k)] = int(v)
-                x.append(instance)
-            line = f_stream.readline()
+    selected_line_no = sample_line_num(max_line_num, sample_size)
+    for line_no in selected_line_no:
+        line = linecache.getline(data_file_path, line_no)
+        tmp_y, tmp_x = line.strip().split(' ', 1)
+        y.append([int(tmp_label) for tmp_label in tmp_y.split(',')])
+        instance = dict()
+        for column in tmp_x.split(' '):
+            k, v = column.split(':')
+            instance[int(k)] = int(v)
+        x.append(instance)
     return sample(y, x)
 
 

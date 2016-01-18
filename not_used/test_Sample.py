@@ -5,7 +5,7 @@ import data_processing.transformation
 
 class TestSample:
     def pytest_funcarg__full_sample(self):
-        return data_processing.transformation.base_sample_reader(
+        return data_processing.transformation.sample_reader(
             '/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt')
 
     def pytest_funcarg__hierarchy(self):

@@ -1,29 +1,20 @@
-import StringIO
-import cProfile
-import pstats
 import sys
-from learning.chunking import iter_chuck
-import numpy as np
-import memory_profiler
 
-from data_processing.transformation import base_sample_reader, construct_csr_sample, x_with_tf_idf
-from model_evaluation.cross_validation import split_train_test
-from model_evaluation.evaluation_metrics import macro_precision_and_recall
-from learning.redefined_multinomial_naive_bayes import MultiOutputMultinomialNB
-from data_processing.description import describe_x_y
-from sklearn.preprocessing import MultiLabelBinarizer
+from time import time
+from data_processing.transformation import sample_reader
 
-submission_test_path = '/Users/wumengling/PycharmProjects/kaggle/input_data/test.csv'
-predict_result_path = '/Users/wumengling/PycharmProjects/kaggle/input_data/predict_result.csv'
-log_f_path = '/Users/wumengling/PycharmProjects/kaggle/log/learning_log.txt'
+path_train_sample = sys.argv[1] if len(
+        sys.argv) >= 2 else '/Users/wumengling/PycharmProjects/kaggle/input_data/train.csv'
 
-learning_config = {'sample_proportion': 1,
-                   'tf_idf_threshold': 0.1,
-                   'split_proportion': 0.8,
-                   'predict_class_num': 3}
+max_line = 2365436
+sample_size = 1000
 
-sample = base_sample_reader('/Users/wumengling/PycharmProjects/kaggle/input_data/train.csv',
-                            learning_config['sample_proportion'])
+start_time = time()
+samples = sample_reader(path_train_sample, max_line, sample_size)
+print(time() - start_time)
+print(type(samples.y))
+print(len(samples.y))
+
 
 # dimension_reduced_x = x_with_tf_idf(sample.x, learning_config['tf_idf_threshold']) if \
 #     learning_config['tf_idf_threshold'] > 0 else sample.x
