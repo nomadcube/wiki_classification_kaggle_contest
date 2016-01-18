@@ -11,3 +11,4 @@ vec = csc_matrix((range(4), (range(4), [0] * 4)), shape=(4, 1))
 res = mat.getcol(0) * vec.getrow(0)
 for k in range(1, 4):
     res = res + mat.getcol(k) * vec.getrow(k)
+print(res)

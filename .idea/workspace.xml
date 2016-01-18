@@ -1,45 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b8aeb2c8-a84f-4641-b373-9ab2724160ba" name="Default" comment="1. 创建一个MultinomialNB的子类，其中增加多类预测的代码&#10;2. 增加对y, x数据进行描述的代码&#10;">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/auto_profile.sh" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data_processing/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data_processing/csr_tf_idf.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data_processing/description.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data_processing/read_into_csr.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data_processing/test_description.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data_processing/test_tf_idf.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data_processing/test_transformation.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data_processing/tf_idf.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data_processing/transformation.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/learning/chunking.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/learning/matrix_banded.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/learning/multinomial_naive_bayes_csr.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/learning/plot_out_of_core_classification.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/learning/test_multinomial_naive_bayes_csr.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/teee.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/unit_test_data/dat_sampling_result.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/unit_test_data/model_fitting_predict.txt" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/description.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/hierarchy/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/hierarchy/hierarchy.cpp" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/hierarchy/hierarchy.h" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/hierarchy/hierarchy.i" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/hierarchy/hierarchy_run.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/hierarchy/setup.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/test_description.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/test_tf_idf.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/test_transformation.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/tf_idf.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/transformation.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/not_used/multinomial_naive_bayes_csr.py" afterPath="" />
+    <list default="true" id="b8aeb2c8-a84f-4641-b373-9ab2724160ba" name="Default" comment="增加矩阵分块计算的代码">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/learning/multinomial_naive_bayes.py" afterPath="$PROJECT_DIR$/learning/multinomial_naive_bayes.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/learning/redefined_multinomial_naive_bayes.py" afterPath="$PROJECT_DIR$/learning/redefined_multinomial_naive_bayes.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/learning_result.md" afterPath="$PROJECT_DIR$/learning_result.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model_evaluation/evaluation_metrics.py" afterPath="$PROJECT_DIR$/model_evaluation/evaluation_metrics.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/not_used/test_Sample.py" afterPath="$PROJECT_DIR$/not_used/test_Sample.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/learning/matrix_banded.py" afterPath="$PROJECT_DIR$/learning/matrix_banded.py" />
     </list>
     <ignored path="kaggle.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -107,7 +71,7 @@
       <file leaf-file-name="matrix_banded.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/learning/matrix_banded.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.2960199">
+            <state vertical-scroll-proportion="0.29675812">
               <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
@@ -836,7 +800,13 @@
       <option name="project" value="LOCAL" />
       <updated>1452249943942</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="增加矩阵分块计算的代码">
+      <created>1453093998814</created>
+      <option name="number" value="00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1453093998814</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -852,8 +822,9 @@
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18745595" sideWeight="0.49242425" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25299507" sideWeight="0.49242425" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32866243" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3299363" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32655653" sideWeight="0.50592595" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32289156" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32401526" sideWeight="0.49407408" order="10" side_tool="false" content_ui="tabs" />
@@ -861,7 +832,6 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28025478" sideWeight="0.48814815" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16518518" sideWeight="0.50757575" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3299363" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
@@ -911,7 +881,8 @@
     <MESSAGE value="加上交叉检验的逻辑" />
     <MESSAGE value="完成多项式朴素贝叶斯的demo" />
     <MESSAGE value="1. 创建一个MultinomialNB的子类，其中增加多类预测的代码&#10;2. 增加对y, x数据进行描述的代码&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="1. 创建一个MultinomialNB的子类，其中增加多类预测的代码&#10;2. 增加对y, x数据进行描述的代码&#10;" />
+    <MESSAGE value="增加矩阵分块计算的代码" />
+    <option name="LAST_COMMIT_MESSAGE" value="增加矩阵分块计算的代码" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1301,7 +1272,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/learning/matrix_banded.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2960199">
+        <state vertical-scroll-proportion="0.29675812">
           <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
           <folding>
             <element signature="e#0#35#0" expanded="true" />
