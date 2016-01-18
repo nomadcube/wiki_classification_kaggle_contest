@@ -4,18 +4,8 @@ from time import time
 from data_processing.transformation import sample_reader, describe
 from pympler.asizeof import asizeof
 
-path_train_sample = sys.argv[1] if len(
+train_sample_path = sys.argv[1] if len(
         sys.argv) >= 2 else '/Users/wumengling/PycharmProjects/kaggle/input_data/train.csv'
+sample_size = sys.argv[2] if len(sys.argv) >= 3 else 100000
 
-max_line = 2365436
-sample_size = 100000
-
-start_time = time()
-samples = sample_reader(path_train_sample, sample_size)
-print(time() - start_time)
-print(type(samples.y))
-print(len(samples.y))
-print(asizeof(samples.x))
-print(sys.getsizeof(samples.x))
-print(samples.x.shape)
-print(samples.x.nnz)
+samples = sample_reader(train_sample_path, sample_size)

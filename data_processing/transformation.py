@@ -1,10 +1,6 @@
 import itertools
-import numpy as np
-
 from collections import namedtuple
-
 from scipy.sparse import csr_matrix
-
 from pympler.asizeof import asizeof
 
 
