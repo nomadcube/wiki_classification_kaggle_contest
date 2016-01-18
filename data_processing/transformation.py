@@ -7,6 +7,18 @@ from scipy.sparse import csr_matrix
 from pympler.asizeof import asizeof
 
 
+def describe(data_file_path):
+    dimension = 0
+    with open(data_file_path) as f:
+        for line_no, line in enumerate(f):
+            y, x = line.split(' ', 1)
+            for feature in x.split(' '):
+                col = int(feature.split(':')[0])
+                if col > dimension:
+                    dimension = col
+    return dimension
+
+
 def sample_reader(data_file_path, sample_size):
     """
     Read data_processing from data_file_path and convert it to a Sample object.
