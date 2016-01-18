@@ -12,7 +12,7 @@ from memory_profiler import profile
 def sample_line_num(max_line_num, sample_size):
     res = set()
     while len(res) < sample_size:
-        new_line_num = randrange(max_line_num)
+        new_line_num = randrange(1, max_line_num)
         if new_line_num not in res:
             res.add(new_line_num)
     return res
