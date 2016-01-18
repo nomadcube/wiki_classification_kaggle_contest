@@ -11,9 +11,11 @@ max_line = 2365436
 sample_size = 1000000
 
 start_time = time()
-samples = sample_reader(path_train_sample, sample_size)
+samples = sample_reader(path_train_sample, sample_size, 100611105)
 print(time() - start_time)
 print(type(samples.y))
 print(len(samples.y))
 print(asizeof(samples.x))
 print(sys.getsizeof(samples.x))
+print(samples.x.shape)
+print(samples.x.nnz)
