@@ -20,35 +20,28 @@ def describe(data_file_path):
     return dimension
 
 
-def sample_reader(data_file_path, sample_size, max_nnz):
+def sample_reader(data_file_path, sample_size):
     """
     Read data_processing from data_file_path and convert it to a Sample object.
 
     :param data_file_path: str
     :param sample_size: int
-    :param max_nnz: int
     :return: sample
     """
     sample = namedtuple('sample', 'y x')
     y = list()
-    element_x = np.zeros(max_nnz, dtype='int32')
-    row_index_x = np.zeros(max_nnz, dtype='int32')
-    col_index_x = np.zeros(max_nnz, dtype='int32')
-    current_nnz = 0
+    element_x = list()
+    row_index_x = list()
+    col_index_x = list()
     with open(data_file_path) as f:
         for line_no, line in enumerate(itertools.islice(f.__iter__(), sample_size)):
-            if current_nnz >= max_nnz:
-                break
             multi_label, instance = line.strip().split(' ', 1)
             y.append([int(label) for label in multi_label.split(',')])
             for feature in instance.split(' '):
-                if current_nnz >= max_nnz:
-                    break
                 column, element = feature.split(':')
-                element_x[current_nnz] = (int(element))
-                col_index_x[current_nnz] = (int(column))
-                row_index_x[current_nnz] = (int(line_no))
-                current_nnz += 1
+                element_x.append(int(element))
+                col_index_x.append(int(column))
+                row_index_x.append(int(line_no))
     x = csr_matrix((element_x, (row_index_x, col_index_x)), shape=(max(row_index_x) + 1, max(col_index_x) + 1),
                    dtype='int32')
     return sample(y, x)
