@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b8aeb2c8-a84f-4641-b373-9ab2724160ba" name="Default" comment="增加矩阵分块计算的代码">
+    <list default="true" id="b8aeb2c8-a84f-4641-b373-9ab2724160ba" name="Default" comment="优化数据读入代码">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data_processing/test_transformation.py" afterPath="$PROJECT_DIR$/data_processing/test_transformation.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data_processing/transformation.py" afterPath="$PROJECT_DIR$/data_processing/transformation.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/learning/multinomial_naive_bayes.py" afterPath="$PROJECT_DIR$/learning/multinomial_naive_bayes.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/not_used/test_Sample.py" afterPath="$PROJECT_DIR$/not_used/test_Sample.py" />
     </list>
     <ignored path="kaggle.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -86,8 +82,8 @@
       <file leaf-file-name="multinomial_naive_bayes.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/learning/multinomial_naive_bayes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.24959217">
-              <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.22185971">
+              <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -839,7 +835,13 @@
       <option name="project" value="LOCAL" />
       <updated>1453094166000</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="优化数据读入代码">
+      <created>1453100318230</created>
+      <option name="number" value="00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1453100318230</updated>
+    </task>
+    <option name="localTasksCounter" value="46" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -862,7 +864,7 @@
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30722892" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32289156" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32401526" sideWeight="0.49407408" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22771084" sideWeight="0.4925926" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22771084" sideWeight="0.4925926" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19097957" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27951807" sideWeight="0.48814815" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16518518" sideWeight="0.50757575" order="2" side_tool="true" content_ui="tabs" />
@@ -915,7 +917,8 @@
     <MESSAGE value="完成多项式朴素贝叶斯的demo" />
     <MESSAGE value="1. 创建一个MultinomialNB的子类，其中增加多类预测的代码&#10;2. 增加对y, x数据进行描述的代码&#10;" />
     <MESSAGE value="增加矩阵分块计算的代码" />
-    <option name="LAST_COMMIT_MESSAGE" value="增加矩阵分块计算的代码" />
+    <MESSAGE value="优化数据读入代码" />
+    <option name="LAST_COMMIT_MESSAGE" value="优化数据读入代码" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1305,8 +1308,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/learning/multinomial_naive_bayes.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.24959217">
-          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.22185971">
+          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
