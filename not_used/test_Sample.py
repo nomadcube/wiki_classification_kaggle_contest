@@ -1,11 +1,10 @@
-from data_processing.transformation.hierarchy import hierarchy
-
-import data_processing.transformation
+import reader
+from reader import hierarchy
 
 
 class TestSample:
     def pytest_funcarg__full_sample(self):
-        return data_processing.transformation.sample_reader(
+        return reader.sample_reader(
             '/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt')
 
     def pytest_funcarg__hierarchy(self):

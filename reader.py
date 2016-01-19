@@ -39,7 +39,7 @@ def sample_reader(data_file_path, sample_size):
                 col_index_x.append(int(column))
                 row_index_x.append(int(line_no))
     x = csr_matrix((element_x, (row_index_x, col_index_x)), shape=(max(row_index_x) + 1, max(col_index_x) + 1),
-                   dtype='int32')
+                   dtype='double')
     return sample(y, x)
 
 
