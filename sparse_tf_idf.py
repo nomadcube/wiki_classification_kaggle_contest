@@ -36,7 +36,7 @@ def part_tf_idf_generator(part_csr_dir, global_idf):
         with open(os.path.join(part_csr_dir, part_file_name), 'r') as f:
             part_sample = pickle.load(f)
             origin_mat = csr_matrix((part_sample.element_x, (part_sample.row_index_x, part_sample.col_index_x)),
-                                    shape=(max(part_sample.row_index_x) + 1, max(part_sample.col_index_x) + 1))
+                                    shape=(max(part_sample.row_index_x) + 1, global_idf.shape[0]))
             yield tf(origin_mat).dot(global_idf)
 
 
