@@ -16,4 +16,4 @@ total_idf = sparse_tf_idf.idf(column, size_of_sample)
 reader_and_serializer.save_part_sample([sample_1, sample_2], part_sample_path)
 
 for each_tf_idf in sparse_tf_idf.part_tf_idf_generator(part_sample_path, total_idf):
-    print(each_tf_idf)
+    print(each_tf_idf.shape)
