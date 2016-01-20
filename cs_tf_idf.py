@@ -1,6 +1,7 @@
-from scipy.sparse import csr_matrix
-import numpy as np
 import math
+
+import numpy as np
+from scipy.sparse import csr_matrix
 
 
 def counting_occurrence(array_like):
@@ -20,14 +21,16 @@ def tf(count_mat):
 def idf(count_mat):
     total_doc_count = count_mat.shape[0]
     feature_occurrence = counting_occurrence(count_mat.indices)
-    log_inverse_doc_frequency = np.zeros(max(feature_occurrence.keys()) + 1)
+    init_row = list()
+    init_element = list()
     for feature, occurrence in feature_occurrence.items():
-        log_inverse_doc_frequency[feature] = math.log(float(total_doc_count) / occurrence)
-    return log_inverse_doc_frequency
+        init_row.append(feature)
+        init_element.append(math.log(float(total_doc_count) / occurrence))
+    return csr_matrix((init_element, (init_row, init_row)), shape=(max(init_row) + 1, max(init_row) + 1))
 
 
 def tf_idf(count_mat):
-    return csr_matrix(tf(count_mat).multiply(idf(count_mat)))
+    return tf(count_mat).dot(idf(count_mat))
 
 
 if __name__ == '__main__':
@@ -35,6 +38,6 @@ if __name__ == '__main__':
     row_index = np.array([0, 1, 1, 1, 2, 2])
     col_index = [1250536, 634175, 805104, 1095476, 805104, 1250536]
     mat = csr_matrix((element, (row_index, col_index)), shape=(max(row_index) + 1, max(col_index) + 1))
-    print(tf(mat))
-    print(idf(mat))
+    tf_mat = tf(mat)
+    idf_mat = idf(mat)
     print(tf_idf(mat))
