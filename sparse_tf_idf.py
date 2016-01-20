@@ -1,4 +1,6 @@
 import math
+import os
+import pickle
 
 import numpy as np
 from scipy.sparse import csr_matrix
@@ -18,9 +20,9 @@ def tf(count_mat):
     return count_mat
 
 
-def idf(count_mat):
-    total_doc_count = count_mat.shape[0]
-    feature_occurrence = counting_occurrence(count_mat.indices)
+def idf(column, sample_size):
+    total_doc_count = sample_size
+    feature_occurrence = counting_occurrence(column)
     init_row = list()
     init_element = list()
     for feature, occurrence in feature_occurrence.items():
@@ -29,8 +31,13 @@ def idf(count_mat):
     return csr_matrix((init_element, (init_row, init_row)), shape=(max(init_row) + 1, max(init_row) + 1))
 
 
-def tf_idf(count_mat):
-    return tf(count_mat).dot(idf(count_mat))
+def part_tf_idf_generator(part_csr_dir, global_idf):
+    for part_file_name in os.listdir(part_csr_dir):
+        with open(os.path.join(part_csr_dir, part_file_name), 'r') as f:
+            part_sample = pickle.load(f)
+            origin_mat = csr_matrix((part_sample.element_x, (part_sample.row_index_x, part_sample.col_index_x)),
+                                    shape=(max(part_sample.row_index_x) + 1, max(part_sample.col_index_x) + 1))
+            yield tf(origin_mat).dot(global_idf)
 
 
 if __name__ == '__main__':
@@ -39,5 +46,5 @@ if __name__ == '__main__':
     col_index = [1250536, 634175, 805104, 1095476, 805104, 1250536]
     mat = csr_matrix((element, (row_index, col_index)), shape=(max(row_index) + 1, max(col_index) + 1))
     tf_mat = tf(mat)
-    idf_mat = idf(mat)
-    print(tf_idf(mat))
+    idf_mat = idf(col_index, 3)
+    print(idf_mat)

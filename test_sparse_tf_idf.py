@@ -1,4 +1,4 @@
-from cs_tf_idf import tf_idf
+from sparse_tf_idf import tf_idf
 
 
 def test_cs_mat_tf_idf():
