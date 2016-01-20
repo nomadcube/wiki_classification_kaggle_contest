@@ -1,7 +1,5 @@
 import itertools
 from collections import namedtuple
-from scipy.sparse import csr_matrix
-from pympler.asizeof import asizeof
 
 
 def describe(data_file_path):
@@ -38,14 +36,12 @@ def sample_reader(data_file_path, sample_size):
                 element_x.append(int(element))
                 col_index_x.append(int(column))
                 row_index_x.append(int(line_no))
-    x = csr_matrix((element_x, (row_index_x, col_index_x)), shape=(max(row_index_x) + 1, max(col_index_x) + 1),
-                   dtype='double')
-    return sample(y, x)
+    return y, element_x, col_index_x, row_index_x
 
 
 if __name__ == '__main__':
     smp = sample_reader('/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt', 2)
-    print(smp.y)
-    print(smp.x)
-    print(smp.x.dtype)
-    print(asizeof(smp.x))
+    # print(smp.y)
+    # print(smp.x)
+    # print(smp.x.dtype)
+    # print(asizeof(smp.x))
