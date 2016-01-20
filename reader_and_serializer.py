@@ -33,14 +33,10 @@ def read_part_sample(data_file_path, total_sample_size, part_one_sample_size):
     return part_one_sample, part_two_sample
 
 
-def save_part_sample(all_parts, save_dir):
-    global_column = list()
-    for part_index, part in enumerate(all_parts):
-        global_column += part.col_index_x
-        with open(os.path.join(save_dir, 'part_sample/sample_{0}.obj'.format(part_index)), 'w') as f:
+def save_part_sample(part_sample, part_sample_dir):
+    for part_index, part in enumerate(part_sample):
+        with open(os.path.join(part_sample_dir, 'sample_{0}.obj'.format(part_index)), 'w') as f:
             pickle.dump(part, f)
-    with open(os.path.join(save_dir, 'all_column.obj'), 'w') as all_column_f:
-        pickle.dump(global_column, all_column_f)
 
 
 if __name__ == '__main__':

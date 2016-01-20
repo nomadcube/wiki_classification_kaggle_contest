@@ -3,8 +3,8 @@ import pickle
 
 from sparse_tf_idf import idf, part_tf_idf_generator
 
-output_dir = '/Users/wumengling/PycharmProjects/kaggle/output'
-part_sample_dir = '/Users/wumengling/PycharmProjects/kaggle/output/part_sample'
+output_dir = '/Users/wumengling/PycharmProjects/kaggle/part_sample'
+part_sample_dir = '/Users/wumengling/PycharmProjects/kaggle/part_sample/part_csr'
 
 if __name__ == '__main__':
     with open(os.path.join(output_dir, 'all_sample_size.obj'), 'r') as all_sample_size_f:
