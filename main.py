@@ -10,4 +10,4 @@ sample_size = sys.argv[2] if len(sys.argv) >= 3 else 10
 
 sample = sample_reader(train_sample_path, sample_size)
 x_tf_idf = tf_idf(sample.x)
-print(x_tf_idf.nnz)
+print(x_tf_idf.shape)
