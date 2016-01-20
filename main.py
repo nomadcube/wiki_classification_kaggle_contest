@@ -19,4 +19,4 @@ reader_and_serializer.save_part_sample([sample_1, sample_2], part_sample_path)
 
 for each_tf_idf in sparse_tf_idf.part_tf_idf_generator(part_sample_path, total_idf):
     print(each_tf_idf.shape)
-print(start_time - time())
+print(time() - start_time)
