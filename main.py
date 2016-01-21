@@ -2,8 +2,8 @@ import sys
 from time import time
 
 from scipy.sparse import csr_matrix
-from sklearn.naive_bayes import MultinomialNB
 
+import multi_label_mnb
 import reader
 import sparse_tf_idf
 
@@ -21,9 +21,7 @@ smp_x = csr_matrix((smp.element_x, (smp.row_index_x, smp.col_index_x)),
 tf_idf_smp_x = sparse_tf_idf.tf_idf(smp_x)
 
 # fit mnb model
-mnb = MultinomialNB()
-mnb.fit(tf_idf_smp_x, smp.y)
-predicted_y = mnb.predict(tf_idf_smp_x)
-print(predicted_y[:3])
-print(smp.y[:3])
+model = multi_label_mnb.fit(smp.y, tf_idf_smp_x)
+print(model[0].shape)
+print(model[1].shape)
 print(time() - start_time)
