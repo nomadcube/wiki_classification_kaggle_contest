@@ -19,7 +19,7 @@ class Sample:
         return self
 
 
-def read_part_sample(data_file_path, total_sample_size):
+def read_sample(data_file_path, total_sample_size):
     sample = Sample()
     with open(data_file_path) as f:
         for line_no, line in enumerate(itertools.islice(f.__iter__(), total_sample_size)):
@@ -28,7 +28,7 @@ def read_part_sample(data_file_path, total_sample_size):
 
 
 if __name__ == '__main__':
-    smp_1, smp_2 = read_part_sample('/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt', 3, 1)
+    smp_1, smp_2 = read_sample('/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt', 3, 1)
     print(smp_1.y)
     print(smp_2.y)
     print(smp_1.element_x)
