@@ -1,10 +1,10 @@
-import reader_and_serializer
-from reader_and_serializer import hierarchy
+import reader
+from reader import hierarchy
 
 
 class TestSample:
     def pytest_funcarg__full_sample(self):
-        return reader_and_serializer.all_part_sample(
+        return reader.all_part_sample(
             '/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt')
 
     def pytest_funcarg__hierarchy(self):

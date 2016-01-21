@@ -1,6 +1,4 @@
 import itertools
-import os
-import pickle
 
 
 class Sample:
@@ -21,22 +19,12 @@ class Sample:
         return self
 
 
-def read_part_sample(data_file_path, total_sample_size, part_one_sample_size):
-    part_one_sample = Sample()
-    part_two_sample = Sample()
+def read_part_sample(data_file_path, total_sample_size):
+    sample = Sample()
     with open(data_file_path) as f:
         for line_no, line in enumerate(itertools.islice(f.__iter__(), total_sample_size)):
-            if line_no <= part_one_sample_size:
-                part_one_sample.increment_by_one_line(line_no, line)
-            else:
-                part_two_sample.increment_by_one_line(line_no, line)
-    return part_one_sample, part_two_sample
-
-
-def save_part_sample(part_sample, part_sample_dir):
-    for part_index, part in enumerate(part_sample):
-        with open(os.path.join(part_sample_dir, 'sample_{0}.obj'.format(part_index)), 'w') as f:
-            pickle.dump(part, f)
+            sample.increment_by_one_line(line_no, line)
+    return sample
 
 
 if __name__ == '__main__':
