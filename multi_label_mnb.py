@@ -2,7 +2,39 @@ import numpy as np
 from scipy.sparse import csr_matrix, coo_matrix
 
 
-def construct_coo_from_list(lst):
+def fit(y, x):
+    label_count, label_feature_count = _count_occurrence(y, x)
+    return _log_rate_per_column(label_count), _log_rate_per_row(label_feature_count)
+
+
+def predict(x, model):
+    res = dict()
+    log_likelihood_matrix = _log_likelihood(x, model)
+    if not isinstance(log_likelihood_matrix, csr_matrix):
+        raise TypeError()
+    n_row = log_likelihood_matrix.shape[0]
+    for row_no in range(n_row):
+        row_data = log_likelihood_matrix.getrow(row_no)
+        if row_data.nnz > 0:
+            res[row_no] = row_data.indices[row_data.data.argmax()]
+    return res
+
+
+def _log_likelihood(x, model):
+    multinomial_parameters = model[1]
+    class_prior = model[0]
+    if not isinstance(x, csr_matrix):
+        raise TypeError()
+    if not isinstance(multinomial_parameters, csr_matrix):
+        raise TypeError()
+    if not isinstance(class_prior, csr_matrix):
+        raise TypeError()
+    log_likelihood_mat = multinomial_parameters.dot(x.transpose())
+    log_likelihood_mat.data += np.array(class_prior.transpose().toarray().repeat(np.diff(log_likelihood_mat.indptr)))[0]
+    return log_likelihood_mat
+
+
+def _construct_coo_from_list(lst):
     elements = list()
     rows = list()
     columns = list()
@@ -14,17 +46,40 @@ def construct_coo_from_list(lst):
     return coo_matrix((elements, (rows, columns)), shape=(len(lst), max(columns) + 1), dtype='float')
 
 
-def fit(y, x):
-    coo_y = construct_coo_from_list(y)
+def _count_occurrence(y, x):
+    coo_y = _construct_coo_from_list(y)
     csr_y = coo_y.tocsr()
-    label_count = csr_matrix(coo_y.sum(axis=0))
-    label_feature_count = csr_y.transpose().dot(x)
-    return label_count, label_feature_count
+    label_occurrence = csr_matrix(coo_y.sum(axis=0))
+    label_feature_co_occurrence = csr_y.transpose().dot(x)
+    return label_occurrence, csr_matrix(label_feature_co_occurrence)
+
+
+def _log_rate_per_row(co_occurrence_frequency):
+    if not isinstance(co_occurrence_frequency, csr_matrix):
+        raise TypeError('freq_mat must be of csr_matrix type.')
+    if co_occurrence_frequency.dtype != 'float':
+        raise TypeError('dtype of freq_mat must be of float.')
+    row_sum = co_occurrence_frequency.sum(axis=1)
+    co_occurrence_frequency.data /= np.array(row_sum.repeat(np.diff(co_occurrence_frequency.indptr)))[0]
+    co_occurrence_frequency.data = np.log(co_occurrence_frequency.data)
+    return co_occurrence_frequency
+
+
+def _log_rate_per_column(y_count):
+    if not isinstance(y_count, csr_matrix):
+        raise TypeError()
+    column_sum = y_count.sum(axis=1)
+    y_count.data /= np.array(column_sum)[0]
+    y_count.data = np.log(y_count.data)
+    return y_count
 
 
 if __name__ == '__main__':
     test_y = np.array([[314523, 165538, 416827], [21631], [76255, 335416]])
     test_x = csr_matrix(([1.0, 4.0, 1.0, 1.0, 1.0, 1.0],
                          ([0, 1, 1, 1, 2, 2], [1250536, 1095476, 805104, 634175, 1250536, 805104])))
+    # print(_count_occurrence(test_y, test_x)[0])
+    # print(_count_occurrence(test_y, test_x)[1])
     print(fit(test_y, test_x)[0])
     print(fit(test_y, test_x)[1])
+    print(fit(test_y, test_x)[0].getrow(0)[0])
