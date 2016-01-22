@@ -22,5 +22,7 @@ tf_idf_smp_x = sparse_tf_idf.tf_idf(smp_x)
 
 # fit mnb model
 model = multi_label_mnb.fit(smp.y, tf_idf_smp_x)
-predict_sample_per_label = multi_label_mnb.predict(tf_idf_smp_x, model)
+print(model[0].shape)
+print(model[1].shape)
+# predict_sample_per_label = multi_label_mnb.predict(tf_idf_smp_x, model)
 print(time() - start_time)
