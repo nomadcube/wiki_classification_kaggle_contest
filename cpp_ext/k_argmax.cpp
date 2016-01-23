@@ -32,8 +32,8 @@ int k_argmax_per_row(row_t one_row)
     if(one_row.size() == 0)
         return -1;
     else{
-        auto largest = one_row.begin();
-        for(auto b = one_row.begin(); b != one_row.end(); ++b)
+        row_t::iterator largest = one_row.begin();
+        for(row_t::iterator b = one_row.begin(); b != one_row.end(); ++b)
         {
             if((*b).first > (*largest).first)
                 largest = b;

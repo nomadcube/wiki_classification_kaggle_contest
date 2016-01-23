@@ -9,7 +9,6 @@
 
 
 from sys import version_info
-
 if version_info >= (2, 6, 0):
     def swig_import_helper():
         from os.path import dirname
@@ -26,8 +25,6 @@ if version_info >= (2, 6, 0):
             finally:
                 fp.close()
             return _mod
-
-
     _k_argmax = swig_import_helper()
     del swig_import_helper
 else:
@@ -73,7 +70,6 @@ def _swig_getattr_nondynamic(self, class_type, name, static=1):
     else:
         raise AttributeError(name)
 
-
 def _swig_getattr(self, class_type, name):
     return _swig_getattr_nondynamic(self, class_type, name, 0)
 
@@ -85,15 +81,12 @@ def _swig_repr(self):
         strthis = ""
     return "<%s.%s; %s >" % (self.__class__.__module__, self.__class__.__name__, strthis,)
 
-
 try:
     _object = object
     _newclass = 1
 except AttributeError:
     class _object:
         pass
-
-
     _newclass = 0
 
 
@@ -105,7 +98,6 @@ class SwigPyIterator(_object):
 
     def __init__(self, *args, **kwargs):
         raise AttributeError("No constructor defined - class is abstract")
-
     __repr__ = _swig_repr
     __swig_destroy__ = _k_argmax.delete_SwigPyIterator
     __del__ = lambda self: None
@@ -157,14 +149,10 @@ class SwigPyIterator(_object):
 
     def __sub__(self, *args):
         return _k_argmax.SwigPyIterator___sub__(self, *args)
-
     def __iter__(self):
         return self
-
-
 SwigPyIterator_swigregister = _k_argmax.SwigPyIterator_swigregister
 SwigPyIterator_swigregister(SwigPyIterator)
-
 
 class element_t(_object):
     __swig_setmethods__ = {}
@@ -175,7 +163,6 @@ class element_t(_object):
 
     def iterator(self):
         return _k_argmax.element_t_iterator(self)
-
     def __iter__(self):
         return self.iterator()
 
@@ -275,14 +262,10 @@ class element_t(_object):
 
     def capacity(self):
         return _k_argmax.element_t_capacity(self)
-
     __swig_destroy__ = _k_argmax.delete_element_t
     __del__ = lambda self: None
-
-
 element_t_swigregister = _k_argmax.element_t_swigregister
 element_t_swigregister(element_t)
-
 
 class result_t(_object):
     __swig_setmethods__ = {}
@@ -293,7 +276,6 @@ class result_t(_object):
 
     def iterator(self):
         return _k_argmax.result_t_iterator(self)
-
     def __iter__(self):
         return self.iterator()
 
@@ -393,14 +375,10 @@ class result_t(_object):
 
     def capacity(self):
         return _k_argmax.result_t_capacity(self)
-
     __swig_destroy__ = _k_argmax.delete_result_t
     __del__ = lambda self: None
-
-
 result_t_swigregister = _k_argmax.result_t_swigregister
 result_t_swigregister(result_t)
-
 
 class row_t(_object):
     __swig_setmethods__ = {}
@@ -411,7 +389,6 @@ class row_t(_object):
 
     def iterator(self):
         return _k_argmax.row_t_iterator(self)
-
     def __iter__(self):
         return self.iterator()
 
@@ -511,14 +488,10 @@ class row_t(_object):
 
     def capacity(self):
         return _k_argmax.row_t_capacity(self)
-
     __swig_destroy__ = _k_argmax.delete_row_t
     __del__ = lambda self: None
-
-
 row_t_swigregister = _k_argmax.row_t_swigregister
 row_t_swigregister(row_t)
-
 
 class all_row_t(_object):
     __swig_setmethods__ = {}
@@ -529,7 +502,6 @@ class all_row_t(_object):
 
     def iterator(self):
         return _k_argmax.all_row_t_iterator(self)
-
     def __iter__(self):
         return self.iterator()
 
@@ -629,32 +601,21 @@ class all_row_t(_object):
 
     def capacity(self):
         return _k_argmax.all_row_t_capacity(self)
-
     __swig_destroy__ = _k_argmax.delete_all_row_t
     __del__ = lambda self: None
-
-
 all_row_t_swigregister = _k_argmax.all_row_t_swigregister
 all_row_t_swigregister(all_row_t)
 
 
 def construct_all_row(arg1, arg2, arg3):
     return _k_argmax.construct_all_row(arg1, arg2, arg3)
-
-
 construct_all_row = _k_argmax.construct_all_row
-
 
 def k_argmax_per_row(arg1):
     return _k_argmax.k_argmax_per_row(arg1)
-
-
 k_argmax_per_row = _k_argmax.k_argmax_per_row
-
 
 def k_argmax(arg1, arg2, arg3):
     return _k_argmax.k_argmax(arg1, arg2, arg3)
-
-
 k_argmax = _k_argmax.k_argmax
 # This file is compatible with both classic and new-style classes.
