@@ -1,6 +1,8 @@
 import numpy as np
 from scipy.sparse import csr_matrix, coo_matrix
 
+from cpp_ext import k_argmax
+
 
 def fit(y, x):
     label_count, label_feature_count = _count_occurrence(y, x)
@@ -8,16 +10,11 @@ def fit(y, x):
 
 
 def predict(x, model):
-    res = dict()
     log_likelihood_matrix = _log_likelihood(x, model)
     if not isinstance(log_likelihood_matrix, csr_matrix):
         raise TypeError()
-    n_row = log_likelihood_matrix.shape[0]
-    for row_no in range(n_row):
-        row_data = log_likelihood_matrix.getrow(row_no)
-        if row_data.nnz > 0:
-            res[row_no] = row_data.indices[row_data.data.argmax()]
-    return res
+    return k_argmax.k_argmax(log_likelihood_matrix.data, log_likelihood_matrix.indices.tolist(),
+                             log_likelihood_matrix.indptr.tolist())
 
 
 def _log_likelihood(x, model):
@@ -75,11 +72,9 @@ def _log_rate_per_column(y_count):
 
 
 if __name__ == '__main__':
+    print(k_argmax.k_argmax([0.1, 1.1, 2.1, 3.2], [3, 1, 0, 2], [0, 1, 4, 4]))
     test_y = np.array([[314523, 165538, 416827], [21631], [76255, 335416]])
     test_x = csr_matrix(([1.0, 4.0, 1.0, 1.0, 1.0, 1.0],
                          ([0, 1, 1, 1, 2, 2], [1250536, 1095476, 805104, 634175, 1250536, 805104])))
-    # print(_count_occurrence(test_y, test_x)[0])
-    # print(_count_occurrence(test_y, test_x)[1])
-    print(fit(test_y, test_x)[0])
-    print(fit(test_y, test_x)[1])
-    print(fit(test_y, test_x)[0].getrow(0)[0])
+    m = fit(test_y, test_x)
+    print(len(predict(test_x, m)))
