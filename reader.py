@@ -19,12 +19,16 @@ class Sample:
         return self
 
 
-def read_sample(data_file_path, total_sample_size):
-    sample = Sample()
+def read_sample(data_file_path, total_sample_size, train_sample_size):
+    train_sample = Sample()
+    test_sample = Sample()
     with open(data_file_path) as f:
-        for line_no, line in enumerate(itertools.islice(f.__iter__(), total_sample_size)):
-            sample.increment_by_one_line(line_no, line)
-    return sample
+        for line_no, line in enumerate(itertools.islice(f.__iter__(), 0, train_sample_size)):
+            train_sample.increment_by_one_line(line_no, line)
+    with open(data_file_path) as f:
+        for line_no, line in enumerate(itertools.islice(f.__iter__(), train_sample_size, total_sample_size)):
+            test_sample.increment_by_one_line(line_no, line)
+    return train_sample, test_sample
 
 
 if __name__ == '__main__':

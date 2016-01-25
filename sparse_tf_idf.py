@@ -20,13 +20,14 @@ def tf(count_mat):
 
 def idf(count_mat):
     total_doc_count = count_mat.shape[0]
+    n_dim = count_mat.shape[1]
     feature_occurrence = counting_occurrence(count_mat.indices)
     init_row = list()
     init_element = list()
     for feature, occurrence in feature_occurrence.items():
         init_row.append(feature)
         init_element.append(math.log(float(total_doc_count) / occurrence))
-    return csr_matrix((init_element, (init_row, init_row)), shape=(max(init_row) + 1, max(init_row) + 1))
+    return csr_matrix((init_element, (init_row, init_row)), shape=(n_dim, n_dim))
 
 
 def tf_idf(count_mat):

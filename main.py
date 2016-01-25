@@ -7,24 +7,29 @@ import multi_label_mnb
 import reader
 import sparse_tf_idf
 
-sample_path = sys.argv[1] if len(sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt'
-size_of_sample = int(sys.argv[2]) if len(sys.argv) > 2 else 3
+sample_path = sys.argv[1] if len(sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/input_data/train.csv'
+size_of_sample = int(sys.argv[2]) if len(sys.argv) > 2 else 10
+size_of_train_sample = int(sys.argv[3]) if len(sys.argv) > 3 else 5
 
 start_time = time()
 
 # read data from file
-smp = reader.read_sample(sample_path, size_of_sample)
-smp_x = csr_matrix((smp.element_x, (smp.row_index_x, smp.col_index_x)),
-                   shape=(max(smp.row_index_x) + 1, max(smp.col_index_x) + 1))
+train_smp, test_smp = reader.read_sample(sample_path, size_of_sample, size_of_train_sample)
+n_dim = max(max(train_smp.col_index_x), max(test_smp.col_index_x)) + 1
+train_x = csr_matrix((train_smp.element_x, (train_smp.row_index_x, train_smp.col_index_x)),
+                     shape=(max(train_smp.row_index_x) + 1, n_dim))
+test_x = csr_matrix((test_smp.element_x, (test_smp.row_index_x, test_smp.col_index_x)),
+                    shape=(max(test_smp.row_index_x) + 1, n_dim))
 
 # perform tf-idf
-tf_idf_smp_x = sparse_tf_idf.tf_idf(smp_x)
+train_tf_idf_x = sparse_tf_idf.tf_idf(train_x)
+test_tf_idf_x = sparse_tf_idf.tf_idf(test_x)
 
 # fit mnb model
-model = multi_label_mnb.fit(smp.y, tf_idf_smp_x)
-print(model[0].shape)
-print(model[1].shape)
-print(model[1].nnz)
-predict_sample_per_label = multi_label_mnb.predict(tf_idf_smp_x, model)
+model = multi_label_mnb.fit(train_smp.y, train_tf_idf_x)
+
+# make prediction on test sample
+predict_sample_per_label = multi_label_mnb.predict(test_tf_idf_x, model)
 print(len(predict_sample_per_label))
+print(predict_sample_per_label.count(-1))
 print(time() - start_time)
