@@ -10,11 +10,16 @@ def fit(y, x):
 
 
 def predict(x, model):
+    res = [[] for i in range(x.shape[0])]
     log_likelihood_matrix = _log_likelihood(x, model)
     if not isinstance(log_likelihood_matrix, csr_matrix):
         raise TypeError()
-    return k_argmax.k_argmax(log_likelihood_matrix.data, log_likelihood_matrix.indices.tolist(),
-                             log_likelihood_matrix.indptr.tolist())
+    smp_per_label = k_argmax.k_argmax(log_likelihood_matrix.data, log_likelihood_matrix.indices.tolist(),
+                                      log_likelihood_matrix.indptr.tolist())
+    for each_label, smp_per_each_label in enumerate(smp_per_label):
+        if smp_per_each_label >= 0:
+            res[smp_per_each_label].append(each_label)
+    return res
 
 
 def _log_likelihood(x, model):
@@ -31,7 +36,7 @@ def _log_likelihood(x, model):
     return log_likelihood_mat
 
 
-def _construct_coo_from_list(lst):
+def _construct_coo_from_list(lst, max_n_dim=None):
     elements = list()
     rows = list()
     columns = list()
@@ -40,7 +45,8 @@ def _construct_coo_from_list(lst):
         elements.extend([1.0] * row_size)
         rows.extend([row_index] * row_size)
         columns.extend(row)
-    return coo_matrix((elements, (rows, columns)), shape=(len(lst), max(columns) + 1), dtype='float')
+    n_dim = max_n_dim if max_n_dim else (max(columns) + 1)
+    return coo_matrix((elements, (rows, columns)), shape=(len(lst), n_dim), dtype='float')
 
 
 def _count_occurrence(y, x):
@@ -77,4 +83,5 @@ if __name__ == '__main__':
     test_x = csr_matrix(([1.0, 4.0, 1.0, 1.0, 1.0, 1.0],
                          ([0, 1, 1, 1, 2, 2], [1250536, 1095476, 805104, 634175, 1250536, 805104])))
     m = fit(test_y, test_x)
-    print(len(predict(test_x, m)))
+    print(_log_likelihood(test_x, m))
+    print(predict(test_x, m))
