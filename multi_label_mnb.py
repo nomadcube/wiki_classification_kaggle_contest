@@ -16,8 +16,9 @@ def predict(x, model):
         raise TypeError()
     for col_index in range(log_likelihood_matrix.shape[1]):
         each_sample = log_likelihood_matrix.getcol(col_index)
-        arg_max_row_index = each_sample.indices[np.array(each_sample.data).argmax()]
-        res[col_index].append(arg_max_row_index)
+        if len(each_sample.data) > 0:
+            arg_max_row_index = each_sample.indices[np.array(each_sample.data).argmax()]
+            res[col_index].append(arg_max_row_index)
     return res
 
 
