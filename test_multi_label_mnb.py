@@ -61,6 +61,6 @@ def test_predict():
     model = multi_label_mnb.fit(test_y, test_x)
     predict_res = multi_label_mnb.predict(test_x, model)
     assert len(predict_res) == 3
-    assert predict_res[0] == [76255, 335416]
-    assert predict_res[1] == []
-    assert predict_res[2] == [21631]
+    assert predict_res[0] == [76255]
+    assert predict_res[1] == [76255]
+    assert predict_res[2] == [76255]

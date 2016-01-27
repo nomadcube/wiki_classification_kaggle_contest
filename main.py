@@ -8,8 +8,8 @@ import multi_label_mnb
 import reader
 
 sample_path = sys.argv[1] if len(sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/input_data/train.csv'
-size_of_sample = int(sys.argv[2]) if len(sys.argv) > 2 else 10
-size_of_train_sample = int(sys.argv[3]) if len(sys.argv) > 3 else 5
+size_of_sample = int(sys.argv[2]) if len(sys.argv) > 2 else 1000
+size_of_train_sample = int(sys.argv[3]) if len(sys.argv) > 3 else 500
 
 start_time = time()
 
@@ -22,13 +22,8 @@ train_x = csr_matrix((train_smp.element_x, (train_smp.row_index_x, train_smp.col
 test_x = csr_matrix((test_smp.element_x, (test_smp.row_index_x, test_smp.col_index_x)),
                     shape=(max(test_smp.row_index_x) + 1, n_feature))
 
-# perform tf-idf
-# train_tf_idf_x = sparse_tf_idf.tf_idf(train_x)
-# test_tf_idf_x = sparse_tf_idf.tf_idf(test_x)
-
 train_tf_idf_x = train_x
 test_tf_idf_x = test_x
-
 
 # fit non-smoothed mnb model
 model = multi_label_mnb.fit(train_smp.y, train_tf_idf_x)

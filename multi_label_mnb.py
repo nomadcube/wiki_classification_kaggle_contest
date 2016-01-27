@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.sparse import csr_matrix, coo_matrix
+from scipy.sparse import csr_matrix, coo_matrix, csc_matrix
 
 from cpp_ext import k_argmax
 
@@ -11,15 +11,13 @@ def fit(y, x):
 
 def predict(x, model):
     res = [[] for i in range(x.shape[0])]
-    log_likelihood_matrix = _log_likelihood(x, model)
-    if not isinstance(log_likelihood_matrix, csr_matrix):
+    log_likelihood_matrix = _log_likelihood(x, model).tocsc()
+    if not isinstance(log_likelihood_matrix, csc_matrix):
         raise TypeError()
-    # todo: choose the max sample per label may be wrong.
-    smp_per_label = k_argmax.k_argmax(log_likelihood_matrix.data, log_likelihood_matrix.indices.tolist(),
-                                      log_likelihood_matrix.indptr.tolist())
-    for each_label, smp_per_each_label in enumerate(smp_per_label):
-        if smp_per_each_label >= 0:
-            res[smp_per_each_label].append(each_label)
+    for col_index in range(log_likelihood_matrix.shape[1]):
+        each_sample = log_likelihood_matrix.getcol(col_index)
+        arg_max_row_index = each_sample.indices[np.array(each_sample.data).argmax()]
+        res[col_index].append(arg_max_row_index)
     return res
 
 
