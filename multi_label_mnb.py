@@ -10,16 +10,21 @@ def fit(y, x):
 
 
 def predict(x, model):
-    res = [[] for i in range(x.shape[0])]
-    log_likelihood_matrix = _log_likelihood(x, model).tocsc()
-    if not isinstance(log_likelihood_matrix, csc_matrix):
-        raise TypeError()
-    for col_index in range(log_likelihood_matrix.shape[1]):
-        each_sample = log_likelihood_matrix.getcol(col_index)
-        if len(each_sample.data) > 0:
-            arg_max_row_index = each_sample.indices[np.array(each_sample.data).argmax()]
-            res[col_index].append(arg_max_row_index)
+    res = list()
+    for sample_index in range(x.shape[0]):
+        print(sample_index)
+        res.append(_one_predict(x.getrow(sample_index), model))
     return res
+
+
+def _one_predict(one_sample, model):
+    if len(one_sample.data) > 0:
+        log_likelihood = _log_likelihood(one_sample, model).tocsc()
+        if not isinstance(log_likelihood, csc_matrix):
+            raise TypeError()
+        return [log_likelihood.indices[np.array(log_likelihood.data).argmax()]] if len(log_likelihood.data) > 0 else []
+    else:
+        return []
 
 
 def _log_likelihood(x, model):
@@ -32,9 +37,12 @@ def _log_likelihood(x, model):
     if not isinstance(class_prior, csr_matrix):
         raise TypeError()
     log_likelihood_mat = multinomial_parameters.dot(x.transpose())
-    # todo: too many nnz in multinomial_parameters.dot(x.transpose()), when x and multinomial_parameters is big.
-    log_likelihood_mat.data += np.array(class_prior.transpose().toarray().repeat(np.diff(log_likelihood_mat.indptr)))[0]
-    return log_likelihood_mat
+    prior_prob = class_prior.transpose().toarray()
+    if len(log_likelihood_mat.data) > 0:
+        log_likelihood_mat.data += np.array(prior_prob.repeat(np.diff(log_likelihood_mat.indptr)))[0]
+        return log_likelihood_mat
+    else:
+        return csr_matrix(prior_prob.repeat(x.shape[0]))
 
 
 def _construct_coo_from_list(lst, max_n_dim=None):
@@ -85,4 +93,5 @@ if __name__ == '__main__':
                          ([0, 1, 1, 1, 2, 2], [1250536, 1095476, 805104, 634175, 1250536, 805104])))
     m = fit(test_y, test_x)
     print(_log_likelihood(test_x, m))
+    print(_one_predict(test_x, m))
     print(predict(test_x, m))

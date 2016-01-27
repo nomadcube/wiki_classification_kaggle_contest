@@ -22,14 +22,11 @@ train_x = csr_matrix((train_smp.element_x, (train_smp.row_index_x, train_smp.col
 test_x = csr_matrix((test_smp.element_x, (test_smp.row_index_x, test_smp.col_index_x)),
                     shape=(max(test_smp.row_index_x) + 1, n_feature))
 
-train_tf_idf_x = train_x
-test_tf_idf_x = test_x
-
 # fit non-smoothed mnb model
-model = multi_label_mnb.fit(train_smp.y, train_tf_idf_x)
+model = multi_label_mnb.fit(train_smp.y, train_x)
 
 # make prediction on test sample
-predict_sample_per_label = multi_label_mnb.predict(test_tf_idf_x, model)
+predict_sample_per_label = multi_label_mnb.predict(test_x, model)
 
 # evaluation
 print(evaluation.macro_precision_recall(test_smp.y, predict_sample_per_label, n_class_label))
