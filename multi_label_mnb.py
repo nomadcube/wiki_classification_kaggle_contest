@@ -14,6 +14,7 @@ def predict(x, model):
     log_likelihood_matrix = _log_likelihood(x, model)
     if not isinstance(log_likelihood_matrix, csr_matrix):
         raise TypeError()
+    # todo: choose the max sample per label may be wrong.
     smp_per_label = k_argmax.k_argmax(log_likelihood_matrix.data, log_likelihood_matrix.indices.tolist(),
                                       log_likelihood_matrix.indptr.tolist())
     for each_label, smp_per_each_label in enumerate(smp_per_label):
@@ -32,6 +33,7 @@ def _log_likelihood(x, model):
     if not isinstance(class_prior, csr_matrix):
         raise TypeError()
     log_likelihood_mat = multinomial_parameters.dot(x.transpose())
+    # todo: too many nnz in multinomial_parameters.dot(x.transpose()), when x and multinomial_parameters is big.
     log_likelihood_mat.data += np.array(class_prior.transpose().toarray().repeat(np.diff(log_likelihood_mat.indptr)))[0]
     return log_likelihood_mat
 
