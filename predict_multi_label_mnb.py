@@ -6,7 +6,8 @@ from fit_multi_label_mnb import fit
 
 def predict(x, model, block_size=1):
     res = list()
-    for block_x in _block_x(x, block_size):
+    for i, block_x in enumerate(_block_x(x, block_size)):
+        print(i)
         res.extend(_block_predict(block_x, model))
     return res
 
