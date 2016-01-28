@@ -4,7 +4,8 @@ from time import time
 from scipy.sparse import csr_matrix
 
 import evaluation
-import multi_label_mnb
+import fit_multi_label_mnb
+import predict_multi_label_mnb
 import reader
 
 sample_path = sys.argv[1] if len(sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/input_data/train.csv'
@@ -23,10 +24,10 @@ test_x = csr_matrix((test_smp.element_x, (test_smp.row_index_x, test_smp.col_ind
                     shape=(max(test_smp.row_index_x) + 1, n_feature))
 
 # fit non-smoothed mnb model
-model = multi_label_mnb.fit(train_smp.y, train_x)
+model = fit_multi_label_mnb.fit(train_smp.y, train_x)
 
 # make prediction on test sample
-predict_sample_per_label = multi_label_mnb.predict(test_x, model)
+predict_sample_per_label = predict_multi_label_mnb.predict(test_x, model)
 
 # evaluation
 print(evaluation.macro_precision_recall(test_smp.y, predict_sample_per_label, n_class_label))

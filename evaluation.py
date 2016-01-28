@@ -3,7 +3,7 @@ from collections import namedtuple
 import numpy as np
 import numpy.ma as nma
 
-from multi_label_mnb import _construct_coo_from_list
+from fit_multi_label_mnb import _construct_coo_from_list
 
 
 def confusion_matrix(y, predicted_y, max_n_dim):

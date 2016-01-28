@@ -1,4 +1,5 @@
-import multi_label_mnb
+import fit_multi_label_mnb
+import predict_multi_label_mnb
 
 
 def test_fit():
@@ -8,7 +9,7 @@ def test_fit():
     test_y = np.array([[314523, 165538, 416827], [21631], [76255, 335416]])
     test_x = csr_matrix(([1.0, 4.0, 1.0, 1.0, 1.0, 1.0],
                          ([0, 1, 1, 1, 2, 2], [1250536, 1095476, 805104, 634175, 1250536, 805104])))
-    post_prob_y, mn_param = multi_label_mnb.fit(test_y, test_x)
+    post_prob_y, mn_param = fit_multi_label_mnb.fit(test_y, test_x)
     assert post_prob_y.shape == (1, 416828)
     assert mn_param.shape == (416828, 1250537)
     assert post_prob_y.nnz == 6
@@ -38,8 +39,8 @@ def test_log_likelihood():
     test_y = np.array([[314523, 165538, 416827], [21631], [76255, 335416]])
     test_x = csr_matrix(([1.0, 4.0, 1.0, 1.0, 1.0, 1.0],
                          ([0, 1, 1, 1, 2, 2], [1250536, 1095476, 805104, 634175, 1250536, 805104])))
-    model = multi_label_mnb.fit(test_y, test_x)
-    ll = multi_label_mnb._log_likelihood(test_x, model)
+    model = fit_multi_label_mnb.fit(test_y, test_x)
+    ll = predict_multi_label_mnb._log_likelihood(test_x, model)
     assert ll.shape == (416828, 3)
     assert ll.nnz == 8
     assert ll[21631, 1] == math.log(1. / 6.) + 1. * math.log(1. / 6.) + 4. * math.log(4. / 6.) + 1 * math.log(1. / 6.)
@@ -58,8 +59,8 @@ def test_predict():
     test_y = np.array([[314523, 165538, 416827], [21631], [76255, 335416]])
     test_x = csr_matrix(([1.0, 4.0, 1.0, 1.0, 1.0, 1.0],
                          ([0, 1, 1, 1, 2, 2], [1250536, 1095476, 805104, 634175, 1250536, 805104])))
-    model = multi_label_mnb.fit(test_y, test_x)
-    predict_res = multi_label_mnb.predict(test_x, model)
+    model = fit_multi_label_mnb.fit(test_y, test_x)
+    predict_res = predict_multi_label_mnb.predict(test_x, model)
     assert len(predict_res) == 3
     assert predict_res[0] == [76255]
     assert predict_res[1] == [76255]
