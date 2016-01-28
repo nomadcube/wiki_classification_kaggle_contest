@@ -27,7 +27,7 @@ test_x = csr_matrix((test_smp.element_x, (test_smp.row_index_x, test_smp.col_ind
 model = fit_multi_label_mnb.fit(train_smp.y, train_x)
 
 # make prediction on test sample
-predict_sample_per_label = predict_multi_label_mnb.predict(test_x, model)
+predict_sample_per_label = predict_multi_label_mnb.predict(test_x, model, 2500)
 
 # evaluation
 print(evaluation.macro_precision_recall(test_smp.y, predict_sample_per_label, n_class_label))
