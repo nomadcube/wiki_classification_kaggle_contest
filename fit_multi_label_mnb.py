@@ -6,10 +6,11 @@ from scipy.sparse import csr_matrix, csc_matrix
 from cpp_ext import k_argmax
 
 
-def fit(y, x, total_label_occurrence_cnt):
+def fit(y, x):
     if not isinstance(x, csr_matrix):
         raise TypeError('x must be of type csr matrix.')
     y = construct_csr_from_list(y)
+    total_label_occurrence_cnt = y.sum()
     new_x = log_rate_per_row(x)
     new_x = add_unit_column(new_x, total_label_occurrence_cnt)
     return y.transpose().dot(new_x)

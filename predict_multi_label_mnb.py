@@ -39,5 +39,5 @@ if __name__ == '__main__':
     test_y = np.array([[314523, 165538, 416827], [21631], [76255, 335416]])
     test_x = csr_matrix(([1.0, 4.0, 1.0, 1.0, 1.0, 1.0],
                          ([0, 1, 1, 1, 2, 2], [1250536, 1095476, 805104, 634175, 1250536, 805104])))
-    m = fit(test_y, test_x, 6)
+    m = fit(test_y, test_x)
     print(_log_likelihood(add_unit_column(test_x.tocsc()), m))
