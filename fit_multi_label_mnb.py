@@ -1,53 +1,59 @@
+import math
+
 import numpy as np
-from scipy.sparse import csr_matrix, coo_matrix
+from scipy.sparse import csr_matrix, csc_matrix
 
 from cpp_ext import k_argmax
 
 
-def fit(y, x):
-    label_count, label_feature_count = _count_occurrence(y, x)
-    return _log_rate_per_column(label_count), _log_rate_per_row(label_feature_count)
+def fit(y, x, total_label_occurrence_cnt):
+    if not isinstance(x, csr_matrix):
+        raise TypeError('x must be of type csr matrix.')
+    y = construct_csr_from_list(y)
+    new_x = log_rate_per_row(x)
+    new_x = add_unit_column(new_x, total_label_occurrence_cnt)
+    return y.transpose().dot(new_x)
 
 
-def _construct_coo_from_list(lst, max_n_dim=None):
+def construct_csr_from_list(two_dimension_list, max_n_dim=None):
     elements = list()
     rows = list()
     columns = list()
-    for row_index, row in enumerate(lst):
+    for row_index, row in enumerate(two_dimension_list):
         row_size = len(row)
         elements.extend([1.0] * row_size)
         rows.extend([row_index] * row_size)
         columns.extend(row)
     n_dim = max_n_dim if max_n_dim else (max(columns) + 1)
-    return coo_matrix((elements, (rows, columns)), shape=(len(lst), n_dim), dtype='float')
+    return csr_matrix((elements, (rows, columns)), shape=(len(two_dimension_list), n_dim), dtype='float')
 
 
-def _count_occurrence(y, x):
-    coo_y = _construct_coo_from_list(y)
-    csr_y = coo_y.tocsr()
-    label_occurrence = csr_matrix(coo_y.sum(axis=0))
-    label_feature_co_occurrence = csr_y.transpose().dot(x)
-    return label_occurrence, csr_matrix(label_feature_co_occurrence)
-
-
-def _log_rate_per_row(co_occurrence_frequency):
-    if not isinstance(co_occurrence_frequency, csr_matrix):
+def log_rate_per_row(mat):
+    if not isinstance(mat, csr_matrix):
         raise TypeError('freq_mat must be of csr_matrix type.')
-    if co_occurrence_frequency.dtype != 'float':
+    if mat.dtype != 'float':
         raise TypeError('dtype of freq_mat must be of float.')
-    row_sum = co_occurrence_frequency.sum(axis=1)
-    co_occurrence_frequency.data /= np.array(row_sum.repeat(np.diff(co_occurrence_frequency.indptr)))[0]
-    co_occurrence_frequency.data = np.log(co_occurrence_frequency.data)
-    return co_occurrence_frequency
+    new_mat = mat.copy()
+    row_sum = new_mat.sum(axis=1)
+    new_mat.data /= np.array(row_sum.repeat(np.diff(new_mat.indptr)))[0]
+    new_mat.data = np.log(new_mat.data)
+    return new_mat
 
 
-def _log_rate_per_column(y_count):
-    if not isinstance(y_count, csr_matrix):
-        raise TypeError()
-    column_sum = y_count.sum(axis=1)
-    y_count.data /= np.array(column_sum)[0]
-    y_count.data = np.log(y_count.data)
-    return y_count
+def add_unit_column(mat, coefficient=None):
+    mat = mat.tocsc()
+    n_row = mat.shape[0]
+    current_nnz = mat.nnz
+    dat = mat.data.tolist()
+    if coefficient:
+        dat.extend([math.log(1. / coefficient)] * n_row)
+    else:
+        dat.extend([1.] * n_row)
+    indi = mat.indices.tolist()
+    indi.extend(range(n_row))
+    indp = mat.indptr.tolist()
+    indp.append(current_nnz + n_row)
+    return csc_matrix((dat, indi, indp), shape=(mat.shape[0], mat.shape[1] + 1), dtype='float').tocsr()
 
 
 if __name__ == '__main__':
@@ -55,4 +61,8 @@ if __name__ == '__main__':
     test_y = np.array([[314523, 165538, 416827], [21631], [76255, 335416]])
     test_x = csr_matrix(([1.0, 4.0, 1.0, 1.0, 1.0, 1.0],
                          ([0, 1, 1, 1, 2, 2], [1250536, 1095476, 805104, 634175, 1250536, 805104])))
-    m = fit(test_y, test_x)
+    print(test_x)
+    print('========')
+    print(add_unit_column(test_x, 1.))
+    print('========')
+    print(fit(test_y, test_x, 6))

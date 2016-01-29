@@ -3,13 +3,13 @@ from collections import namedtuple
 import numpy as np
 import numpy.ma as nma
 
-from fit_multi_label_mnb import _construct_coo_from_list
+from fit_multi_label_mnb import construct_csr_from_list
 
 
 def confusion_matrix(y, predicted_y, max_n_dim):
     res = namedtuple('confusion_matrix', 'true_positive false_negative false_positive true_negative')
-    y_coo = _construct_coo_from_list(y, max_n_dim).transpose()
-    predicted_y_coo = _construct_coo_from_list(predicted_y, max_n_dim).transpose()
+    y_coo = construct_csr_from_list(y, max_n_dim).transpose()
+    predicted_y_coo = construct_csr_from_list(predicted_y, max_n_dim).transpose()
     y_csr = y_coo.tocsr()
     predicted_y_csr = predicted_y_coo.tocsr()
     tp_mat = y_csr.multiply(predicted_y_csr)

@@ -1,11 +1,12 @@
 import numpy as np
 from scipy.sparse import csr_matrix
 
-from fit_multi_label_mnb import fit
+from fit_multi_label_mnb import fit, add_unit_column
 
 
 def predict(x, model, block_size=1):
     res = list()
+    x = add_unit_column(x.tocsc())
     for i, block_x in enumerate(_block_x(x, block_size)):
         print(i)
         res.extend(_block_predict(block_x, model))
@@ -31,26 +32,12 @@ def _block_x(x, block_size):
 
 
 def _log_likelihood(x, model):
-    multinomial_parameters = model[1]
-    class_prior = model[0]
-    if not isinstance(x, csr_matrix):
-        raise TypeError()
-    if not isinstance(multinomial_parameters, csr_matrix):
-        raise TypeError()
-    if not isinstance(class_prior, csr_matrix):
-        raise TypeError()
-    log_likelihood_mat = multinomial_parameters.dot(x.transpose())
-    prior_prob = class_prior.transpose().toarray()
-    if len(log_likelihood_mat.data) > 0:
-        log_likelihood_mat.data += np.array(prior_prob.repeat(np.diff(log_likelihood_mat.indptr)))[0]
-        return log_likelihood_mat
-    else:
-        return csr_matrix(prior_prob.repeat(x.shape[0]))
+    return model.dot(x.transpose())
 
 
 if __name__ == '__main__':
     test_y = np.array([[314523, 165538, 416827], [21631], [76255, 335416]])
     test_x = csr_matrix(([1.0, 4.0, 1.0, 1.0, 1.0, 1.0],
                          ([0, 1, 1, 1, 2, 2], [1250536, 1095476, 805104, 634175, 1250536, 805104])))
-    m = fit(test_y, test_x)
-    print(predict(test_x, m))
+    m = fit(test_y, test_x, 6)
+    print(_log_likelihood(add_unit_column(test_x.tocsc()), m))
