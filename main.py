@@ -1,3 +1,4 @@
+import gc
 import sys
 from time import time
 
@@ -28,6 +29,9 @@ test_x = csr_matrix((test_smp.element_x, (test_smp.row_index_x, test_smp.col_ind
 model = fit_multi_label_mnb.fit(train_smp.y, train_x)
 
 # make prediction on test sample
+del train_smp
+del train_x
+gc.collect()
 predict_sample_per_label = predict_multi_label_mnb.predict(test_x, model, predict_block_size)
 
 # evaluation
