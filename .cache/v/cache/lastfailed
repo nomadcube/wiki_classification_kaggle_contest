@@ -1,1 +1,3 @@
-{}
+{
+  "test_predict_multi_label_mnb.py::TestPredict::()::test_predict": true
+}
