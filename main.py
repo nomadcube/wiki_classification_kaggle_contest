@@ -34,7 +34,7 @@ h = hpy()
 del train_smp
 del train_x
 gc.collect()
-# todo: predict result seems weird, need to be confirmed.
+model = predict_multi_label_mnb.convert_to_linear_classifier(model)
 predict_sample_per_label = predict_multi_label_mnb.predict(test_x, model, predict_block_size)
 
 # evaluation

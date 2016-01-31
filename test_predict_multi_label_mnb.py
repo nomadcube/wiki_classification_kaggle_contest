@@ -64,11 +64,12 @@ class TestPredict:
     def test_log_likelihood(self, test_y, test_x):
         model = fit_multi_label_mnb.fit(test_y, test_x)
         lm = predict_multi_label_mnb.convert_to_linear_classifier(model)
-        ll = predict_multi_label_mnb._log_likelihood(test_x, lm)
-        assert ll.shape == (2, 15)
-        assert ll.nnz == 30
-
-    #     todo: need more assert
+        new_x = csr_matrix(([1., 1.], ([0, 0], [1, 3])), shape=(1, 6))
+        ll = predict_multi_label_mnb._log_likelihood(new_x, lm)
+        assert ll.shape == (2, 1)
+        assert ll.nnz == 2
+        assert ll[0, 0] == math.log(1. / 15.)
+        assert ll[1, 0] == math.log(1. / 45.)
 
     def test_block_x(self, test_y, test_x):
         from scipy.sparse import csr_matrix
@@ -84,14 +85,9 @@ class TestPredict:
         assert all_block_x[2].nnz == 2
 
     def test_predict(self, test_y, test_x):
-        import numpy as np
-        from scipy.sparse import csr_matrix
-        test_y = np.array([[314523, 165538, 416827], [21631], [76255, 335416]])
-        test_x = csr_matrix(([1.0, 4.0, 1.0, 1.0, 1.0, 1.0],
-                             ([0, 1, 1, 1, 2, 2], [1250536, 1095476, 805104, 634175, 1250536, 805104])))
         model = fit_multi_label_mnb.fit(test_y, test_x)
-        predict_res = predict_multi_label_mnb.predict(test_x, model)
-        assert len(predict_res) == 3
-        assert predict_res[0] == [165538]
-        assert predict_res[1] == [165538]
-        assert predict_res[2] == [165538]
+        lm = predict_multi_label_mnb.convert_to_linear_classifier(model)
+        new_x = csr_matrix(([1., 1.], ([0, 0], [1, 3])), shape=(1, 6))
+        predict_res = predict_multi_label_mnb.predict(new_x, lm)
+        assert len(predict_res) == 1
+        assert predict_res[0] == [0]

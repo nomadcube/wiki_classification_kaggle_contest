@@ -8,7 +8,6 @@ from fit_multi_label_mnb import fit
 
 def predict(x, model, block_size=1):
     res = list()
-    x = add_unit_column(x.tocsc())
     for i, block_x in enumerate(_block_x(x, block_size)):
         print(i)
         res.extend(_block_predict(block_x, model))
@@ -59,12 +58,12 @@ def convert_to_linear_classifier(model):
     mn_param = model[1].tocsc()
     dat = mn_param.data.tolist()
     dat.extend(prior)
-    dat = [math.log(d) for d in dat]
+    log_dat = [math.log(d) if d > 0 else -1e10 for d in dat]
     indi = mn_param.indices.tolist()
     indi.extend(range(mn_param.shape[0]))
     indt = mn_param.indptr.tolist()
     indt.append(mn_param.nnz + mn_param.shape[0])
-    return csc_matrix((dat, indi, indt), shape=(mn_param.shape[0], mn_param.shape[1] + 1), dtype='float')
+    return csc_matrix((log_dat, indi, indt), shape=(mn_param.shape[0], mn_param.shape[1] + 1), dtype='float')
 
 
 if __name__ == '__main__':
@@ -92,4 +91,6 @@ if __name__ == '__main__':
                  2, 5]
     test_x = csr_matrix((element, (row_index, col_index)), shape=(15, 6))
     m = fit(test_y, test_x)
-    print(_log_likelihood(test_x, convert_to_linear_classifier(m)))
+    lm = convert_to_linear_classifier(m)
+    new_x = csr_matrix(([1., 1.], ([0, 0], [1, 3])), shape=(1, 6))
+    print(predict(new_x, lm))
