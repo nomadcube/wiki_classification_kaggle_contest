@@ -64,7 +64,7 @@ class TestPredict:
     def test_log_likelihood(self, test_y, test_x):
         model = fit_multi_label_mnb.fit(test_y, test_x)
         lm = predict_multi_label_mnb.convert_to_linear_classifier(model)
-        new_x = csr_matrix(([1., 1.], ([0, 0], [1, 3])), shape=(1, 6))
+        new_x = predict_multi_label_mnb.add_unit_column(csr_matrix(([1., 1.], ([0, 0], [1, 3])), shape=(1, 6)))
         ll = predict_multi_label_mnb._log_likelihood(new_x, lm)
         assert ll.shape == (2, 1)
         assert ll.nnz == 2

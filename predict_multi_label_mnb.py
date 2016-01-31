@@ -1,3 +1,4 @@
+# coding=utf-8
 import math
 
 import numpy as np
@@ -6,35 +7,22 @@ from scipy.sparse import csr_matrix, csc_matrix
 from fit_multi_label_mnb import fit
 
 
-def predict(x, model, block_size=1):
+def predict(x, model):
     res = list()
-    for i, block_x in enumerate(_block_x(x, block_size)):
+    new_x = add_unit_column(x)
+    for i, block_x in enumerate(new_x):
         print(i)
-        res.extend(_block_predict(block_x, model))
+        res.append(_predict_one(block_x, model))
     return res
 
 
-def _block_predict(block_sample, model):
-    block_res = list()
-    ll = _log_likelihood(block_sample, model).tocsc()
-    for block_row_index in range(ll.shape[1]):
-        ll_col = ll.getcol(block_row_index)
-        row_pred = [ll_col.indices[np.array(ll_col.data).argmax()]] if len(ll_col.data) > 0 else []
-        block_res.append(row_pred)
-    return block_res
-
-
-def _block_x(x, block_size):
-    n_row, n_col = x.shape
-    if n_row % block_size != 0:
-        raise ValueError()
-    for start_row_index in range(0, (n_row - block_size + 1), block_size):
-        yield x._get_submatrix(slice(start_row_index, start_row_index + block_size), slice(0, n_col))
+def _predict_one(one_x, model):
+    ll = _log_likelihood(one_x, model)
+    return [ll.indices[np.array(ll.data).argmax()]] if len(ll.data) > 0 else []
 
 
 def _log_likelihood(x, model):
-    new_x = add_unit_column(x)
-    return model.dot(new_x.transpose())
+    return model.dot(x.transpose())
 
 
 def add_unit_column(mat, coefficient=None):
@@ -50,7 +38,7 @@ def add_unit_column(mat, coefficient=None):
     indi.extend(range(n_row))
     indp = mat.indptr.tolist()
     indp.append(current_nnz + n_row)
-    return csc_matrix((dat, indi, indp), shape=(mat.shape[0], mat.shape[1] + 1), dtype='float').tocsr()
+    return csc_matrix((dat, indi, indp), shape=(mat.shape[0], mat.shape[1] + 1), dtype='float')
 
 
 def convert_to_linear_classifier(model):
@@ -93,4 +81,4 @@ if __name__ == '__main__':
     m = fit(test_y, test_x)
     lm = convert_to_linear_classifier(m)
     new_x = csr_matrix(([1., 1.], ([0, 0], [1, 3])), shape=(1, 6))
-    print(predict(new_x, lm))
+    # print(predict(new_x, lm))
