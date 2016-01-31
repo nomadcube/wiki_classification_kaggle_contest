@@ -22,7 +22,6 @@ n_feature = max(train_smp.max_feature, test_smp.max_feature) + 1
 n_class_label = max(train_smp.max_class_label, test_smp.max_class_label) + 1
 train_x = csr_matrix((train_smp.element_x, train_smp.col_index_x, train_smp.row_indptr_x),
                      shape=(len(train_smp.row_indptr_x) - 1, n_feature), dtype='float')
-print train_x
 # fit non-smoothed mnb model
 # model = fit_multi_label_mnb.fit(train_smp.y, train_x)
 #
