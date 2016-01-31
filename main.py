@@ -11,8 +11,8 @@ import predict_multi_label_mnb
 import reader
 
 sample_path = sys.argv[1] if len(sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/input_data/train.csv'
-size_of_sample = int(sys.argv[2]) if len(sys.argv) > 2 else 100000
-size_of_train_sample = int(sys.argv[3]) if len(sys.argv) > 3 else 50000
+size_of_sample = int(sys.argv[2]) if len(sys.argv) > 2 else 10000
+size_of_train_sample = int(sys.argv[3]) if len(sys.argv) > 3 else 5000
 
 start_time = time()
 
@@ -20,9 +20,9 @@ start_time = time()
 train_smp, test_smp = reader.read_sample(sample_path, size_of_sample, size_of_train_sample)
 n_feature = max(train_smp.max_feature, test_smp.max_feature) + 1
 n_class_label = max(train_smp.max_class_label, test_smp.max_class_label) + 1
-train_x = csr_matrix((train_smp.element_x, (train_smp.row_index_x, train_smp.col_index_x)),
-                     shape=(max(train_smp.row_index_x) + 1, n_feature))
-
+train_x = csr_matrix((train_smp.element_x, train_smp.col_index_x, train_smp.row_indptr_x),
+                     shape=(len(train_smp.row_indptr_x) - 1, n_feature), dtype='float')
+print train_x
 # fit non-smoothed mnb model
 # model = fit_multi_label_mnb.fit(train_smp.y, train_x)
 #
