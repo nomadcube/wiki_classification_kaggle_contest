@@ -1,18 +1,19 @@
+import array
 import itertools
 
 
 class Sample:
     def __init__(self):
         self.y = list()
-        self.element_x = list()
-        self.row_index_x = list()
-        self.col_index_x = list()
+        self.element_x = array.array('f')
+        self.row_index_x = array.array('I')
+        self.col_index_x = array.array('I')
         self.max_feature = -1
         self.max_class_label = -1
 
     def increment_by_one_line(self, line_no, line):
         multi_label, instance = line.strip().split(' ', 1)
-        new_multi_label = list()
+        new_multi_label = array.array('I')
         for label in multi_label.split(','):
             label = int(label)
             new_multi_label.append(label)

@@ -71,19 +71,6 @@ class TestPredict:
         assert ll[0, 0] == math.log(1. / 15.)
         assert ll[1, 0] == math.log(1. / 45.)
 
-    def test_block_x(self, test_y, test_x):
-        from scipy.sparse import csr_matrix
-        test_x = csr_matrix(([1.0, 4.0, 1.0, 1.0, 1.0, 1.0],
-                             ([0, 1, 1, 1, 2, 2], [1250536, 1095476, 805104, 634175, 1250536, 805104])))
-        all_block_x = [i for i in predict_multi_label_mnb._block_x(test_x, 1)]
-        assert len(all_block_x) == 3
-        assert all_block_x[0].shape == (1, 1250537)
-        assert all_block_x[1].shape == (1, 1250537)
-        assert all_block_x[2].shape == (1, 1250537)
-        assert all_block_x[0].nnz == 1
-        assert all_block_x[1].nnz == 3
-        assert all_block_x[2].nnz == 2
-
     def test_predict(self, test_y, test_x):
         model = fit_multi_label_mnb.fit(test_y, test_x)
         lm = predict_multi_label_mnb.convert_to_linear_classifier(model)
