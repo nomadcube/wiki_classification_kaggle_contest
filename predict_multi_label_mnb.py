@@ -2,23 +2,34 @@
 import math
 
 import numpy as np
+import numpy.ma
 from scipy.sparse import csr_matrix, csc_matrix
 
 from fit_multi_label_mnb import fit
 
 
-def predict(x, model):
+def predict(x, model, k=1):
     res = list()
     new_x = add_unit_column(x)
     for i, block_x in enumerate(new_x):
         print(i)
-        res.append(_predict_one(block_x, model))
+        res.append(_one_predict(block_x, model, k))
     return res
 
 
-def _predict_one(one_x, model):
+def _one_predict(one_x, model, k=1):
     ll = _log_likelihood(one_x, model)
-    return [ll.indices[np.array(ll.data).argmax()]] if len(ll.data) > 0 else []
+    k_am = _top_k_argmax(np.array(ll.data), k)
+    return [ll.indices[am] for am in k_am] if len(ll.data) > 0 else []
+
+
+def _top_k_argmax(arr, k):
+    if not isinstance(arr, np.ndarray):
+        raise TypeError()
+    for i in range(k):
+        tmp_am = arr.argmax()
+        yield tmp_am
+        arr = numpy.ma.masked_values(arr, value=arr[tmp_am])
 
 
 def _log_likelihood(x, model):
@@ -82,3 +93,5 @@ if __name__ == '__main__':
     lm = convert_to_linear_classifier(m)
     new_x = csr_matrix(([1., 1.], ([0, 0], [1, 3])), shape=(1, 6))
     # print(predict(new_x, lm))
+    a = np.array([1, 4, 5, 3, 9])
+    print([l for l in _top_k_argmax(a, 2)])

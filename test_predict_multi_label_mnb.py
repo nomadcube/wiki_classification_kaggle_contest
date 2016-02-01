@@ -75,6 +75,13 @@ class TestPredict:
         model = fit_multi_label_mnb.fit(test_y, test_x)
         lm = predict_multi_label_mnb.convert_to_linear_classifier(model)
         new_x = csr_matrix(([1., 1.], ([0, 0], [1, 3])), shape=(1, 6))
-        predict_res = predict_multi_label_mnb.predict(new_x, lm)
+        predict_res = predict_multi_label_mnb.predict(new_x, lm, 2)
         assert len(predict_res) == 1
-        assert predict_res[0] == [0]
+        assert predict_res[0] == [0, 1]
+
+    def test_top_k_argmax(self):
+        a = np.array([1, 4, 5, 3, 9])
+        res = [l for l in predict_multi_label_mnb._top_k_argmax(a, 2)]
+        assert len(res) == 2
+        assert res[0] == 4
+        assert res[1] == 2

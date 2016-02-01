@@ -11,8 +11,8 @@ import predict_multi_label_mnb
 import reader
 
 sample_path = sys.argv[1] if len(sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/input_data/train.csv'
-size_of_sample = int(sys.argv[2]) if len(sys.argv) > 2 else 10000
-size_of_train_sample = int(sys.argv[3]) if len(sys.argv) > 3 else 7000
+size_of_sample = int(sys.argv[2]) if len(sys.argv) > 2 else 1000
+size_of_train_sample = int(sys.argv[3]) if len(sys.argv) > 3 else 900
 
 start_time = time()
 
@@ -39,7 +39,7 @@ del train_smp
 del train_x
 gc.collect()
 print(h.heap())
-predict_sample_per_label = predict_multi_label_mnb.predict(test_x, model)
+predict_sample_per_label = predict_multi_label_mnb.predict(test_x, model, 3)
 
 # evaluation
 print(evaluation.macro_precision_recall(test_smp.y, predict_sample_per_label, n_class_label))
