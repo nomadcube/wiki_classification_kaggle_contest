@@ -12,7 +12,7 @@ import reader
 
 sample_path = sys.argv[1] if len(sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/input_data/train.csv'
 size_of_sample = int(sys.argv[2]) if len(sys.argv) > 2 else 10000
-size_of_train_sample = int(sys.argv[3]) if len(sys.argv) > 3 else 5000
+size_of_train_sample = int(sys.argv[3]) if len(sys.argv) > 3 else 7000
 
 start_time = time()
 
@@ -28,7 +28,7 @@ model = fit_multi_label_mnb.fit(train_smp.y, train_x)
 
 # make prediction on test sample
 test_x = csr_matrix((test_smp.element_x, test_smp.col_index_x, test_smp.row_indptr_x),
-                    shape=(len(train_smp.row_indptr_x) - 1, n_feature), dtype='float')
+                    shape=(len(test_smp.row_indptr_x) - 1, n_feature), dtype='float')
 model = predict_multi_label_mnb.convert_to_linear_classifier(model)
 h = hpy()
 print(h.heap())

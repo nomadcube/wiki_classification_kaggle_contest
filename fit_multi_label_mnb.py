@@ -1,4 +1,5 @@
 import numpy as np
+from array import array
 from scipy.sparse import csr_matrix
 from memory_profiler import profile
 
@@ -16,17 +17,17 @@ def fit(y, x):
     return y_param, y_x_param
 
 
-def construct_csr_from_list(two_dimension_list, max_n_dim=None):
-    elements = list()
-    rows = list()
-    columns = list()
-    for row_index, row in enumerate(two_dimension_list):
+def construct_csr_from_list(two_dimension_arr, max_n_dim=None):
+    elements = array('f')
+    rows = array('I')
+    columns = array('I')
+    for row_index, row in enumerate(two_dimension_arr):
         row_size = len(row)
-        elements.extend([1.0] * row_size)
-        rows.extend([row_index] * row_size)
-        columns.extend(row)
+        elements.extend(array('f', [1.0] * row_size))
+        rows.extend(array('I', [row_index] * row_size))
+        columns.extend(array('I', row))
     n_dim = max_n_dim if max_n_dim else (max(columns) + 1)
-    return csr_matrix((elements, (rows, columns)), shape=(len(two_dimension_list), n_dim), dtype='float')
+    return csr_matrix((elements, (rows, columns)), shape=(len(two_dimension_arr), n_dim), dtype='float')
 
 
 if __name__ == '__main__':
