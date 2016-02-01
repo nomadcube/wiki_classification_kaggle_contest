@@ -14,7 +14,7 @@ def predict(x, model, k=1):
     res = list()
     new_x = add_unit_column(x)
     for i, block_x in enumerate(new_x):
-        # print(i)
+        print(i)
         res.append(_one_predict(block_x, model, k))
     return res
 
