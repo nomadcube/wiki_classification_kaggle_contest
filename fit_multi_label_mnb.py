@@ -1,7 +1,9 @@
 import numpy as np
 from scipy.sparse import csr_matrix
+from memory_profiler import profile
 
 
+# @profile
 def fit(y, x):
     if not isinstance(x, csr_matrix):
         raise TypeError('x must be of type csr matrix.')

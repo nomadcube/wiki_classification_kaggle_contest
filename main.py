@@ -26,22 +26,22 @@ train_x = csr_matrix((train_smp.element_x, train_smp.col_index_x, train_smp.row_
 # fit non-smoothed mnb model
 model = fit_multi_label_mnb.fit(train_smp.y, train_x)
 
-# # make prediction on test sample
-# test_x = csr_matrix((test_smp.element_x, (test_smp.row_index_x, test_smp.col_index_x)),
-#                     shape=(max(test_smp.row_index_x) + 1, n_feature))
-# model = predict_multi_label_mnb.convert_to_linear_classifier(model)
-# h = hpy()
-# print(h.heap())
-# del train_smp.element_x
-# del train_smp.col_index_x
-# del train_smp.row_index_x
-# del train_smp
-# del train_x
-# gc.collect()
-# print(h.heap())
-# predict_sample_per_label = predict_multi_label_mnb.predict(test_x, model)
-#
-# # evaluation
-# print(evaluation.macro_precision_recall(test_smp.y, predict_sample_per_label, n_class_label))
+# make prediction on test sample
+test_x = csr_matrix((test_smp.element_x, test_smp.col_index_x, test_smp.row_indptr_x),
+                    shape=(len(train_smp.row_indptr_x) - 1, n_feature), dtype='float')
+model = predict_multi_label_mnb.convert_to_linear_classifier(model)
+h = hpy()
+print(h.heap())
+del train_smp.element_x
+del train_smp.col_index_x
+del train_smp.row_indptr_x
+del train_smp
+del train_x
+gc.collect()
+print(h.heap())
+predict_sample_per_label = predict_multi_label_mnb.predict(test_x, model)
+
+# evaluation
+print(evaluation.macro_precision_recall(test_smp.y, predict_sample_per_label, n_class_label))
 
 print(time() - start_time)

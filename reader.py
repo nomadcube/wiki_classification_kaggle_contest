@@ -1,5 +1,6 @@
 import array
 import itertools
+from memory_profiler import profile
 
 
 class Sample:
@@ -31,6 +32,7 @@ class Sample:
         return self
 
 
+# @profile
 def read_sample(data_file_path, total_sample_size, train_sample_size):
     train_sample = Sample()
     test_sample = Sample()
