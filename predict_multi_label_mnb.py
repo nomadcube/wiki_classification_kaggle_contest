@@ -3,7 +3,9 @@ import math
 
 import numpy as np
 import numpy.ma
+from array import array
 from scipy.sparse import csr_matrix, csc_matrix
+from memory_profiler import profile
 
 from fit_multi_label_mnb import fit
 
@@ -12,7 +14,7 @@ def predict(x, model, k=1):
     res = list()
     new_x = add_unit_column(x)
     for i, block_x in enumerate(new_x):
-        print(i)
+        # print(i)
         res.append(_one_predict(block_x, model, k))
     return res
 
@@ -26,7 +28,7 @@ def _one_predict(one_x, model, k=1):
 def _top_k_argmax(arr, k):
     if not isinstance(arr, np.ndarray):
         raise TypeError()
-    for i in range(k):
+    for i in xrange(k):
         tmp_am = arr.argmax()
         yield tmp_am
         arr = numpy.ma.masked_values(arr, value=arr[tmp_am])
@@ -36,6 +38,7 @@ def _log_likelihood(x, model):
     return model.dot(x.transpose())
 
 
+# @profile
 def add_unit_column(mat, coefficient=None):
     mat = mat.tocsc()
     n_row = mat.shape[0]
@@ -47,20 +50,21 @@ def add_unit_column(mat, coefficient=None):
         dat.extend([1.] * n_row)
     indi = mat.indices.tolist()
     indi.extend(range(n_row))
-    indp = mat.indptr.tolist()
+    indp = array('I', mat.indptr)
     indp.append(current_nnz + n_row)
     return csc_matrix((dat, indi, indp), shape=(mat.shape[0], mat.shape[1] + 1), dtype='float')
 
 
+# @profile
 def convert_to_linear_classifier(model):
-    prior = list(np.array(model[0])[0])
+    prior = array('f', np.array(model[0])[0])
     mn_param = model[1].tocsc()
-    dat = mn_param.data.tolist()
+    dat = array('f', mn_param.data)
     dat.extend(prior)
     log_dat = [math.log(d) if d > 0 else -1e10 for d in dat]
-    indi = mn_param.indices.tolist()
-    indi.extend(range(mn_param.shape[0]))
-    indt = mn_param.indptr.tolist()
+    indi = array('I', mn_param.indices)
+    indi.extend(array('I', xrange(mn_param.shape[0])))
+    indt = array('I', mn_param.indptr)
     indt.append(mn_param.nnz + mn_param.shape[0])
     return csc_matrix((log_dat, indi, indt), shape=(mn_param.shape[0], mn_param.shape[1] + 1), dtype='float')
 

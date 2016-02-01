@@ -68,8 +68,8 @@ class TestPredict:
         ll = predict_multi_label_mnb._log_likelihood(new_x, lm)
         assert ll.shape == (2, 1)
         assert ll.nnz == 2
-        assert ll[0, 0] == math.log(1. / 15.)
-        assert ll[1, 0] == math.log(1. / 45.)
+        assert abs(ll[0, 0] - math.log(1. / 15.)) < 1e10
+        assert abs(ll[1, 0] == math.log(1. / 45.)) < 1e10
 
     def test_predict(self, test_y, test_x):
         model = fit_multi_label_mnb.fit(test_y, test_x)
