@@ -22,9 +22,10 @@ n_feature = max(train_smp.max_feature, test_smp.max_feature) + 1
 n_class_label = max(train_smp.max_class_label, test_smp.max_class_label) + 1
 train_x = csr_matrix((train_smp.element_x, train_smp.col_index_x, train_smp.row_indptr_x),
                      shape=(len(train_smp.row_indptr_x) - 1, n_feature), dtype='float')
+
 # fit non-smoothed mnb model
-# model = fit_multi_label_mnb.fit(train_smp.y, train_x)
-#
+model = fit_multi_label_mnb.fit(train_smp.y, train_x)
+
 # # make prediction on test sample
 # test_x = csr_matrix((test_smp.element_x, (test_smp.row_index_x, test_smp.col_index_x)),
 #                     shape=(max(test_smp.row_index_x) + 1, n_feature))
