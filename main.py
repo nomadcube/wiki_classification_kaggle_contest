@@ -12,7 +12,7 @@ import predict_multi_label_mnb
 import reader
 
 
-@profile
+# @profile
 def main(sample_path, size_of_sample, size_of_train_sample, predict_label_cnt):
     # read data from file
     train_smp, test_smp = reader.read_sample(sample_path, size_of_sample, size_of_train_sample)
@@ -38,10 +38,22 @@ def main(sample_path, size_of_sample, size_of_train_sample, predict_label_cnt):
 
 
 if __name__ == '__main__':
+    import cProfile, pstats, StringIO
+
+    pr = cProfile.Profile()
+    # pr.enable()
+
     start_time = time()
     sample_path = sys.argv[1] if len(sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/input_data/train.csv'
-    size_of_sample = int(sys.argv[2]) if len(sys.argv) > 2 else 100
-    size_of_train_sample = int(sys.argv[3]) if len(sys.argv) > 3 else 90
+    size_of_sample = int(sys.argv[2]) if len(sys.argv) > 2 else 10
+    size_of_train_sample = int(sys.argv[3]) if len(sys.argv) > 3 else 9
     predict_label_cnt_per_sample = int(sys.argv[4]) if len(sys.argv) > 4 else 1
     print(main(sample_path, size_of_sample, size_of_train_sample, predict_label_cnt_per_sample))
     print(time() - start_time)
+
+    # pr.disable()
+    # s = StringIO.StringIO()
+    # sortby = 'tottime'
+    # ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+    # ps.print_stats()
+    # print s.getvalue()
