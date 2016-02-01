@@ -23,13 +23,16 @@ def main(sample_path, size_of_sample, size_of_train_sample, predict_label_cnt):
 
     # fit non-smoothed mnb model
     model = fit_multi_label_mnb.fit(train_smp.y, train_x)
-    model = predict_multi_label_mnb.convert_to_linear_classifier(model)
+
+    # convert to linear classifier
+    b, w = predict_multi_label_mnb.convert_to_linear(model)
 
     # make prediction on test and train sample
     test_x = csr_matrix((test_smp.element_x, test_smp.col_index_x, test_smp.row_indptr_x),
                         shape=(len(test_smp.row_indptr_x) - 1, n_feature), dtype='float')
-    test_predict = predict_multi_label_mnb.predict(test_x, model, predict_label_cnt)
-    train_predict = predict_multi_label_mnb.predict(train_x, model, predict_label_cnt)
+
+    test_predict = predict_multi_label_mnb.predict(test_x, b, w, predict_label_cnt)
+    train_predict = predict_multi_label_mnb.predict(train_x, b, w, predict_label_cnt)
 
     return evaluation.macro_precision_recall(test_smp.y, test_predict,
                                              n_class_label), evaluation.macro_precision_recall(train_smp.y,
@@ -41,19 +44,19 @@ if __name__ == '__main__':
     import cProfile, pstats, StringIO
 
     pr = cProfile.Profile()
-    # pr.enable()
+    pr.enable()
 
     start_time = time()
     sample_path = sys.argv[1] if len(sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/input_data/train.csv'
-    size_of_sample = int(sys.argv[2]) if len(sys.argv) > 2 else 10
-    size_of_train_sample = int(sys.argv[3]) if len(sys.argv) > 3 else 9
+    size_of_sample = int(sys.argv[2]) if len(sys.argv) > 2 else 1000
+    size_of_train_sample = int(sys.argv[3]) if len(sys.argv) > 3 else 900
     predict_label_cnt_per_sample = int(sys.argv[4]) if len(sys.argv) > 4 else 1
     print(main(sample_path, size_of_sample, size_of_train_sample, predict_label_cnt_per_sample))
     print(time() - start_time)
 
-    # pr.disable()
-    # s = StringIO.StringIO()
-    # sortby = 'tottime'
-    # ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
-    # ps.print_stats()
-    # print s.getvalue()
+    pr.disable()
+    s = StringIO.StringIO()
+    sortby = 'tottime'
+    ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+    ps.print_stats()
+    print s.getvalue()
