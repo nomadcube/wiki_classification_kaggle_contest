@@ -25,19 +25,10 @@ def main(sample_path, size_of_sample, size_of_train_sample, predict_label_cnt):
     m = fit_multi_label_mnb.fit(train_smp.y, train_x)
 
     # make prediction on test and train sample
-    # test_x = csr_matrix((test_smp.element_x, test_smp.col_index_x, test_smp.row_indptr_x),
-    #                     shape=(len(test_smp.row_indptr_x) - 1, n_feature), dtype='float')
-
-    return m
-
-    # test_predict = predict_multi_label_mnb.predict(test_x, m)
-    #
-    # train_predict = predict_multi_label_mnb.predict(train_x, m)
-    #
-    # return evaluation.macro_precision_recall(test_smp.y, test_predict,
-    #                                          n_class_label), evaluation.macro_precision_recall(train_smp.y,
-    #                                                                                            train_predict,
-    #                                                                                            n_class_label)
+    test_x = csr_matrix((test_smp.element_x, test_smp.col_index_x, test_smp.row_indptr_x),
+                        shape=(len(test_smp.row_indptr_x) - 1, n_feature), dtype='float')
+    test_predict = predict_multi_label_mnb.predict(test_x, m, 1)
+    return evaluation.macro_precision_recall(test_smp.y, test_predict, n_class_label)
 
 
 if __name__ == '__main__':
@@ -48,8 +39,8 @@ if __name__ == '__main__':
     #
     start_time = time()
     sample_path = sys.argv[1] if len(sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/input_data/train.csv'
-    size_of_sample = int(sys.argv[2]) if len(sys.argv) > 2 else 1000
-    size_of_train_sample = int(sys.argv[3]) if len(sys.argv) > 3 else 800
+    size_of_sample = int(sys.argv[2]) if len(sys.argv) > 2 else 100
+    size_of_train_sample = int(sys.argv[3]) if len(sys.argv) > 3 else 10
     predict_label_cnt_per_sample = int(sys.argv[4]) if len(sys.argv) > 4 else 1
     print(main(sample_path, size_of_sample, size_of_train_sample, predict_label_cnt_per_sample))
     h = hpy()

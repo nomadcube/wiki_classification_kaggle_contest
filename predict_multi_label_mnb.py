@@ -10,10 +10,25 @@ from memory_profiler import profile
 from fit_multi_label_mnb import fit
 
 
-def predict(x, model):
+def predict(x, model, max_class_cnt):
+    res = list()
     expanded_x = add_unit_column(x)
-    ll = log_likelihood(expanded_x, model)
-    return ll
+    ll = log_likelihood(expanded_x, model).transpose()
+    for i, each_ll in enumerate(ll):
+        top_k_am = top_k_argmax(each_ll, max_class_cnt)
+        res.append([c for c in top_k_am])
+    return res
+
+
+def top_k_argmax(one_log_likelihood, max_class_cnt):
+    if not isinstance(one_log_likelihood, csr_matrix):
+        raise TypeError()
+    for current_cnt in xrange(max_class_cnt):
+        max_value = one_log_likelihood.data.argmax()
+        new_class = one_log_likelihood.indices[max_value]
+        one_log_likelihood.data = numpy.ma.masked_values(one_log_likelihood.data,
+                                                         value=one_log_likelihood.data[max_value])
+        yield new_class
 
 
 def log_likelihood(x, model):
@@ -63,4 +78,5 @@ if __name__ == '__main__':
     test_x = csr_matrix((element, (row_index, col_index)), shape=(15, 6))
     m = fit(test_y, test_x)
     new_x = csr_matrix(([1., 1.], ([0, 0], [1, 3])), shape=(1, 6))
-    print(predict(new_x, m))
+    print(predict(new_x, m, 2))
+    print [t for t in top_k_argmax(new_x, 2)]
