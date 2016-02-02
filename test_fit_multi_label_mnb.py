@@ -1,4 +1,5 @@
 import fit_multi_label_mnb
+import math
 
 
 def test_fit():
@@ -27,20 +28,18 @@ def test_fit():
                  2, 5,
                  2, 5]
     test_x = csr_matrix((element, (row_index, col_index)), shape=(15, 6))
-    prior_param = fit_multi_label_mnb.fit(test_y, test_x)[0]
-    mn_param = fit_multi_label_mnb.fit(test_y, test_x)[1]
-    assert prior_param.shape == (1, 2)
-    assert mn_param.shape == (2, 6)
-    assert mn_param.nnz == 12
-    assert mn_param[0, 0] == 0.5
-    assert round(mn_param[0, 1], 12) == 0.333333333333
-    assert round(mn_param[0, 2], 12) == 0.166666666667
-    assert round(mn_param[0, 3], 12) == 0.5
-    assert round(mn_param[0, 4], 12) == 0.333333333333
-    assert round(mn_param[0, 5], 12) == 0.166666666667
-    assert round(mn_param[1, 0], 12) == 0.222222222222
-    assert round(mn_param[1, 1], 12) == 0.333333333333
-    assert round(mn_param[1, 2], 12) == 0.444444444444
-    assert round(mn_param[1, 3], 12) == 0.111111111111
-    assert round(mn_param[1, 4], 12) == 0.444444444444
-    assert round(mn_param[1, 5], 12) == 0.444444444444
+    m = fit_multi_label_mnb.fit(test_y, test_x)
+    assert m.nnz == 14
+    assert m.shape == (2, 7)
+    assert abs(m[0, 0] - math.log(0.5)) < 1e-6
+    assert abs(m[0, 1] - math.log(0.333333333333)) < 1e-6
+    assert abs(m[0, 2] - math.log(0.166666666667)) < 1e-6
+    assert abs(m[0, 3] - math.log(0.5)) < 1e-6
+    assert abs(m[0, 4] - math.log(0.333333333333)) < 1e-6
+    assert abs(m[0, 5] - math.log(0.166666666667)) < 1e-6
+    assert abs(m[1, 0] - math.log(0.222222222222)) < 1e-6
+    assert abs(m[1, 1] - math.log(0.333333333333)) < 1e-6
+    assert abs(m[1, 2] - math.log(0.444444444444)) < 1e-6
+    assert abs(m[1, 3] - math.log(0.111111111111)) < 1e-6
+    assert abs(m[1, 4] - math.log(0.444444444444)) < 1e-6
+    assert abs(m[1, 5] - math.log(0.444444444444)) < 1e-6
