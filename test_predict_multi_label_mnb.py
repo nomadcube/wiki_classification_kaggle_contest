@@ -48,7 +48,7 @@ class TestPredict:
         w = model[1]
         w.data = np.array([math.log(i) if i > 0 else 1e-8 for i in w.data])
         new_x = csr_matrix(([1., 1.], ([0, 0], [1, 3])), shape=(1, 6))
-        ll = predict_multi_label_mnb._log_likelihood(new_x, b, w)
+        ll = predict_multi_label_mnb.log_likelihood(new_x, b, w)
         assert ll.shape == (2,)
         assert abs(ll[0] - math.log(1. / 15.)) < 1e-10
         assert abs(ll[1] - math.log(1. / 45.)) < 1e-10
@@ -63,7 +63,7 @@ class TestPredict:
 
     def test_top_k_argmax(self):
         a = np.array([1, 4, 5, 3, 9])
-        res = [l for l in predict_multi_label_mnb._top_k_argmax(a, 2)]
+        res = [l for l in predict_multi_label_mnb.top_k_argmax(a, 2)]
         assert len(res) == 2
         assert res[0] == 4
         assert res[1] == 2

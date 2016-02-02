@@ -10,38 +10,31 @@ from memory_profiler import profile
 from fit_multi_label_mnb import fit
 
 
+def predict(x, model):
+    expanded_x = add_unit_column(x)
+    ll = log_likelihood(expanded_x, model)
+    return ll
+
+
+def log_likelihood(x, model):
+    return model.dot(x.transpose())
+
+
 # @profile
-def predict(x, b, w, k=1):
-    res = list()
-    for i, each_x in enumerate(x):
-        # print(i)
-        res.append(_one_predict(each_x, b, w, k))
-    return res
+def add_unit_column(x):
+    x = x.tocsc()
 
+    new_data = array('f', x.data)
+    new_indices = array('I', x.indices)
+    new_indptr = array('I', x.indptr)
 
-def _one_predict(one_x, b, w, k=1):
-    ll = _log_likelihood(one_x, b, w)
-    return [am for am in _top_k_argmax(ll, k)]
+    current_row_cnt = x.shape[0]
+    current_nnz = x.nnz
 
-
-def _log_likelihood(x, b, w):
-    return np.array(x.dot(w.transpose()).toarray() + b)[0]
-
-
-def _top_k_argmax(arr, k):
-    if not isinstance(arr, np.ndarray):
-        raise TypeError()
-    for i in xrange(k):
-        tmp_am = arr.argmax()
-        yield tmp_am
-        arr = numpy.ma.masked_values(arr, value=arr[tmp_am])
-
-
-def convert_to_linear(model):
-    b = np.array([math.log(i) if i > 0 else 1e-8 for i in np.array(model[0])[0]])
-    w = model[1].tocsc()
-    w.data = np.array([math.log(i) if i > 0 else 1e-8 for i in w.data])
-    return [b, w]
+    new_data.extend(array('f', [1.] * current_row_cnt))
+    new_indices.extend(array('I', xrange(current_row_cnt)))
+    new_indptr.append(current_nnz + current_row_cnt)
+    return csc_matrix((new_data, new_indices, new_indptr), shape=(x.shape[0], x.shape[1] + 1), dtype='float')
 
 
 if __name__ == '__main__':
@@ -69,6 +62,5 @@ if __name__ == '__main__':
                  2, 5]
     test_x = csr_matrix((element, (row_index, col_index)), shape=(15, 6))
     m = fit(test_y, test_x)
-    b, w = convert_to_linear(m)
     new_x = csr_matrix(([1., 1.], ([0, 0], [1, 3])), shape=(1, 6))
-    print predict(new_x, b, w, 1)
+    print(predict(new_x, m))
