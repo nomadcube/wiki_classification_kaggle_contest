@@ -52,6 +52,8 @@ if __name__ == '__main__':
     size_of_train_sample = int(sys.argv[3]) if len(sys.argv) > 3 else 800
     predict_label_cnt_per_sample = int(sys.argv[4]) if len(sys.argv) > 4 else 1
     print(main(sample_path, size_of_sample, size_of_train_sample, predict_label_cnt_per_sample))
+    h = hpy()
+    print h.heap()
     print(time() - start_time)
 
     # pr.disable()
