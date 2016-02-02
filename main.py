@@ -28,6 +28,8 @@ def main(sample_path, size_of_sample, size_of_train_sample, predict_label_cnt):
     test_x = csr_matrix((test_smp.element_x, test_smp.col_index_x, test_smp.row_indptr_x),
                         shape=(len(test_smp.row_indptr_x) - 1, n_feature), dtype='float')
     test_predict = predict_multi_label_mnb.predict(test_x, m, 1)
+    h = hpy()
+    print h.heap()
     return evaluation.macro_precision_recall(test_smp.y, test_predict, n_class_label)
 
 
