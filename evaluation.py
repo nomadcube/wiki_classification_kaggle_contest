@@ -1,4 +1,5 @@
 from collections import namedtuple
+from memory_profiler import profile
 
 import numpy as np
 import numpy.ma as nma
@@ -6,6 +7,7 @@ import numpy.ma as nma
 from fit_multi_label_mnb import construct_csr_from_list
 
 
+# @profile
 def confusion_matrix(y, predicted_y, max_n_dim):
     res = namedtuple('confusion_matrix', 'true_positive false_negative false_positive true_negative')
     y_coo = construct_csr_from_list(y, max_n_dim).transpose()
@@ -20,6 +22,7 @@ def confusion_matrix(y, predicted_y, max_n_dim):
     return res(c_11, (c_10_11 - c_11), (c_01_11 - c_11), (c_01_10_00_11 - (c_10_11 + (c_01_11 - c_11))))
 
 
+# @profile
 def precision_recall(y, predicted_y, max_n_dim):
     confusion_mat = confusion_matrix(y, predicted_y, max_n_dim)
     flat_arr = np.array(confusion_mat.true_positive + confusion_mat.false_negative).flatten()

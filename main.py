@@ -12,7 +12,7 @@ import predict_multi_label_mnb
 import reader
 
 
-# @profile
+@profile
 def main(sample_path, size_of_sample, size_of_train_sample, predict_label_cnt):
     # read data from file
     test, train, part_train = reader.read_sample(sample_path, size_of_sample, size_of_train_sample)
@@ -27,15 +27,15 @@ def main(sample_path, size_of_sample, size_of_train_sample, predict_label_cnt):
     # fit non-smoothed mnb model
     m = fit_multi_label_mnb.fit(train.y, x_train)
 
-    h = hpy()
-    print h.heap()
     # make prediction on test,  train and cv sample
-    predict_test = predict_multi_label_mnb.predict(x_test, m, predict_label_cnt)
     predict_part_train = predict_multi_label_mnb.predict(x_part_train, m, predict_label_cnt)
+    predict_test = predict_multi_label_mnb.predict(x_test, m, predict_label_cnt)
+    print len(predict_part_train)
+    print len(predict_test)
+    print evaluation.macro_precision_recall(test.y, predict_test, n_class_label)
+    print evaluation.macro_precision_recall(part_train.y, predict_part_train, n_class_label)
 
-    return evaluation.macro_precision_recall(part_train.y, predict_part_train,
-                                             n_class_label), evaluation.macro_precision_recall(test.y, predict_test,
-                                                                                               n_class_label)
+    return 0
 
 
 if __name__ == '__main__':
