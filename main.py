@@ -13,9 +13,9 @@ import reader
 
 
 # @profile
-def main(sample_path, size_of_sample, size_of_train_sample, predict_label_cnt):
+def main(sample_path, size_train, size_test, predict_label_cnt):
     # read data from file
-    test, train, part_train = reader.read_sample(sample_path, size_of_sample, size_of_train_sample)
+    test, train, part_train = reader.read_sample(sample_path, size_train, size_test)
     n_feature = max(train.max_feature, test.max_feature, part_train.max_feature) + 1
     n_class_label = max(train.max_class_label, test.max_class_label, part_train.max_feature) + 1
 
