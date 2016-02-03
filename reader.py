@@ -1,6 +1,7 @@
 import array
 import itertools
 from memory_profiler import profile
+from scipy.sparse import csr_matrix
 
 
 class Sample:
@@ -31,29 +32,42 @@ class Sample:
             self.max_feature = column if column > self.max_feature else self.max_feature
         return self
 
+    def convert_to_csr(self, feature_dim):
+        return csr_matrix((self.element_x, self.col_index_x, self.row_indptr_x),
+                          shape=(len(self.row_indptr_x) - 1, feature_dim), dtype='float')
+
 
 # @profile
-def read_sample(data_file_path, total_sample_size, train_sample_size):
-    train_sample = Sample()
+def read_sample(data_file_path, train_size, test_or_cv_size):
     test_sample = Sample()
+    train_sample = Sample()
+    cv_sample = Sample()
     with open(data_file_path) as f:
-        for line_no, line in enumerate(itertools.islice(f.__iter__(), 0, train_sample_size)):
+        for line_no, line in enumerate(itertools.islice(f.__iter__(), 0, test_or_cv_size)):
+            test_sample.increment_by_one_line(line)
+    with open(data_file_path) as f:
+        for line_no, line in enumerate(itertools.islice(f.__iter__(), test_or_cv_size, train_size + test_or_cv_size)):
             train_sample.increment_by_one_line(line)
     with open(data_file_path) as f:
-        for line_no, line in enumerate(itertools.islice(f.__iter__(), train_sample_size, total_sample_size)):
-            test_sample.increment_by_one_line(line)
-    return train_sample, test_sample
+        for line_no, line in enumerate(
+                itertools.islice(f.__iter__(), train_size + test_or_cv_size, train_size + 2 * test_or_cv_size)):
+            cv_sample.increment_by_one_line(line)
+    return test_sample, train_sample, cv_sample
 
 
 if __name__ == '__main__':
-    smp_1, smp_2 = read_sample('/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt', 3, 1)
-    print(smp_1.y)
-    print(smp_2.y)
-    print(smp_1.element_x)
-    print(smp_2.element_x)
-    print(smp_1.max_feature)
-    print(smp_2.max_feature)
-    print(smp_1.max_class_label)
-    print(smp_2.max_class_label)
-    print(smp_1.row_indptr_x)
-    print(smp_2.row_indptr_x)
+    smp_1, smp_2, smp3 = read_sample('/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt', 1, 1)
+    # print(smp_1.y)
+    # print(smp_2.y)
+    # print(smp3.y)
+    #
+    # print(smp_1.element_x)
+    # print(smp_2.element_x)
+    # print(smp_1.max_feature)
+    # print(smp_2.max_feature)
+    # print(smp_1.max_class_label)
+    # print(smp_2.max_class_label)
+    # print(smp_1.row_indptr_x)
+    # print(smp_2.row_indptr_x)
+
+    print smp_2.convert_to_csr(1250536 + 1)

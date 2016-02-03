@@ -1,5 +1,1 @@
-{
-  "test_predict_multi_label_mnb.py::TestPredict::()::test_log_likelihood": true, 
-  "test_predict_multi_label_mnb.py::TestPredict::()::test_predict": true, 
-  "test_predict_multi_label_mnb.py::TestPredict::()::test_top_k_argmax": true
-}
+{}
