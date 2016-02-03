@@ -1,3 +1,4 @@
+# coding=utf-8
 import gc
 import sys
 from time import time
@@ -10,6 +11,7 @@ import evaluation
 import fit_multi_label_mnb
 import predict_multi_label_mnb
 import reader
+import feature_selection
 
 
 # @profile
@@ -26,16 +28,14 @@ def main(sample_path, size_train, size_test, predict_label_cnt):
 
     # fit non-smoothed mnb model
     m = fit_multi_label_mnb.fit(train.y, x_train)
+    simpler_m = feature_selection.remove_redundant_feature_and_zero(m)
 
     # make prediction on test,  train and cv sample
-    predict_part_train = predict_multi_label_mnb.predict(x_part_train, m, predict_label_cnt)
-    predict_test = predict_multi_label_mnb.predict(x_test, m, predict_label_cnt)
-    print len(predict_part_train)
-    print len(predict_test)
-    print evaluation.macro_precision_recall(test.y, predict_test, n_class_label)
-    print evaluation.macro_precision_recall(part_train.y, predict_part_train, n_class_label)
+    predict_part_train = predict_multi_label_mnb.predict(x_part_train, simpler_m, predict_label_cnt)
+    predict_test = predict_multi_label_mnb.predict(x_test, simpler_m, predict_label_cnt)
 
-    return 0
+    return evaluation.macro_precision_recall(test.y, predict_test, n_class_label), evaluation.macro_precision_recall(
+        part_train.y, predict_part_train, n_class_label)
 
 
 if __name__ == '__main__':
@@ -47,8 +47,8 @@ if __name__ == '__main__':
     start_time = time()
 
     sample_path = sys.argv[1] if len(sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/input_data/train.csv'
-    size_train = int(sys.argv[2]) if len(sys.argv) > 3 else 1000
-    size_test = int(sys.argv[3]) if len(sys.argv) > 2 else 100
+    size_train = int(sys.argv[2]) if len(sys.argv) > 3 else 10
+    size_test = int(sys.argv[3]) if len(sys.argv) > 2 else 5
     cnt_predict_class = int(sys.argv[4]) if len(sys.argv) > 4 else 1
 
     print(main(sample_path, size_train, size_test, cnt_predict_class))
