@@ -27,11 +27,11 @@ def main(sample_path, size_train, size_test, predict_label_cnt):
 
     # fit non-smoothed mnb model
     m = fit_multi_label_mnb.fit(train.y, x_train)
-    simpler_m = feature_selection.remove_redundant_feature_and_zero(m)
+    # simpler_m = feature_selection.remove_redundant_feature_and_zero(m)
 
     # make prediction on test,  train and cv sample
-    predict_part_train = predict_multi_label_mnb.predict(x_part_train, simpler_m, predict_label_cnt)
-    predict_test = predict_multi_label_mnb.predict(x_test, simpler_m, predict_label_cnt)
+    predict_part_train = predict_multi_label_mnb.predict(x_part_train, m, predict_label_cnt)
+    predict_test = predict_multi_label_mnb.predict(x_test, m, predict_label_cnt)
 
     return evaluation.macro_precision_recall(test.y, predict_test, n_class_label), evaluation.macro_precision_recall(
         part_train.y, predict_part_train, n_class_label)
