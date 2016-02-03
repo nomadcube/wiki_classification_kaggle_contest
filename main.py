@@ -14,7 +14,6 @@ import reader
 import feature_selection
 
 
-# @profile
 def main(sample_path, size_train, size_test, predict_label_cnt):
     # read data from file
     test, train, part_train = reader.read_sample(sample_path, size_train, size_test)
