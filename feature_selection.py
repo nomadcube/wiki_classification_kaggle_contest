@@ -18,6 +18,7 @@ def remove_redundant_feature_and_zero(condition_probability_table):
     new_column = array('I')
     new_row = array('I')
     redundant_features = detect_redundant_feature(condition_probability_table)
+    print len(redundant_features)
     for i, non_zero in enumerate(coo_cpt.data):
         current_column = coo_cpt.col[i]
         if non_zero != 0. and current_column not in redundant_features:
