@@ -38,25 +38,25 @@ class Sample:
 
 
 # @profile
-def read_sample(data_file_path, train_size, test_or_cv_size):
+def read_sample(data_file_path, train_size, test_size):
     test_sample = Sample()
     train_sample = Sample()
-    cv_sample = Sample()
+    part_train_sample = Sample()
     with open(data_file_path) as f:
-        for line_no, line in enumerate(itertools.islice(f.__iter__(), 0, test_or_cv_size)):
+        for line_no, line in enumerate(itertools.islice(f.__iter__(), 0, test_size)):
             test_sample.increment_by_one_line(line)
     with open(data_file_path) as f:
-        for line_no, line in enumerate(itertools.islice(f.__iter__(), test_or_cv_size, train_size + test_or_cv_size)):
+        for line_no, line in enumerate(itertools.islice(f.__iter__(), test_size, train_size + 2 * test_size)):
             train_sample.increment_by_one_line(line)
     with open(data_file_path) as f:
         for line_no, line in enumerate(
-                itertools.islice(f.__iter__(), train_size + test_or_cv_size, train_size + 2 * test_or_cv_size)):
-            cv_sample.increment_by_one_line(line)
-    return test_sample, train_sample, cv_sample
+                itertools.islice(f.__iter__(), train_size + test_size, train_size + 2 * test_size)):
+            part_train_sample.increment_by_one_line(line)
+    return test_sample, train_sample, part_train_sample
 
 
 if __name__ == '__main__':
-    smp_1, smp_2, smp3 = read_sample('/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt', 1, 1)
+    smp_1, smp_2, smp_3 = read_sample('/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt', 1, 1)
     # print(smp_1.y)
     # print(smp_2.y)
     # print(smp3.y)
@@ -71,3 +71,10 @@ if __name__ == '__main__':
     # print(smp_2.row_indptr_x)
 
     print smp_2.convert_to_csr(1250536 + 1)
+    print "======"
+
+    print smp_1.convert_to_csr(1250536 + 1)
+    print "======"
+
+    print smp_3.convert_to_csr(1250536 + 1)
+    print "======"
