@@ -12,7 +12,7 @@ import predict_multi_label_mnb
 import reader
 
 
-@profile
+# @profile
 def main(sample_path, size_of_sample, size_of_train_sample, predict_label_cnt):
     # read data from file
     test, train, part_train = reader.read_sample(sample_path, size_of_sample, size_of_train_sample)
@@ -41,8 +41,8 @@ def main(sample_path, size_of_sample, size_of_train_sample, predict_label_cnt):
 if __name__ == '__main__':
     import cProfile, pstats, StringIO
 
-    pr = cProfile.Profile()
-    pr.enable()
+    # pr = cProfile.Profile()
+    # pr.enable()
 
     start_time = time()
 
@@ -54,9 +54,9 @@ if __name__ == '__main__':
     print(main(sample_path, size_train, size_test, cnt_predict_class))
     print(time() - start_time)
 
-    pr.disable()
-    s = StringIO.StringIO()
-    sortby = 'tottime'
-    ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
-    ps.print_stats()
-    print s.getvalue()
+    # pr.disable()
+    # s = StringIO.StringIO()
+    # sortby = 'tottime'
+    # ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+    # ps.print_stats()
+    # print s.getvalue()

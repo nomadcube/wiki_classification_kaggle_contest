@@ -20,7 +20,7 @@ def fit(y, x):
     return combine_b_w(y_col_sum, y_x_param.tocsc())
 
 
-def construct_csr_from_list(two_dimension_arr, max_n_dim=None):
+def construct_csr_from_list(two_dimension_arr, element_dtype='float', max_n_dim=None):
     elements = array('f')
     rows = array('I')
     columns = array('I')
@@ -30,7 +30,7 @@ def construct_csr_from_list(two_dimension_arr, max_n_dim=None):
         rows.extend(array('I', [row_index] * row_size))
         columns.extend(array('I', row))
     n_dim = max_n_dim if max_n_dim else (max(columns) + 1)
-    return csr_matrix((elements, (rows, columns)), shape=(len(two_dimension_arr), n_dim), dtype='float')
+    return csr_matrix((elements, (rows, columns)), shape=(len(two_dimension_arr), n_dim), dtype=element_dtype)
 
 
 # @profile
