@@ -5,19 +5,16 @@ import numpy as np
 import numpy.ma
 from array import array
 from scipy.sparse import csr_matrix, csc_matrix
+import increment_predict
 from memory_profiler import profile
 
 from fit_multi_label_mnb import fit
 
 
-def predict(x, model, max_class_cnt):
-    res = list()
-    expanded_x = add_unit_column(x)
-    ll = log_likelihood(expanded_x, model).transpose()
-    for i, each_ll in enumerate(ll):
-        top_k_am = top_k_argmax(each_ll, max_class_cnt)
-        res.append([c for c in top_k_am])
-    return res
+def predict(x, model):
+    w = model[1].transpose().tocsc()
+    b = model[0]
+    return increment_predict.predict_label(x, w, b)
 
 
 def top_k_argmax(one_log_likelihood, max_class_cnt):
@@ -32,7 +29,10 @@ def top_k_argmax(one_log_likelihood, max_class_cnt):
 
 
 def log_likelihood(x, model):
-    return model.dot(x.transpose())
+    b, w = model
+    tmp = w.dot(x.transpose()).tocsr()
+    tmp.data += b.repeat(np.diff(tmp.indptr))
+    return tmp
 
 
 # @profile
@@ -78,5 +78,4 @@ if __name__ == '__main__':
     test_x = csr_matrix((element, (row_index, col_index)), shape=(15, 6))
     m = fit(test_y, test_x)
     new_x = csr_matrix(([1., 1.], ([0, 0], [1, 3])), shape=(1, 6))
-    print(predict(new_x, m, 2))
-    print [t for t in top_k_argmax(new_x, 2)]
+    print(predict(new_x, m, 1))
