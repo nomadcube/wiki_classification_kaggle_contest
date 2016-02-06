@@ -3,7 +3,6 @@ import numpy as np
 from array import array
 from scipy.sparse import csr_matrix, csc_matrix
 from memory_profiler import profile
-from sklearn.naive_bayes import MultinomialNB
 
 
 # @profile
