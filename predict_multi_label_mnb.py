@@ -12,7 +12,8 @@ from fit_multi_label_mnb import fit
 
 
 def predict(x, model):
-    w = model[1].transpose().tocsc()
+    x = x.tolil()
+    w = model[1].tolil()
     b = model[0]
     return increment_predict.predict_label(x, w, b)
 

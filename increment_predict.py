@@ -1,33 +1,30 @@
-from scipy.sparse import csr_matrix, csc_matrix
+from scipy.sparse import csr_matrix, csc_matrix, lil_matrix
 
 
 def predict_label(x, w, b):
-    if not isinstance(x, csr_matrix):
+    if not isinstance(x, lil_matrix):
         raise TypeError()
-    if not isinstance(w, csc_matrix):
+    if not isinstance(w, lil_matrix):
         raise TypeError()
-
-    x_zip = [(x.data[i], x.indices[i]) for i in range(len(x.data))]
-    w_zip = [(w.indices[i], w.data[i]) for i in range(len(w.data))]
 
     labels = list()
-    for sample_no in xrange(len(x.indptr) - 1):
+
+    for sample_no in xrange(len(x.data)):
+        sample_indices_data = {x.rows[sample_no][i]: x.data[sample_no][i] for i in xrange(len(x.data[sample_no]))}
         max_class = 0
         max_score = -1e30
-        sample_zip = {v: k for (k, v) in x_zip[x.indptr[sample_no]: x.indptr[sample_no + 1]]}
-        if len(sample_zip) > 0:
-            for class_no in xrange(len(w.indptr) - 1):
-                class_zip = {k: v for (k, v) in w_zip[w.indptr[class_no]: w.indptr[class_no + 1]]}
-                if len(class_zip) > 0:
-                    sample_class_score = b[class_no]
-                    if len(set(sample_zip.keys()).difference(set(class_zip.keys()))) > 0:
-                        continue
-                    else:
-                        for feature_no in sample_zip.keys():
-                            sample_class_score += sample_zip[feature_no] * class_zip[feature_no]
-                    if sample_class_score > max_score:
-                        max_score = sample_class_score
-                        max_class = class_no
+        for label_no in xrange(len(w.data)):
+            label_indices_data = {w.rows[label_no][i]: w.data[label_no][i] for i in xrange(len(w.data[label_no]))}
+            sample_class_score = b[label_no]
+            if sample_class_score == -float("inf") or len(
+                    set(sample_indices_data.keys()).difference(set(label_indices_data.keys()))) > 0:
+                continue
+            print sample_no, label_no
+            for feature in set(sample_indices_data.keys()).intersection(set(label_indices_data.keys())):
+                sample_class_score += sample_indices_data[feature] * label_indices_data[feature]
+            if sample_class_score > max_score:
+                max_score = sample_class_score
+                max_class = label_no
         labels.append([max_class])
     return labels
 
@@ -41,12 +38,12 @@ if __name__ == '__main__':
     pr = cProfile.Profile()
     pr.enable()
 
-    x = np.random.randint(1, 5, size=(90, 100))
-    y = np.array([[random.randint(1, 10)] for i in range(90)])
-    w = fit_multi_label_mnb.fit(y, csr_matrix(x))[1]
-    b = fit_multi_label_mnb.fit(y, csr_matrix(x))[0]
-    print predict_label(csr_matrix(x), w.transpose().tocsc(), b)
-    print y
+    test_x = np.random.randint(1, 5, size=(90, 100))
+    test_y = np.array([[random.randint(0, 9)] for i in range(90)])
+    test_w = fit_multi_label_mnb.fit(test_y, csr_matrix(test_x))[1]
+    test_b = fit_multi_label_mnb.fit(test_y, csr_matrix(test_x))[0]
+    print predict_label(lil_matrix(test_x), test_w.tolil(), test_b)
+    print test_y
     pr.disable()
     s = StringIO.StringIO()
     sortby = 'tottime'
