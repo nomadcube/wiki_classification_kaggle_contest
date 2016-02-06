@@ -38,10 +38,10 @@ def main(sample_path, size_train, size_test, predict_label_cnt):
 
 
 if __name__ == '__main__':
-    import cProfile, pstats, StringIO
-
-    pr = cProfile.Profile()
-    pr.enable()
+    # import cProfile, pstats, StringIO
+    #
+    # pr = cProfile.Profile()
+    # pr.enable()
 
     start_time = time()
 
@@ -53,9 +53,9 @@ if __name__ == '__main__':
     print(main(sample_path, size_train, size_test, cnt_predict_class))
     print(time() - start_time)
 
-    pr.disable()
-    s = StringIO.StringIO()
-    sortby = 'tottime'
-    ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
-    ps.print_stats()
-    print s.getvalue()
+    # pr.disable()
+    # s = StringIO.StringIO()
+    # sortby = 'tottime'
+    # ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+    # ps.print_stats()
+    # print s.getvalue()
