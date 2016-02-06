@@ -12,7 +12,6 @@ import fit_multi_label_mnb
 import predict_multi_label_mnb
 import reader
 import feature_selection
-from sklearn.naive_bayes import MultinomialNB
 
 
 # @profile
