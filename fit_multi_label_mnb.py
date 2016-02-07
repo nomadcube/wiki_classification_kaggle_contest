@@ -49,6 +49,6 @@ if __name__ == '__main__':
 
     new_y = np.array([[i] for i in y])
     m = fit(new_y, csr_matrix(X))
-    import predict_multi_label_mnb
+    import predict_multi_label
 
     print predict_multi_label_mnb.predict(csr_matrix(X), m, 1)
