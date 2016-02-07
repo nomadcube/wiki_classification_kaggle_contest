@@ -19,7 +19,6 @@ def predict_label(x, w, b):
             if sample_class_score == -float("inf") or len(
                     set(sample_indices_data.keys()).difference(set(label_indices_data.keys()))) > 0:
                 continue
-            print sample_no, label_no
             for feature in set(sample_indices_data.keys()).intersection(set(label_indices_data.keys())):
                 sample_class_score += sample_indices_data[feature] * label_indices_data[feature]
             if sample_class_score > max_score:
