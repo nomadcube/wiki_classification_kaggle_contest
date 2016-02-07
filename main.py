@@ -57,7 +57,7 @@ if __name__ == '__main__':
     sample_path = sys.argv[1] if len(sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/input_data/train.csv'
     size_train = int(sys.argv[2]) if len(sys.argv) > 3 else 100
     size_test = int(sys.argv[3]) if len(sys.argv) > 2 else 100
-    cnt_predict_class = int(sys.argv[4]) if len(sys.argv) > 4 else 5
+    cnt_predict_class = int(sys.argv[4]) if len(sys.argv) > 4 else 1
 
     print(main(sample_path, size_train, size_test, cnt_predict_class))
     print(time() - start_time)
