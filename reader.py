@@ -18,9 +18,9 @@ class Sample:
     def increment_by_one_line(self, line):
         multi_label, instance = line.strip().split(' ', 1)
 
-        all_labels = array.array('I', [[int(l) for l in multi_label.split(',')][0]])
+        # all_labels = array.array('I', [int(l) for l in multi_label.split(',')])
+        all_labels = array.array('I', [[int(l) for l in multi_label.split(',')]][0])
         self.y.append(all_labels)
-        # todo: 只选了一个label，记得改回来
         for label in all_labels:
             self.max_class_label = label if label > self.max_class_label else self.max_class_label
 
