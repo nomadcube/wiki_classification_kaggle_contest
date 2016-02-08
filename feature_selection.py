@@ -1,3 +1,4 @@
+# coding=utf-8
 from scipy.sparse import csc_matrix, coo_matrix, csr_matrix
 from array import array
 import sparse_tf_idf
@@ -14,17 +15,29 @@ def high_tf_idf_features(tf_idf_mat, threshold):
     return good_features
 
 
-def construct_lower_rank_x(original_x, good_features):
+def construct_lower_rank_x(original_x, good_features, feature_mapping=None):
+    # todo: 将feature映射到更小的集合上，避免模型还是按原来的类别数*特征数来存储
     coo_x = original_x.tocoo()
     new_data = array('f')
     new_row = array('I')
     new_col = array('I')
-    for i in xrange(len(coo_x.data)):
-        if coo_x.col[i] in good_features:
-            new_data.append(coo_x.data[i])
-            new_col.append(coo_x.col[i])
-            new_row.append(coo_x.row[i])
-    return coo_matrix((new_data, (new_row, new_col)), shape=original_x.shape, dtype='float')
+    if feature_mapping is None:
+        feature_mapping = dict()
+        for i in xrange(len(coo_x.data)):
+            if coo_x.col[i] in good_features:
+                if coo_x.col[i] not in feature_mapping.keys():
+                    feature_mapping[coo_x.col[i]] = len(feature_mapping)
+                new_data.append(coo_x.data[i])
+                new_col.append(feature_mapping[coo_x.col[i]])
+                new_row.append(coo_x.row[i])
+        return coo_matrix((new_data, (new_row, new_col)), dtype='float'), feature_mapping
+    else:
+        for i in xrange(len(coo_x.data)):
+            if coo_x.col[i] in good_features:
+                new_data.append(coo_x.data[i])
+                new_col.append(feature_mapping[coo_x.col[i]])
+                new_row.append(coo_x.row[i])
+        return coo_matrix((new_data, (new_row, new_col)), dtype='float')
 
 
 if __name__ == '__main__':
@@ -35,4 +48,4 @@ if __name__ == '__main__':
     tf_mat = sparse_tf_idf.tf_idf(mat)
     print tf_mat
     gf = high_tf_idf_features(tf_mat, 0.5)
-    print construct_lower_rank_x(mat, gf).shape
+    print construct_lower_rank_x(mat, gf)

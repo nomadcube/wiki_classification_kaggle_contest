@@ -2,11 +2,6 @@ from scipy.sparse import csr_matrix, csc_matrix, lil_matrix
 
 
 def predict_label(x, w, b):
-    if not isinstance(x, lil_matrix):
-        raise TypeError()
-    if not isinstance(w, lil_matrix):
-        raise TypeError()
-
     labels = list()
 
     for sample_no in xrange(len(x.data)):
@@ -15,10 +10,13 @@ def predict_label(x, w, b):
         max_score = -1e30
         for label_no in xrange(len(w.data)):
             label_indices_data = {w.rows[label_no][i]: w.data[label_no][i] for i in xrange(len(w.data[label_no]))}
+            if len(label_indices_data) == 0:
+                continue
             sample_class_score = b[label_no]
             if sample_class_score == -float("inf") or len(
                     set(sample_indices_data.keys()).difference(set(label_indices_data.keys()))) > 0:
                 continue
+            print sample_no, label_no
             for feature in set(sample_indices_data.keys()).intersection(set(label_indices_data.keys())):
                 sample_class_score += sample_indices_data[feature] * label_indices_data[feature]
             if sample_class_score > max_score:

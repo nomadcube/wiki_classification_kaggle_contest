@@ -15,12 +15,14 @@ def fit(y, x):
     y_col_sum /= total_label_occurrence_cnt
     y_col_sum = np.log(y_col_sum)
 
-    y_x_param = y.transpose().dot(x).tocsr()
+    y_x_param = y.transpose().dot(x).todense()
+    y_x_param += 1.
+    # todo: 正在修复feature hashing的问题
     tmp = np.array(y_x_param.sum(axis=1).ravel())[0]
-    y_x_param.data /= tmp.repeat(np.diff(y_x_param.indptr))
-    y_x_param.data = np.log(y_x_param.data)
+    y_x_param /= tmp.repeat(y_x_param.shape[1]).reshape(y_x_param.shape)
+    y_x_param = np.log(y_x_param)
 
-    return y_col_sum, y_x_param.tocsc()
+    return y_col_sum, csc_matrix(y_x_param)
 
 
 def construct_csr_from_list(two_dimension_arr, element_dtype='float', max_n_dim=None):
