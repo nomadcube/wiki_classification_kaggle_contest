@@ -2,6 +2,7 @@
 from array import array
 from memory_profiler import profile
 from scipy.sparse import csr_matrix
+import numpy as np
 
 
 class Sample:
@@ -42,6 +43,29 @@ class Sample:
         self._convert_x_to_csr()
         return self
 
+    def extract_and_update(self, extract_cnt):
+        if not extract_cnt < len(self.y):
+            raise ValueError()
+        subset = Sample()
+        row_cnt, feature_dimension = self.x.shape
+        subset.y = self.y[:extract_cnt]
+        subset._row_indptr = self._row_indptr[:(extract_cnt + 1)]
+        subset._element = self._element[:subset._row_indptr[-1]]
+        subset._col_index = self._col_index[:subset._row_indptr[-1]]
+        subset.x = csr_matrix((subset._element, subset._col_index, subset._row_indptr),
+                              shape=(extract_cnt, feature_dimension), dtype='float')
+        subset.class_cnt = self.class_cnt
+
+        self.y = self.y[extract_cnt:]
+        self._row_indptr = np.array(self._row_indptr[extract_cnt:])
+        self._row_indptr -= len(subset._element)
+        self._element = self._element[subset._row_indptr[-1]:]
+        self._col_index = self._col_index[subset._row_indptr[-1]:]
+        self.x = csr_matrix((self._element, self._col_index, self._row_indptr),
+                            shape=(row_cnt - extract_cnt, feature_dimension), dtype='float')
+
+        return subset
+
 
 if __name__ == '__main__':
     smp = Sample()
@@ -49,3 +73,7 @@ if __name__ == '__main__':
     print smp.y
     print smp.x
     print smp.class_cnt
+    sub_smp = smp.extract_and_update(2)
+    print sub_smp.y
+    print sub_smp.x
+    print sub_smp.class_cnt
