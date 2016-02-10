@@ -1,4 +1,4 @@
-import sparse_tf_idf
+import tf_idf
 
 
 def test_tf_idf():
@@ -8,7 +8,7 @@ def test_tf_idf():
     row_index = np.array([0, 1, 1, 1, 2, 2])
     col_index = [1250536, 634175, 805104, 1095476, 805104, 1250536]
     mat = csr_matrix((element, (row_index, col_index)), shape=(max(row_index) + 1, max(col_index) + 1))
-    tf_idf_mat = sparse_tf_idf.tf_idf(mat)
+    tf_idf_mat = tf_idf.tf_idf(mat)
     assert tf_idf_mat.nnz == 6
     assert round(tf_idf_mat[0, 1250536], 12) == 0.405465108108
     assert round(tf_idf_mat[1, 1095476], 12) == 0.732408192445
