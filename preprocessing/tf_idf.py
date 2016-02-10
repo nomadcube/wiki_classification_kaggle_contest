@@ -16,9 +16,12 @@ def _counting_occurrence(array_like):
 
 
 def _tf(count_mat):
+    updated_mat = csr_matrix(count_mat.shape)
     row_sum = csr_matrix.sum(count_mat, axis=1).ravel()
-    count_mat.data /= np.array(row_sum.repeat(np.diff(count_mat.indptr)))[0]
-    return count_mat
+    updated_mat.data = count_mat.data / np.array(row_sum.repeat(np.diff(count_mat.indptr)))[0]
+    updated_mat.indptr = count_mat.indptr
+    updated_mat.indices = count_mat.indices
+    return updated_mat
 
 
 def _idf(count_mat):

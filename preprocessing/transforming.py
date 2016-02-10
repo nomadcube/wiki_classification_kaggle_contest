@@ -3,10 +3,10 @@ from array import array
 from scipy.sparse import coo_matrix, csr_matrix
 
 
-def pick_features(features, scores, threshold):
+def pick_features(features, scores, percentage):
     if len(features) != len(scores):
         raise ValueError('features and scores must be of the same length.')
-    threshold = np.percentile(scores, threshold)
+    threshold = np.percentile(scores, percentage)
     good_features = set()
     for i in xrange(len(scores)):
         if scores[i] >= threshold:
@@ -32,7 +32,8 @@ def dimension_reduction(origin_x, selected_features):
             new_data.append(coo_x.data[i])
             new_col.append(coo_x.col[i])
             new_row.append(coo_x.row[i])
-    return coo_matrix((new_data, (new_row, new_col)), shape=(origin_x.shape[0], max(new_col)), dtype='float')
+    return coo_matrix((new_data, (new_row, new_col)), shape=(origin_x.shape[0], max(new_col) + 1),
+                      dtype='float').tocsr()
 
 
 def convert_y_to_csr(y, element_dtype='float', max_n_dim=None):

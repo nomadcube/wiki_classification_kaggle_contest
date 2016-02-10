@@ -3,7 +3,7 @@ from collections import namedtuple
 import numpy as np
 import numpy.ma as nma
 
-from preprocessing import convert_y_to_csr
+from preprocessing.transforming import convert_y_to_csr
 
 
 def confusion_matrix(y, predicted_y, max_n_dim):

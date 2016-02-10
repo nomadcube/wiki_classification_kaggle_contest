@@ -29,7 +29,7 @@ class MNB:
         else:
             y_x_param = y.transpose().dot(x).tocsr()
             tmp = np.array(y_x_param.sum(axis=1).ravel())[0]
-            y_x_param.data /= tmp.repeat(np.array(np.diff(y_x_param.indptr))[0])
+            y_x_param.data /= tmp.repeat(np.diff(y_x_param.indptr))
             y_x_param.data = np.log(y_x_param.data)
             self.w = y_x_param.tolil()
         return self
@@ -60,11 +60,11 @@ class MNB:
 
 
 if __name__ == '__main__':
-    from preprocessing import tf_idf
+    from preprocessing import tf_idf, transforming
 
-    y = tf_idf.convert_y_to_csr(np.array([[0], [0], [1], [1], [0],
-                                          [0], [0], [1], [1], [1],
-                                          [1], [1], [1], [1], [0]]))
+    y = transforming.convert_y_to_csr(np.array([[0], [0], [1], [1], [0],
+                                                [0], [0], [1], [1], [1],
+                                                [1], [1], [1], [1], [0]]))
     element = [1.] * 30
     row_index = list()
     for i in range(15):

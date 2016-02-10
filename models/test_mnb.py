@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.sparse import csr_matrix
-from preprocessing import tf_idf
+from preprocessing import tf_idf, transforming
 import mnb
 import math
 
@@ -10,7 +10,7 @@ class TestMNB:
         tmp = np.array([[0], [0], [1], [1], [0],
                         [0], [0], [1], [1], [1],
                         [1], [1], [1], [1], [0]])
-        return tf_idf.convert_y_to_csr(tmp)
+        return transforming.convert_y_to_csr(tmp)
 
     def pytest_funcarg__x(self):
         element = [1.] * 30
