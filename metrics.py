@@ -1,18 +1,22 @@
 from collections import namedtuple
-from memory_profiler import profile
 
 import numpy as np
 import numpy.ma as nma
 
-from fit_multi_label_mnb import construct_csr_from_list
+from preprocessing import convert_y_to_csr
 
 
-# @profile
 def confusion_matrix(y, predicted_y, max_n_dim):
+    """
+    :param y: list
+    :param predicted_y: list
+    :param max_n_dim: int
+    :return: confusion_matrix
+    """
     res = namedtuple('confusion_matrix', 'true_positive false_negative false_positive true_negative')
 
-    y_mat = construct_csr_from_list(y, element_dtype='bool', max_n_dim=max_n_dim).transpose()
-    pred_mat = construct_csr_from_list(predicted_y, element_dtype='bool', max_n_dim=max_n_dim).transpose()
+    y_mat = convert_y_to_csr(y, element_dtype='bool', max_n_dim=max_n_dim).transpose()
+    pred_mat = convert_y_to_csr(predicted_y, element_dtype='bool', max_n_dim=max_n_dim).transpose()
 
     y_pred_logical_and = y_mat.multiply(pred_mat)
 
@@ -23,7 +27,6 @@ def confusion_matrix(y, predicted_y, max_n_dim):
                (y_mat.shape[0] - (y_positive + (pred_positive - y_pred_positive))))
 
 
-# @profile
 def macro_precision_recall(y, predicted_y, max_n_dim):
     confusion_mat = confusion_matrix(y, predicted_y, max_n_dim)
     y_positive = nma.masked_values(confusion_mat.true_positive + confusion_mat.false_negative, 0.)

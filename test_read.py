@@ -1,10 +1,10 @@
 from array import array
 
-import reader
+import read
 
 
 def test_read_sample():
-    smp_1, smp_2, smp_3 = reader.read_sample('/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt', 1, 1)
+    smp_1, smp_2, smp_3 = read.read_sample('/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt', 1, 1)
     assert smp_1.y == [array('I', [314523L, 165538L, 416827L])]
     assert smp_1.element_x == array('f', [1.0])
     assert smp_1.col_index_x == array('I', [1250536L])
@@ -28,8 +28,8 @@ def test_read_sample():
 
 
 def test_convert_to_csr():
-    smp_1 = reader.read_sample('/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt', 1, 1)[0]
-    csr_smp_1 = smp_1.convert_to_csr(1250536 + 1)
+    smp_1 = read.read_sample('/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt', 1, 1)[0]
+    csr_smp_1 = smp_1._convert_x_to_csr(1250536 + 1)
     assert csr_smp_1.shape == (1, 1250537)
     assert csr_smp_1.nnz == 1
     assert csr_smp_1[0, 1250536] == 1.0
