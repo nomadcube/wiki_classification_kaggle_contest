@@ -12,10 +12,7 @@ from fit_multi_label_mnb import fit
 
 
 def predict(x, model):
-    x = x.tolil()
-    w = model[1].tolil()
-    b = model[0]
-    return increment_predict.predict_label(x, w, b)
+    return increment_predict.predict_label(x.tolil(), model[1].tolil(), model[0])
 
 
 def top_k_argmax(one_log_likelihood, max_class_cnt):

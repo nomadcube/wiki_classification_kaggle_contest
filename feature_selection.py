@@ -6,6 +6,7 @@ import numpy as np
 
 
 def high_tf_idf_features(tf_idf_mat, threshold):
+    threshold = np.percentile(tf_idf_mat.data, threshold)
     good_features = set()
     if not isinstance(tf_idf_mat, csr_matrix):
         raise TypeError()
@@ -15,29 +16,17 @@ def high_tf_idf_features(tf_idf_mat, threshold):
     return good_features
 
 
-def construct_lower_rank_x(original_x, good_features, feature_mapping=None):
-    # todo: 将feature映射到更小的集合上，避免模型还是按原来的类别数*特征数来存储
+def construct_lower_rank_x(original_x, good_features, feature_mapping):
     coo_x = original_x.tocoo()
     new_data = array('f')
     new_row = array('I')
     new_col = array('I')
-    if feature_mapping is None:
-        feature_mapping = dict()
-        for i in xrange(len(coo_x.data)):
-            if coo_x.col[i] in good_features:
-                if coo_x.col[i] not in feature_mapping.keys():
-                    feature_mapping[coo_x.col[i]] = len(feature_mapping)
-                new_data.append(coo_x.data[i])
-                new_col.append(feature_mapping[coo_x.col[i]])
-                new_row.append(coo_x.row[i])
-        return coo_matrix((new_data, (new_row, new_col)), dtype='float'), feature_mapping
-    else:
-        for i in xrange(len(coo_x.data)):
-            if coo_x.col[i] in good_features:
-                new_data.append(coo_x.data[i])
-                new_col.append(feature_mapping[coo_x.col[i]])
-                new_row.append(coo_x.row[i])
-        return coo_matrix((new_data, (new_row, new_col)), dtype='float')
+    for i in xrange(len(coo_x.data)):
+        if coo_x.col[i] in good_features:
+            new_data.append(coo_x.data[i])
+            new_col.append(feature_mapping[coo_x.col[i]])
+            new_row.append(coo_x.row[i])
+    return coo_matrix((new_data, (new_row, new_col)), shape=(original_x.shape[0], max(new_col)), dtype='float')
 
 
 if __name__ == '__main__':
@@ -47,5 +36,7 @@ if __name__ == '__main__':
     mat = csr_matrix((element, (row_index, col_index)), shape=(max(row_index) + 1, max(col_index) + 1))
     tf_mat = sparse_tf_idf.tf_idf(mat)
     print tf_mat
-    gf = high_tf_idf_features(tf_mat, 0.5)
+    gf = high_tf_idf_features(tf_mat, 75)
+    print gf
     print construct_lower_rank_x(mat, gf)
+    print mat
