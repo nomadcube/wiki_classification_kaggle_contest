@@ -1,3 +1,4 @@
+# coding=utf-8
 import sys
 from time import time
 
@@ -29,6 +30,7 @@ def main(in_path, subset_cnt, threshold, mnb_alpha):
 
     print predicted_y
     print test_predicted_y
+    print test_smp.y
 
     return macro_precision_recall(smp.y, predicted_y, smp.class_cnt), macro_precision_recall(test_smp.y,
                                                                                              test_predicted_y,
@@ -36,8 +38,8 @@ def main(in_path, subset_cnt, threshold, mnb_alpha):
 
 
 if __name__ == '__main__':
-    in_p = sys.argv[1] if len(sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt'
-    sc = int(sys.argv[2]) if len(sys.argv) > 2 else 1
+    in_p = sys.argv[1] if len(sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/input_data/train_subset.csv'
+    sc = int(sys.argv[2]) if len(sys.argv) > 2 else 10
     t = int(sys.argv[3]) if len(sys.argv) > 3 else 50
     alpha = int(sys.argv[4]) if len(sys.argv) > 4 else 0.
 
