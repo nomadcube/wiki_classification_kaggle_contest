@@ -25,7 +25,7 @@ class MNB:
             tmp = np.array(y_x_param.sum(axis=1).ravel())[0]
             y_x_param /= tmp.repeat(y_x_param.shape[1]).reshape(y_x_param.shape)
             y_x_param = np.log(y_x_param)
-            self.w = csc_matrix(y_x_param)
+            self.w = lil_matrix(y_x_param)
         else:
             y_x_param = y.transpose().dot(x).tocsr()
             tmp = np.array(y_x_param.sum(axis=1).ravel())[0]
