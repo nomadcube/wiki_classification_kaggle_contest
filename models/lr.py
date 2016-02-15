@@ -1,5 +1,4 @@
 from scipy.optimize import minimize
-from random import randint
 import numpy as np
 
 
@@ -8,7 +7,7 @@ def p_norm(w, p):
 
 
 def sigmoid(x):
-    return 1. / (1. + np.exp((-1.) * x))
+    return 1. / (1. + np.exp(x))
 
 
 def discrimination(w, x):
@@ -37,7 +36,7 @@ class LR:
     def predict(self, x):
         estimated_y = list()
         for i, each_x in enumerate(x):
-            if sigmoid(discrimination(self.w, each_x)) < 0.5:
+            if discrimination(self.w, each_x) > 0:
                 estimated_y.append(0)
             else:
                 estimated_y.append(1)
