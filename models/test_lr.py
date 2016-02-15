@@ -21,3 +21,9 @@ class TestLR:
         assert abs(m.w[2] - (-32.52328342)) < 1e-6
         assert abs(m.w[3] - 15.67538028) < 1e-6
         assert abs(m.w[4] - 0.084586) < 1e-6
+
+    def test_predict(self, y, x):
+        m = lr.LR(0, 2)
+        m.fit(y, x)
+        p = m.predict(x)
+        assert p == [0, 1, 0, 1, 0, 1, 0, 1, 1, 0]

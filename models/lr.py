@@ -50,9 +50,15 @@ class LR:
 
 
 if __name__ == '__main__':
-    x = [np.array([randint(1, 3) for _ in range(5)]) for _ in range(10)]
+    from array import array
+
+    x = [array('f', [2, 3, 3, 3, 2]), array('f', [2, 1, 1, 1, 3]), array('f', [1, 1, 2, 2, 3]),
+         array('f', [3, 1, 1, 1, 2]),
+         array('f', [2, 2, 3, 3, 2]), array('f', [1, 3, 2, 1, 1]), array('f', [1, 1, 2, 3, 1]),
+         array('f', [1, 1, 1, 1, 3]),
+         array('f', [3, 2, 1, 1, 3]), array('f', [3, 1, 2, 3, 3])]
     print x
-    y = [randint(0, 1) for _ in range(10)]
+    y = [0, 1, 0, 0, 0, 1, 0, 0, 1, 1]
     print y
     lr = LR(0, 2)
     lr.fit(y, x)
