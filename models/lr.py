@@ -14,11 +14,11 @@ def posterior_prob(w, one_x, one_y, C):
     w_mat = np.array(w).reshape((C, -1))
     denominator = 1.
     for i, each_w_row in enumerate(w_mat):
-        denominator += np.exp(sum(each_w_row * one_x))
+        denominator += np.exp(discrimination(each_w_row, one_x))
     if one_y == C:
         return 1. / denominator
     else:
-        return np.exp(sum(w_mat[one_y] * one_x)) / denominator
+        return np.exp(discrimination(w_mat[one_y], one_x)) / denominator
 
 
 def empirical_risk(w, y, x):
@@ -35,7 +35,7 @@ class LR:
         self.w = None
 
     def fit(self, y, x):
-        init_w = [[0.1, 0.1, 0.1, 0.1, 0.1] for _ in range(max(y))]
+        init_w = [[0.1] * len(x[0]) for _ in range(max(y))]
         self.w = minimize(
             lambda w: empirical_risk(w, y, x) + float(self._regularization_coefficient) * p_norm(w, self._p),
             init_w).x
