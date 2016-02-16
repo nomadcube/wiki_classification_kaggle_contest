@@ -48,6 +48,7 @@ class LR:
     def fit(self, y, X):
         if not isinstance(X, np.ndarray):
             raise TypeError()
+        print _max_class(y)
         init_w = [[0.1] * X.shape[1] for _ in range(_max_class(y))]
         self.w = minimize(
             lambda w: empirical_risk(w, y, X) + float(self._regularization_coefficient) * p_norm(w, self._p),
