@@ -14,14 +14,6 @@ def pick_features(features, scores, percentage):
     return good_features
 
 
-def feature_mapping(origin_x, old_new_relation):
-    if not isinstance(origin_x, csr_matrix):
-        raise TypeError()
-    coo_x = origin_x.tocoo()
-    coo_x.col = array('I', [old_new_relation[c] for c in coo_x.col])
-    return origin_x
-
-
 def dimension_reduction(origin_x, selected_features):
     coo_x = origin_x.tocoo()
     new_data = array('f')
@@ -36,6 +28,15 @@ def dimension_reduction(origin_x, selected_features):
                       dtype='float').tocsr()
 
 
+def feature_mapping(origin_x, old_new_relation):
+    if not isinstance(origin_x, csr_matrix):
+        raise TypeError()
+    coo_x = origin_x.tocoo()
+    coo_x.col = np.array([old_new_relation[c] for c in coo_x.col], dtype='int')
+    return coo_matrix((coo_x.data, (coo_x.row, coo_x.col)), shape=(origin_x.shape[0], max(coo_x.col) + 1),
+                      dtype='float').tocsr()
+
+
 def convert_y_to_csr(y, element_dtype='float', max_n_dim=None):
     elements = array('f')
     rows = array('I')
@@ -47,3 +48,19 @@ def convert_y_to_csr(y, element_dtype='float', max_n_dim=None):
         columns.extend(array('I', row))
     n_dim = max_n_dim if max_n_dim else (max(columns) + 1)
     return csr_matrix((elements, (rows, columns)), shape=(len(y), n_dim), dtype=element_dtype)
+
+
+if __name__ == '__main__':
+    from tf_idf import tf_idf
+
+    element = np.array([1., 1., 1., 4., 1., 1.])
+    row_index = np.array([0, 1, 1, 1, 2, 2])
+    col_index = [1250536, 634175, 805104, 1095476, 805104, 1250536]
+    origin_x = csr_matrix((element, (row_index, col_index)), shape=(max(row_index) + 1, max(col_index) + 1))
+    tf_idf_x = tf_idf(origin_x)
+    features = pick_features(tf_idf_x.indices, tf_idf_x.data, 100)
+    reduced_x = dimension_reduction(origin_x, features)
+    feat_mapping_rel = {old: new for new, old in enumerate(features)}
+    mapped_x = feature_mapping(reduced_x, feat_mapping_rel)
+    print mapped_x
+    print mapped_x.shape
