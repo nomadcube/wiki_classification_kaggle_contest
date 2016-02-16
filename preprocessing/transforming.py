@@ -28,7 +28,8 @@ def dimension_reduction(origin_x, selected_features):
                       dtype='float').tocsr()
 
 
-def feature_mapping(origin_x, old_new_relation):
+def feature_mapping(origin_x, features):
+    old_new_relation = {old: new for new, old in enumerate(features)}
     if not isinstance(origin_x, csr_matrix):
         raise TypeError()
     coo_x = origin_x.tocoo()
@@ -60,7 +61,6 @@ if __name__ == '__main__':
     tf_idf_x = tf_idf(origin_x)
     features = pick_features(tf_idf_x.indices, tf_idf_x.data, 100)
     reduced_x = dimension_reduction(origin_x, features)
-    feat_mapping_rel = {old: new for new, old in enumerate(features)}
-    mapped_x = feature_mapping(reduced_x, feat_mapping_rel)
+    mapped_x = feature_mapping(reduced_x, features)
     print mapped_x
     print mapped_x.shape

@@ -27,15 +27,11 @@ class TestTransformation:
         assert reduced_x.shape == (3, 1095477)
         assert reduced_x.nnz == 1
 
-    def pytest_funcarg__feat_mapping_rel(self, features):
-        return {old: new for new, old in enumerate(features)}
-
     def pytest_funcarg__reduced_x(self, origin_x, features):
         return dimension_reduction(origin_x, features)
 
-    def test_feature_mapping(self, reduced_x, feat_mapping_rel):
-        assert feat_mapping_rel[1095476] == 0
-        mapped_x = feature_mapping(reduced_x, feat_mapping_rel)
+    def test_feature_mapping(self, reduced_x, features):
+        mapped_x = feature_mapping(reduced_x, features)
         assert isinstance(mapped_x, csr_matrix)
         assert mapped_x.shape == (3, 1)
         assert mapped_x[1, 0] == 4.
