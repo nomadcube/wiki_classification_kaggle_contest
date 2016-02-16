@@ -7,14 +7,14 @@ def p_norm(w, p):
 
 
 def discrimination(one_w, one_x):
-    return sum(one_w * one_x)
+    return one_w * one_x.transpose()
 
 
 def posterior_prob(w, one_x, one_y, C):
     w_mat = np.array(w).reshape((C, -1))
     denominator = 1.
     for i, each_w_row in enumerate(w_mat):
-        denominator += np.exp(discrimination(each_w_row, one_x))
+        denominator += np.exp(discrimination(each_w_row.reshape(one_x.shape), one_x))
     if one_y == C:
         return 1. / denominator
     else:
@@ -34,13 +34,13 @@ class LR:
         self._p = p
         self.w = None
 
-    def fit(self, y, x):
+    def fit(self, y, X):
         y = [e[0] for e in y]
-        if not isinstance(x, np.ndarray):
+        if not isinstance(X, np.ndarray):
             raise TypeError()
-        init_w = [[0.1] * x.shape[1] for _ in range(max(y))]
+        init_w = [[0.1] * X.shape[1] for _ in range(max(y))]
         self.w = minimize(
-            lambda w: empirical_risk(w, y, x) + float(self._regularization_coefficient) * p_norm(w, self._p),
+            lambda w: empirical_risk(w, y, X) + float(self._regularization_coefficient) * p_norm(w, self._p),
             init_w).x
         self.w = np.array(self.w).reshape((max(y), -1))
 
@@ -72,7 +72,7 @@ if __name__ == '__main__':
          array('f', [2, 2, 3, 3, 2]), array('f', [1, 3, 2, 1, 1]), array('f', [1, 1, 2, 3, 1]),
          array('f', [1, 1, 1, 1, 3]),
          array('f', [3, 2, 1, 1, 3]), array('f', [3, 1, 2, 3, 3])]
-    x = np.array(x).reshape((10, 5))
+    x = np.matrix(np.array(x).reshape((10, 5)))
     print x
     y = [[0], [1], [0], [0], [0], [1], [0], [0], [2], [2]]
     print y

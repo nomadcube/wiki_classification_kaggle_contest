@@ -13,7 +13,7 @@ class TestLR:
              array('f', [2, 2, 3, 3, 2]), array('f', [1, 3, 2, 1, 1]), array('f', [1, 1, 2, 3, 1]),
              array('f', [1, 1, 1, 1, 3]),
              array('f', [3, 2, 1, 1, 3]), array('f', [3, 1, 2, 3, 3])]
-        return np.array(a).reshape((10, 5))
+        return np.matrix(np.array(a).reshape((10, 5)))
 
     def test_fit(self, y, x):
         m = lr.LR(0, 2)
