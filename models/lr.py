@@ -36,7 +36,9 @@ class LR:
 
     def fit(self, y, x):
         y = [e[0] for e in y]
-        init_w = [[0.1] * len(x[0]) for _ in range(max(y))]
+        if not isinstance(x, np.ndarray):
+            raise TypeError()
+        init_w = [[0.1] * x.shape[1] for _ in range(max(y))]
         self.w = minimize(
             lambda w: empirical_risk(w, y, x) + float(self._regularization_coefficient) * p_norm(w, self._p),
             init_w).x
@@ -70,6 +72,7 @@ if __name__ == '__main__':
          array('f', [2, 2, 3, 3, 2]), array('f', [1, 3, 2, 1, 1]), array('f', [1, 1, 2, 3, 1]),
          array('f', [1, 1, 1, 1, 3]),
          array('f', [3, 2, 1, 1, 3]), array('f', [3, 1, 2, 3, 3])]
+    x = np.array(x).reshape((10, 5))
     print x
     y = [[0], [1], [0], [0], [0], [1], [0], [0], [2], [2]]
     print y
