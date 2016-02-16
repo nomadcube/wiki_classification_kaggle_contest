@@ -6,21 +6,25 @@ def p_norm(w, p):
     return abs(pow(sum(np.power(w, p)), 1. / p))
 
 
-def sigmoid(x):
-    return 1. / (1. + np.exp(x))
-
-
 def discrimination(w, x):
     return sum(w * x)
+
+
+def posterior_prob(w, one_x, one_y, C):
+    w_mat = np.array(w).reshape((C, -1))
+    denominator = 1.
+    for i, each_w_row in enumerate(w_mat):
+        denominator += np.exp(sum(each_w_row * one_x))
+    if one_y == C:
+        return 1. / denominator
+    else:
+        return np.exp(sum(w_mat[one_y] * one_x)) / denominator
 
 
 def empirical_risk(w, y, x):
     res = 0.
     for i, each_y in enumerate(y):
-        if each_y == 1:
-            res += np.log(sigmoid(discrimination(w, x[i])))
-        else:
-            res += np.log(1 - sigmoid(discrimination(w, x[i])))
+        res += np.log(posterior_prob(w, x[i], each_y, max(y)))
     return (-1.) * res
 
 
@@ -31,7 +35,10 @@ class LR:
         self.w = None
 
     def fit(self, y, x):
-        self.w = self._solve(y, x, init_w=[0.1, 0.1, 0.1, 0.1, 0.1])
+        init_w = [[0.1, 0.1, 0.1, 0.1, 0.1] for _ in range(max(y))]
+        self.w = minimize(
+            lambda w: empirical_risk(w, y, x) + float(self._regularization_coefficient) * p_norm(w, self._p),
+            init_w).x
 
     def predict(self, x):
         estimated_y = list()
@@ -41,11 +48,6 @@ class LR:
             else:
                 estimated_y.append(1)
         return estimated_y
-
-    def _solve(self, y, x, init_w):
-        return minimize(
-            lambda w: empirical_risk(w, y, x) + float(self._regularization_coefficient) * p_norm(w, self._p),
-            init_w).x
 
 
 if __name__ == '__main__':
@@ -57,12 +59,12 @@ if __name__ == '__main__':
          array('f', [1, 1, 1, 1, 3]),
          array('f', [3, 2, 1, 1, 3]), array('f', [3, 1, 2, 3, 3])]
     print x
-    y = [0, 1, 0, 0, 0, 1, 0, 0, 1, 1]
+    y = [0, 1, 0, 0, 0, 1, 0, 0, 2, 2]
     print y
     lr = LR(0, 2)
     lr.fit(y, x)
     print lr.w
-    print lr.predict(x)
-
-    print p_norm([1, -2], 1)
-    print p_norm([1, -2], 2)
+    # print lr.predict(x)
+    #
+    # print p_norm([1, -2], 1)
+    # print p_norm([1, -2], 2)
