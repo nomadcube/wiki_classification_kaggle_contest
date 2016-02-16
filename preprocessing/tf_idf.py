@@ -32,7 +32,7 @@ def _idf(count_mat):
     for feature, occurrence in feature_occurrence.items():
         init_row.append(feature)
         init_element.append(math.log(float(total_doc_count) / occurrence))
-    return csr_matrix((init_element, (init_row, init_row)), shape=(max(init_row) + 1, max(init_row) + 1))
+    return csr_matrix((init_element, (init_row, init_row)), shape=(count_mat.shape[1], count_mat.shape[1]))
 
 
 if __name__ == '__main__':

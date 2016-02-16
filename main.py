@@ -4,7 +4,8 @@ from time import time
 
 from read import Sample
 from preprocessing.tf_idf import tf_idf
-from preprocessing.transforming import pick_features, dimension_reduction, convert_y_to_csr, feature_mapping
+from preprocessing.transforming import pick_features, dimension_reduction, convert_y_to_csr, feature_mapping, \
+    label_mapping
 from models.mnb import MNB
 from models.lr import LR
 from metrics import macro_precision_recall
@@ -25,8 +26,10 @@ def main(in_path, subset_cnt, threshold, mnb_alpha):
     mapped_reduced_x = feature_mapping(reduction_x, good_features)
     mapped_reduced_test_x = feature_mapping(test_reduction_x, good_features)
 
+    mapped_y = label_mapping(smp.y)
+
     m = LR(0, 2)
-    m.fit(smp.y, mapped_reduced_x.todense())
+    m.fit(mapped_y, mapped_reduced_x.todense())
 
     test_predicted_y = m.predict(mapped_reduced_test_x)
 
@@ -35,8 +38,8 @@ def main(in_path, subset_cnt, threshold, mnb_alpha):
 
 if __name__ == '__main__':
     in_p = sys.argv[1] if len(
-        sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/input_data/train_subset.csv'
-    sc = int(sys.argv[2]) if len(sys.argv) > 2 else 50
+        sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/input_data/origin_train_subset.csv'
+    sc = int(sys.argv[2]) if len(sys.argv) > 2 else 5
     t = float(sys.argv[3]) if len(sys.argv) > 3 else 98
     alpha = float(sys.argv[4]) if len(sys.argv) > 4 else 0.
 
