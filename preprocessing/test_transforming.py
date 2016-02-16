@@ -1,4 +1,4 @@
-from transforming import pick_features, dimension_reduction, feature_mapping
+from transforming import pick_features, dimension_reduction, feature_mapping, label_mapping
 from tf_idf import tf_idf
 import numpy as np
 from scipy.sparse import csr_matrix
@@ -35,3 +35,14 @@ class TestTransformation:
         assert isinstance(mapped_x, csr_matrix)
         assert mapped_x.shape == (3, 1)
         assert mapped_x[1, 0] == 4.
+
+    def pytest_funcarg__y(self):
+        return [[314523, 165538, 416827], [21631], [76255, 165538]]
+
+    def test_label_mapping(self, y):
+        from array import array
+        new_y = label_mapping(y)
+        assert len(new_y) == 3
+        assert new_y[0] == array('I', [0L, 1L, 2L])
+        assert new_y[1] == array('I', [3L])
+        assert new_y[2] == array('I', [4L, 1L])

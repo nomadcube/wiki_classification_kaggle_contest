@@ -51,6 +51,19 @@ def convert_y_to_csr(y, element_dtype='float', max_n_dim=None):
     return csr_matrix((elements, (rows, columns)), shape=(len(y), n_dim), dtype=element_dtype)
 
 
+def label_mapping(y):
+    rel = dict()
+    new_y = list()
+    for labels in y:
+        new_labels = array('I')
+        for each_label in labels:
+            if each_label not in rel.keys():
+                rel[each_label] = len(rel)
+            new_labels.append(rel[each_label])
+        new_y.append(new_labels)
+    return new_y
+
+
 if __name__ == '__main__':
     from tf_idf import tf_idf
 
@@ -64,3 +77,6 @@ if __name__ == '__main__':
     mapped_x = feature_mapping(reduced_x, features)
     print mapped_x
     print mapped_x.shape
+
+    y = [[314523, 165538, 416827], [21631], [76255, 165538]]
+    print label_mapping(y)
