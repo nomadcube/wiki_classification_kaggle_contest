@@ -16,14 +16,14 @@ class TestLR:
     def test_fit(self, y, x):
         m = lr.LR(0, 2)
         m.fit(y, x)
-        assert abs(m.w[0] + 0.22692079) < 1e-6
-        assert abs(m.w[1] + 15.21590892) < 1e-6
-        assert abs(m.w[2] + (-30.08303294)) < 1e-6
-        assert abs(m.w[3] + 14.45525843) < 1e-6
-        assert abs(m.w[4] + 0.0845936) < 1e-6
+        assert abs(m.w[0][0] + 0.22692079) < 1e-6
+        assert abs(m.w[0][1] + 15.21590892) < 1e-6
+        assert abs(m.w[0][2] + (-30.08303294)) < 1e-6
+        assert abs(m.w[0][3] + 14.45525843) < 1e-6
+        assert abs(m.w[0][4] + 0.0845936) < 1e-6
 
     def test_predict(self, y, x):
         m = lr.LR(0, 2)
         m.fit(y, x)
         p = m.predict(x)
-        assert p == [0, 1, 0, 1, 0, 1, 0, 1, 1, 0]
+        assert p == [[0], [1], [0], [1], [0], [1], [0], [1], [1], [0]]

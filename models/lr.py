@@ -6,8 +6,8 @@ def p_norm(w, p):
     return abs(pow(sum(np.power(w, p)), 1. / p))
 
 
-def discrimination(w, x):
-    return sum(w * x)
+def discrimination(one_w, one_x):
+    return sum(one_w * one_x)
 
 
 def posterior_prob(w, one_x, one_y, C):
@@ -39,15 +39,26 @@ class LR:
         self.w = minimize(
             lambda w: empirical_risk(w, y, x) + float(self._regularization_coefficient) * p_norm(w, self._p),
             init_w).x
+        self.w = np.array(self.w).reshape((max(y), -1))
 
     def predict(self, x):
         estimated_y = list()
         for i, each_x in enumerate(x):
-            if discrimination(self.w, each_x) > 0:
-                estimated_y.append(0)
-            else:
-                estimated_y.append(1)
+            estimated_y.append(self._one_predict(each_x))
         return estimated_y
+
+    def _one_predict(self, one_x):
+        max_i = -1
+        max_discrimination_val = -1e30
+        for i, each_w in enumerate(self.w):
+            current_discrimination_val = discrimination(each_w, one_x)
+            if current_discrimination_val > max_discrimination_val:
+                max_discrimination_val = current_discrimination_val
+                max_i = i
+        if max_discrimination_val > 0:
+            return [max_i]
+        else:
+            return [self.w.shape[0]]
 
 
 if __name__ == '__main__':
@@ -64,7 +75,7 @@ if __name__ == '__main__':
     lr = LR(0, 2)
     lr.fit(y, x)
     print lr.w
-    # print lr.predict(x)
+    print lr.predict(x)
     #
     # print p_norm([1, -2], 1)
     # print p_norm([1, -2], 2)
