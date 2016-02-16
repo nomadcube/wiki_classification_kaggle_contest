@@ -1,5 +1,15 @@
+# coding=utf-8
 from scipy.optimize import minimize
 import numpy as np
+
+
+def _max_class(y):
+    max_class = -1
+    for each_y in y:
+        for each_label in each_y:
+            if each_label > max_class:
+                max_class = each_label
+    return max_class
 
 
 def p_norm(w, p):
@@ -24,7 +34,8 @@ def posterior_prob(w, one_x, one_y, C):
 def empirical_risk(w, y, x):
     res = 0.
     for i, each_y in enumerate(y):
-        res += np.log(posterior_prob(w, x[i], each_y, max(y)))
+        for each_label in each_y:
+            res += np.log(posterior_prob(w, x[i], each_label, _max_class(y)))
     return (-1.) * res
 
 
@@ -35,14 +46,13 @@ class LR:
         self.w = None
 
     def fit(self, y, X):
-        y = [e[0] for e in y]
         if not isinstance(X, np.ndarray):
             raise TypeError()
-        init_w = [[0.1] * X.shape[1] for _ in range(max(y))]
+        init_w = [[0.1] * X.shape[1] for _ in range(_max_class(y))]
         self.w = minimize(
             lambda w: empirical_risk(w, y, X) + float(self._regularization_coefficient) * p_norm(w, self._p),
             init_w).x
-        self.w = np.array(self.w).reshape((max(y), -1))
+        self.w = np.array(self.w).reshape((_max_class(y), -1))
 
     def predict(self, x):
         estimated_y = list()
@@ -74,9 +84,10 @@ if __name__ == '__main__':
          array('f', [3, 2, 1, 1, 3]), array('f', [3, 1, 2, 3, 3])]
     x = np.matrix(np.array(x).reshape((10, 5)))
     print x
-    y = [[0], [1], [0], [0], [0], [1], [0], [0], [2], [2]]
+    y = [[0, 1], [0, 1], [0], [0, 1], [0, 2], [1], [0], [0], [2], [1, 2]]
     print y
     lr = LR(0, 2)
+    print _max_class(y)
     lr.fit(y, x)
     print lr.w
     print lr.predict(x)
