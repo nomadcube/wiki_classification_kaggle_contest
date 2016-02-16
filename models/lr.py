@@ -51,7 +51,7 @@ class LR:
         print _max_class(y)
         init_w = [[0.1] * X.shape[1] for _ in range(_max_class(y))]
         self.w = minimize(
-            lambda w: empirical_risk(w, y, X) + float(self._regularization_coefficient) * p_norm(w, self._p),
+            lambda w: empirical_risk(w, y, X),
             init_w).x
         self.w = np.array(self.w).reshape((_max_class(y), -1))
 
@@ -85,9 +85,9 @@ if __name__ == '__main__':
          array('f', [3, 2, 1, 1, 3]), array('f', [3, 1, 2, 3, 3])]
     x = np.matrix(np.array(x).reshape((10, 5)))
     print x
-    y = [[0, 1], [0, 1], [0], [0, 1], [0, 2], [1], [0], [0], [2], [1, 2]]
+    y = [[0, 1], [0, 1], [1, 2], [0, 1], [0, 2], [1, 2], [0], [0], [2], [1, 2]]
     print y
-    lr = LR(0, 2)
+    lr = LR(0.3, 1)
     print _max_class(y)
     lr.fit(y, x)
     print lr.w

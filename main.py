@@ -38,11 +38,25 @@ def main(in_path, subset_cnt, threshold, mnb_alpha):
 
 if __name__ == '__main__':
     in_p = sys.argv[1] if len(
-        sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/input_data/origin_train_subset.csv'
-    sc = int(sys.argv[2]) if len(sys.argv) > 2 else 5
-    t = float(sys.argv[3]) if len(sys.argv) > 3 else 98
+        sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/input_data/train_subset.csv'
+    sc = int(sys.argv[2]) if len(sys.argv) > 2 else 80
+    t = float(sys.argv[3]) if len(sys.argv) > 3 else 96
     alpha = float(sys.argv[4]) if len(sys.argv) > 4 else 0.
 
     start_time = time()
+
+    import cProfile, pstats, StringIO
+
+    pr = cProfile.Profile()
+    pr.enable()
+
     print(main(in_p, sc, t, alpha))
+
+    pr.disable()
+    s = StringIO.StringIO()
+    sortby = 'cumulative'
+    ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+    ps.print_stats()
+    print s.getvalue()
+
     print(time() - start_time)
