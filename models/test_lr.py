@@ -1,5 +1,6 @@
 from array import array
 import lr
+import numpy as np
 
 
 class TestLR:
@@ -7,11 +8,12 @@ class TestLR:
         return [[0], [1], [0], [0], [0], [1], [0], [0], [1], [1]]
 
     def pytest_funcarg__x(self):
-        return [array('f', [2, 3, 3, 3, 2]), array('f', [2, 1, 1, 1, 3]), array('f', [1, 1, 2, 2, 3]),
-                array('f', [3, 1, 1, 1, 2]),
-                array('f', [2, 2, 3, 3, 2]), array('f', [1, 3, 2, 1, 1]), array('f', [1, 1, 2, 3, 1]),
-                array('f', [1, 1, 1, 1, 3]),
-                array('f', [3, 2, 1, 1, 3]), array('f', [3, 1, 2, 3, 3])]
+        a = [array('f', [2, 3, 3, 3, 2]), array('f', [2, 1, 1, 1, 3]), array('f', [1, 1, 2, 2, 3]),
+             array('f', [3, 1, 1, 1, 2]),
+             array('f', [2, 2, 3, 3, 2]), array('f', [1, 3, 2, 1, 1]), array('f', [1, 1, 2, 3, 1]),
+             array('f', [1, 1, 1, 1, 3]),
+             array('f', [3, 2, 1, 1, 3]), array('f', [3, 1, 2, 3, 3])]
+        return np.array(a).reshape((10, 5))
 
     def test_fit(self, y, x):
         m = lr.LR(0, 2)
