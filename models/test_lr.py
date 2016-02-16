@@ -4,7 +4,7 @@ import lr
 
 class TestLR:
     def pytest_funcarg__y(self):
-        return [0, 1, 0, 0, 0, 1, 0, 0, 1, 1]
+        return [[0], [1], [0], [0], [0], [1], [0], [0], [1], [1]]
 
     def pytest_funcarg__x(self):
         return [array('f', [2, 3, 3, 3, 2]), array('f', [2, 1, 1, 1, 3]), array('f', [1, 1, 2, 2, 3]),

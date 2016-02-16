@@ -35,6 +35,7 @@ class LR:
         self.w = None
 
     def fit(self, y, x):
+        y = [e[0] for e in y]
         init_w = [[0.1] * len(x[0]) for _ in range(max(y))]
         self.w = minimize(
             lambda w: empirical_risk(w, y, x) + float(self._regularization_coefficient) * p_norm(w, self._p),
@@ -70,7 +71,7 @@ if __name__ == '__main__':
          array('f', [1, 1, 1, 1, 3]),
          array('f', [3, 2, 1, 1, 3]), array('f', [3, 1, 2, 3, 3])]
     print x
-    y = [0, 1, 0, 0, 0, 1, 0, 0, 2, 2]
+    y = [[0], [1], [0], [0], [0], [1], [0], [0], [2], [2]]
     print y
     lr = LR(0, 2)
     lr.fit(y, x)
