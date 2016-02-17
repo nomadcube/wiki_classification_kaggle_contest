@@ -18,5 +18,10 @@ def distribution(observations):
 
 if __name__ == '__main__':
     y = [[314523, 165538, 416827], [21631], [76255, 165538]]
-    print occurrence(y)
-    print distribution(occurrence(y))
+    oy = occurrence(y)
+    print oy
+    print distribution(oy)
+    for label, instances in oy.items():
+        if len(instances) > 1:
+            print instances.pop()
+    print oy
