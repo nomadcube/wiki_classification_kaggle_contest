@@ -7,15 +7,15 @@ from tf_idf import tf_idf
 class XConverter:
     def __init__(self, feature_selection_percentile):
         self._percentile = feature_selection_percentile
-        self._selected_features = None
         self._old_new_features_rel = None
+        self.selected_features = None
 
     def construct(self, X):
         if not isinstance(X, csr_matrix):
             raise TypeError()
         tf_idf_X = tf_idf(X)
-        self._selected_features = self._pick_features(tf_idf_X.indices, tf_idf_X.data, self._percentile)
-        self._old_new_features_rel = {old: new for new, old in enumerate(self._selected_features)}
+        self.selected_features = self._pick_features(tf_idf_X.indices, tf_idf_X.data, self._percentile)
+        self._old_new_features_rel = {old: new for new, old in enumerate(self.selected_features)}
 
     def convert(self, X):
         coo_x = X.tocoo()
@@ -23,11 +23,11 @@ class XConverter:
         new_row = array('I')
         new_col = array('I')
         for i in xrange(len(coo_x.data)):
-            if coo_x.col[i] in self._selected_features:
+            if coo_x.col[i] in self.selected_features:
                 new_data.append(coo_x.data[i])
                 new_col.append(self._old_new_features_rel[coo_x.col[i]])
                 new_row.append(coo_x.row[i])
-        return coo_matrix((new_data, (new_row, new_col)), shape=(X.shape[0], max(new_col) + 1),
+        return coo_matrix((new_data, (new_row, new_col)), shape=(X.shape[0], len(self.selected_features)),
                           dtype='float').tocsr()
 
     @staticmethod

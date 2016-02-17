@@ -13,8 +13,8 @@ class TestTransformation:
     def test_construct(self, origin_x):
         xc = XConverter(100)
         xc.construct(origin_x)
-        assert len(xc._selected_features) == 1
-        assert 1095476 in xc._selected_features
+        assert len(xc.selected_features) == 1
+        assert 1095476 in xc.selected_features
 
     def test_convert(self, origin_x):
         xc = XConverter(100)
