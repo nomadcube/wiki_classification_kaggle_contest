@@ -7,8 +7,10 @@ from preprocessing.transforming import YConverter, XConverter
 from models.mnb import MNB
 from models.lr import LR
 from metrics import macro_precision_recall
+from memory_profiler import profile
 
 
+@profile
 def main(in_path, threshold):
     smp = Sample()
     smp.read(in_path)
@@ -38,7 +40,7 @@ def main(in_path, threshold):
 
 if __name__ == '__main__':
     in_p = sys.argv[1] if len(
-        sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/input_data/origin_train_subset.csv'
+        sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/input_data/small_origin_train_subset.csv'
     t = float(sys.argv[2]) if len(sys.argv) > 2 else 99.5
 
     start_time = time()

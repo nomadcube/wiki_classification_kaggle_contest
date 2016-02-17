@@ -2,6 +2,7 @@ import numpy as np
 from array import array
 from scipy.sparse import coo_matrix, csr_matrix
 from tf_idf import tf_idf
+from memory_profiler import profile
 
 
 class XConverter:
@@ -10,6 +11,7 @@ class XConverter:
         self._old_new_features_rel = None
         self.selected_features = None
 
+    @profile
     def construct(self, X):
         if not isinstance(X, csr_matrix):
             raise TypeError()
