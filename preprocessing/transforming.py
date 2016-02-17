@@ -34,7 +34,7 @@ def feature_mapping(origin_x, features):
         raise TypeError()
     coo_x = origin_x.tocoo()
     coo_x.col = np.array([old_new_relation[c] for c in coo_x.col], dtype='int')
-    return coo_matrix((coo_x.data, (coo_x.row, coo_x.col)), shape=(origin_x.shape[0], max(coo_x.col) + 1),
+    return coo_matrix((coo_x.data, (coo_x.row, coo_x.col)), shape=(origin_x.shape[0], len(features)),
                       dtype='float').tocsr()
 
 
