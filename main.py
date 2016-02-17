@@ -3,7 +3,7 @@ import sys
 from time import time
 
 from read import Sample
-from preprocessing.transforming import YConverter, XConverter
+from preprocessing.transforming import YConverter, XConverter, convert_y_to_csr
 from models.mnb import MNB
 from models.lr import LR
 from metrics import macro_precision_recall
@@ -30,11 +30,15 @@ def main(in_path, threshold):
 
     mapped_y = y_converter.convert(smp.y)
 
-    m = LR(0, 2)
-    m.fit(mapped_y, mapped_reduced_x.todense())
+    # m_lr = LR(0, 2)
+    # m_lr.fit(mapped_y, mapped_reduced_x.todense())
+    # test_predicted_y = m_lr.predict(mapped_reduced_test_x.todense())
 
-    test_predicted_y = m.predict(mapped_reduced_test_x.todense())
+    mnb = MNB(0.)
+    mnb.fit(convert_y_to_csr(mapped_y), mapped_reduced_x)
+    test_predicted_y = mnb.predict(mapped_reduced_test_x)
     old_test_predicted_y = y_converter.withdraw_convert(test_predicted_y)
+
     return macro_precision_recall(test_smp.y, old_test_predicted_y, smp.class_cnt)
 
 
