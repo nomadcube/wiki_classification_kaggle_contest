@@ -30,8 +30,8 @@ def main(in_path, subset_cnt, threshold, mnb_alpha):
     m.fit(mapped_y, mapped_reduced_x.todense())
 
     test_predicted_y = m.predict(mapped_reduced_test_x.todense())
-
-    return macro_precision_recall(test_smp.y, test_predicted_y, smp.class_cnt)
+    old_test_predicted_y = y_converter.withdraw_convert(test_predicted_y)
+    return macro_precision_recall(test_smp.y, old_test_predicted_y, smp.class_cnt)
 
 
 if __name__ == '__main__':
