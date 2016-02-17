@@ -7,15 +7,14 @@ from preprocessing.transforming import YConverter, XConverter
 from models.mnb import MNB
 from models.lr import LR
 from metrics import macro_precision_recall
-from data_analysis.labels import occurrence
 
 
 def main(in_path, threshold):
     smp = Sample()
     smp.read(in_path)
     smp, test_smp = smp.extract_and_update()
-    print len(smp.y)
-    print len(test_smp.y)
+    print len(smp)
+    print len(test_smp)
 
     x_converter = XConverter(threshold)
     x_converter.construct(smp.x)
@@ -40,9 +39,7 @@ def main(in_path, threshold):
 if __name__ == '__main__':
     in_p = sys.argv[1] if len(
         sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/input_data/small_origin_train_subset.csv'
-    sc = int(sys.argv[2]) if len(sys.argv) > 2 else 6
-    t = float(sys.argv[3]) if len(sys.argv) > 3 else 97
-    alpha = float(sys.argv[4]) if len(sys.argv) > 4 else 0.
+    t = float(sys.argv[2]) if len(sys.argv) > 2 else 99
 
     start_time = time()
 
@@ -51,7 +48,7 @@ if __name__ == '__main__':
     pr = cProfile.Profile()
     pr.enable()
 
-    print(main(in_p, sc))
+    print(main(in_p, t))
 
     pr.disable()
     s = StringIO.StringIO()
