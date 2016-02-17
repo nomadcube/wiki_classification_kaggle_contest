@@ -2,7 +2,7 @@
 from array import array
 from memory_profiler import profile
 from scipy.sparse import csr_matrix
-import numpy as np
+from data_analysis.labels import occurrence
 
 
 class Sample:
@@ -14,6 +14,42 @@ class Sample:
         self._row_indptr = array('I')
         self._row_indptr.append(0)
         self._col_index = array('I')
+
+    def read(self, data_file_path):
+        with open(data_file_path) as f:
+            for line_no, line in enumerate(f.__iter__()):
+                self._read_one_line(line)
+        self._convert_x_to_csr()
+        return self
+
+    def extract_and_update(self):
+        test_instances = self._select_instances()
+
+        test_smp = Sample()
+        train_smp = Sample()
+
+        row_cnt, feature_dimension = self.x.shape
+
+        for row_no in range(len(self.y)):
+            begin, end = self._row_indptr[row_no], self._row_indptr[row_no + 1]
+            if row_no in test_instances:
+                test_smp.y.append(self.y[row_no])
+                test_smp._element.extend(self._element[begin: end])
+                test_smp._col_index.extend(self._col_index[begin: end])
+                test_smp._row_indptr.append(test_smp._row_indptr[-1] + (end - begin))
+            else:
+                train_smp.y.append(self.y[row_no])
+                train_smp._element.extend(self._element[begin: end])
+                train_smp._col_index.extend(self._col_index[begin: end])
+                train_smp._row_indptr.append(train_smp._row_indptr[-1] + (end - begin))
+
+        test_smp.x = csr_matrix((test_smp._element, test_smp._col_index, test_smp._row_indptr),
+                                shape=(len(test_instances), feature_dimension), dtype='float')
+        test_smp.class_cnt = self.class_cnt
+        train_smp.x = csr_matrix((train_smp._element, train_smp._col_index, train_smp._row_indptr),
+                                 shape=(len(self.y) - len(test_instances), feature_dimension), dtype='float')
+        train_smp.class_cnt = self.class_cnt
+        return train_smp, test_smp
 
     def _read_one_line(self, line):
         multi_label, instance = line.strip().split(' ', 1)
@@ -36,35 +72,14 @@ class Sample:
         self.x = csr_matrix((self._element, self._col_index, self._row_indptr),
                             shape=(len(self._row_indptr) - 1, max(self._col_index) + 1), dtype='float')
 
-    def read(self, data_file_path):
-        with open(data_file_path) as f:
-            for line_no, line in enumerate(f.__iter__()):
-                self._read_one_line(line)
-        self._convert_x_to_csr()
-        return self
+    def _select_instances(self):
+        test_instances = set()
+        label_occurrence = occurrence(self.y)
+        for label, instance_of_label in label_occurrence.items():
+            if len(instance_of_label) > 1:
+                test_instances.add(instance_of_label.pop())
 
-    def extract_and_update(self, extract_cnt):
-        if not extract_cnt < len(self.y):
-            raise ValueError()
-        subset = Sample()
-        row_cnt, feature_dimension = self.x.shape
-        subset.y = self.y[:extract_cnt]
-        subset._row_indptr = self._row_indptr[:(extract_cnt + 1)]
-        subset._element = self._element[:subset._row_indptr[-1]]
-        subset._col_index = self._col_index[:subset._row_indptr[-1]]
-        subset.x = csr_matrix((subset._element, subset._col_index, subset._row_indptr),
-                              shape=(extract_cnt, feature_dimension), dtype='float')
-        subset.class_cnt = self.class_cnt
-
-        self.y = self.y[extract_cnt:]
-        self._row_indptr = np.array(self._row_indptr[extract_cnt:])
-        self._row_indptr -= len(subset._element)
-        self._element = self._element[subset._row_indptr[-1]:]
-        self._col_index = self._col_index[subset._row_indptr[-1]:]
-        self.x = csr_matrix((self._element, self._col_index, self._row_indptr),
-                            shape=(row_cnt - extract_cnt, feature_dimension), dtype='float')
-
-        return subset
+        return test_instances
 
 
 if __name__ == '__main__':
@@ -73,7 +88,12 @@ if __name__ == '__main__':
     print smp.y
     print smp.x
     print smp.class_cnt
-    sub_smp = smp.extract_and_update(2)
-    print sub_smp.y
-    print sub_smp.x
-    print sub_smp.class_cnt
+    tr_smp, te_smp = smp.extract_and_update()
+    print "================"
+    print tr_smp.y
+    print tr_smp.x
+    print tr_smp.class_cnt
+    print "==============="
+    print te_smp.y
+    print te_smp.x
+    print te_smp.class_cnt
