@@ -42,6 +42,26 @@ class XConverter:
         return good_features
 
 
+class YConverter:
+    def __init__(self):
+        self.label_old_new_relation = dict()
+
+    def construct(self, y):
+        for labels in y:
+            for each_label in labels:
+                if each_label not in self.label_old_new_relation.keys():
+                    self.label_old_new_relation[each_label] = len(self.label_old_new_relation)
+
+    def convert(self, y):
+        new_y = list()
+        for labels in y:
+            new_labels = array('I')
+            for each_label in labels:
+                new_labels.append(self.label_old_new_relation[each_label])
+            new_y.append(new_labels)
+        return new_y
+
+
 def convert_y_to_csr(y, element_dtype='float', max_n_dim=None):
     elements = array('f')
     rows = array('I')
@@ -53,19 +73,6 @@ def convert_y_to_csr(y, element_dtype='float', max_n_dim=None):
         columns.extend(array('I', row))
     n_dim = max_n_dim if max_n_dim else (max(columns) + 1)
     return csr_matrix((elements, (rows, columns)), shape=(len(y), n_dim), dtype=element_dtype)
-
-
-def label_mapping(y):
-    rel = dict()
-    new_y = list()
-    for labels in y:
-        new_labels = array('I')
-        for each_label in labels:
-            if each_label not in rel.keys():
-                rel[each_label] = len(rel)
-            new_labels.append(rel[each_label])
-        new_y.append(new_labels)
-    return new_y
 
 
 if __name__ == '__main__':
@@ -80,4 +87,6 @@ if __name__ == '__main__':
     print new_x
 
     y = [[314523, 165538, 416827], [21631], [76255, 165538]]
-    print label_mapping(y)
+    y_converter = YConverter()
+    y_converter.construct(y)
+    print y_converter.convert(y)

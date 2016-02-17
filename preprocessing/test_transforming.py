@@ -1,4 +1,4 @@
-from transforming import XConverter, label_mapping
+from transforming import XConverter, YConverter
 import numpy as np
 from scipy.sparse import csr_matrix
 
@@ -27,9 +27,11 @@ class TestTransformation:
     def pytest_funcarg__y(self):
         return [[314523, 165538, 416827], [21631], [76255, 165538]]
 
-    def test_label_mapping(self, y):
+    def test_y_convert(self, y):
         from array import array
-        new_y = label_mapping(y)
+        yc = YConverter()
+        yc.construct(y)
+        new_y = yc.convert(y)
         assert len(new_y) == 3
         assert new_y[0] == array('I', [0L, 1L, 2L])
         assert new_y[1] == array('I', [3L])
