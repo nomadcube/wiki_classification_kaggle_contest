@@ -23,8 +23,7 @@ def discrimination(one_w, one_x):
 def posterior_prob(w, one_x, one_y, C):
     w_mat = np.array(w).reshape((C, -1))
     denominator = 1.
-    for i, each_w_row in enumerate(w_mat):
-        denominator += np.exp(discrimination(each_w_row.reshape(one_x.shape), one_x))
+    denominator += sum(np.exp(np.dot(w_mat, one_x.transpose())))
     if one_y == C:
         return 1. / denominator
     else:
@@ -64,6 +63,7 @@ class LR:
     def _one_predict(self, one_x):
         max_i = -1
         max_discrimination_val = -1e30
+        # todo: 改成矩阵乘法形式
         for i, each_w in enumerate(self.w):
             current_discrimination_val = discrimination(each_w, one_x)
             if current_discrimination_val > max_discrimination_val:
