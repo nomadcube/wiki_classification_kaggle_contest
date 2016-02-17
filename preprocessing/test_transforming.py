@@ -1,5 +1,4 @@
-from transforming import pick_features, dimension_reduction, feature_mapping, label_mapping
-from tf_idf import tf_idf
+from transforming import XConverter, label_mapping
 import numpy as np
 from scipy.sparse import csr_matrix
 
@@ -11,27 +10,16 @@ class TestTransformation:
         col_index = [1250536, 634175, 805104, 1095476, 805104, 1250536]
         return csr_matrix((element, (row_index, col_index)), shape=(max(row_index) + 1, max(col_index) + 1))
 
-    def test_pick_features(self, origin_x):
-        tf_idf_x = tf_idf(origin_x)
-        features = pick_features(tf_idf_x.indices, tf_idf_x.data, 100)
-        assert len(features) == 1
-        assert 1095476 in features
+    def test_construct(self, origin_x):
+        xc = XConverter(100)
+        xc.construct(origin_x)
+        assert len(xc._selected_features) == 1
+        assert 1095476 in xc._selected_features
 
-    def pytest_funcarg__features(self, origin_x):
-        tf_idf_x = tf_idf(origin_x)
-        return pick_features(tf_idf_x.indices, tf_idf_x.data, 100)
-
-    def test_dimension_reduction(self, origin_x, features):
-        reduced_x = dimension_reduction(origin_x, features)
-        assert isinstance(reduced_x, csr_matrix)
-        assert reduced_x.shape == (3, 1095477)
-        assert reduced_x.nnz == 1
-
-    def pytest_funcarg__reduced_x(self, origin_x, features):
-        return dimension_reduction(origin_x, features)
-
-    def test_feature_mapping(self, reduced_x, features):
-        mapped_x = feature_mapping(reduced_x, features)
+    def test_convert(self, origin_x):
+        xc = XConverter(100)
+        xc.construct(origin_x)
+        mapped_x = xc.convert(origin_x)
         assert isinstance(mapped_x, csr_matrix)
         assert mapped_x.shape == (3, 1)
         assert mapped_x[1, 0] == 4.
