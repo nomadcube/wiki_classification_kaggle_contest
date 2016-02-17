@@ -24,14 +24,14 @@ def empirical_risk(w, y, x):
     res = 0.
     C = _max_class(y)
     w_mat = np.array(w).reshape((C, -1))
+    denominator_mat = np.exp(np.dot(w_mat, x.transpose()))
+    denominator = denominator_mat.sum(axis=0) + 1.
     for i, each_y in enumerate(y):
-        one_x = x[i]
-        denominator = np.exp(np.dot(w_mat, one_x.transpose())).sum() + 1.
         for each_label in each_y:
             if each_label == C:
-                current_posterior_prob = 1. / denominator
+                current_posterior_prob = 1. / denominator[0, i]
             else:
-                current_posterior_prob = np.exp(discrimination(w_mat[each_label], one_x)) / denominator
+                current_posterior_prob = denominator_mat[each_label, i] / denominator[0, i]
             res += np.log(current_posterior_prob)
     return (-1.) * res
 
@@ -76,7 +76,7 @@ if __name__ == '__main__':
          array('f', [3, 2, 1, 1, 3]), array('f', [3, 1, 2, 3, 3])]
     x = np.matrix(np.array(x).reshape((10, 5)))
     print x
-    y = [[0, 1], [0, 1], [1, 2], [0, 1], [0, 2], [1, 2], [0], [0], [2], [1, 2]]
+    y = [[0], [1], [0], [0], [0], [1], [0], [0], [1], [1]]
     print y
     lr = LR(0.3, 1)
     print _max_class(y)
