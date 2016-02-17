@@ -22,8 +22,7 @@ def discrimination(one_w, one_x):
 
 def posterior_prob(w, one_x, one_y, C):
     w_mat = np.array(w).reshape((C, -1))
-    denominator = 1.
-    denominator += sum(np.exp(np.dot(w_mat, one_x.transpose())))
+    denominator = np.exp(np.dot(w_mat, one_x.transpose())).sum() + 1.
     if one_y == C:
         return 1. / denominator
     else:
@@ -45,8 +44,6 @@ class LR:
         self.w = None
 
     def fit(self, y, X):
-        if not isinstance(X, np.ndarray):
-            raise TypeError()
         print _max_class(y)
         init_w = [[0.1] * X.shape[1] for _ in range(_max_class(y))]
         self.w = minimize(
@@ -61,14 +58,9 @@ class LR:
         return estimated_y
 
     def _one_predict(self, one_x):
-        max_i = -1
-        max_discrimination_val = -1e30
-        # todo: 改成矩阵乘法形式
-        for i, each_w in enumerate(self.w):
-            current_discrimination_val = discrimination(each_w, one_x)
-            if current_discrimination_val > max_discrimination_val:
-                max_discrimination_val = current_discrimination_val
-                max_i = i
+        all_discrimination_val = np.dot(self.w, one_x.transpose())
+        max_discrimination_val = max(all_discrimination_val)
+        max_i = np.argmax(all_discrimination_val)
         if max_discrimination_val > 0:
             return [max_i]
         else:
