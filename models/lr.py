@@ -20,20 +20,19 @@ def discrimination(one_w, one_x):
     return one_w * one_x.transpose()
 
 
-def posterior_prob(w, one_x, one_y, C):
-    w_mat = np.array(w).reshape((C, -1))
-    denominator = np.exp(np.dot(w_mat, one_x.transpose())).sum() + 1.
-    if one_y == C:
-        return 1. / denominator
-    else:
-        return np.exp(discrimination(w_mat[one_y], one_x)) / denominator
-
-
 def empirical_risk(w, y, x):
     res = 0.
+    C = _max_class(y)
+    w_mat = np.array(w).reshape((C, -1))
     for i, each_y in enumerate(y):
+        one_x = x[i]
+        denominator = np.exp(np.dot(w_mat, one_x.transpose())).sum() + 1.
         for each_label in each_y:
-            res += np.log(posterior_prob(w, x[i], each_label, _max_class(y)))
+            if each_label == C:
+                current_posterior_prob = 1. / denominator
+            else:
+                current_posterior_prob = np.exp(discrimination(w_mat[each_label], one_x)) / denominator
+            res += np.log(current_posterior_prob)
     return (-1.) * res
 
 
