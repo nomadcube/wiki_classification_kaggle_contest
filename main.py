@@ -14,26 +14,26 @@ def main(in_path, subset_cnt, threshold, mnb_alpha):
     smp = Sample()
     smp.read(in_path)
     print occurrence_distribution(smp.y)
-    test_smp = smp.extract_and_update(subset_cnt)
+    # test_smp = smp.extract_and_update(subset_cnt)
 
-    x_converter = XConverter(threshold)
-    x_converter.construct(smp.x)
-    print len(x_converter.selected_features)
-
-    mapped_reduced_x = x_converter.convert(smp.x)
-    mapped_reduced_test_x = x_converter.convert(test_smp.x)
-
-    y_converter = YConverter()
-    y_converter.construct(smp.y)
-
-    mapped_y = y_converter.convert(smp.y)
-
-    m = LR(0, 2)
-    m.fit(mapped_y, mapped_reduced_x.todense())
-
-    test_predicted_y = m.predict(mapped_reduced_test_x.todense())
-    old_test_predicted_y = y_converter.withdraw_convert(test_predicted_y)
-    return macro_precision_recall(test_smp.y, old_test_predicted_y, smp.class_cnt)
+    # x_converter = XConverter(threshold)
+    # x_converter.construct(smp.x)
+    # print len(x_converter.selected_features)
+    #
+    # mapped_reduced_x = x_converter.convert(smp.x)
+    # mapped_reduced_test_x = x_converter.convert(test_smp.x)
+    #
+    # y_converter = YConverter()
+    # y_converter.construct(smp.y)
+    #
+    # mapped_y = y_converter.convert(smp.y)
+    #
+    # m = LR(0, 2)
+    # m.fit(mapped_y, mapped_reduced_x.todense())
+    #
+    # test_predicted_y = m.predict(mapped_reduced_test_x.todense())
+    # old_test_predicted_y = y_converter.withdraw_convert(test_predicted_y)
+    # return macro_precision_recall(test_smp.y, old_test_predicted_y, smp.class_cnt)
 
 
 if __name__ == '__main__':
