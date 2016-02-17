@@ -11,7 +11,7 @@ class XConverter:
         self._old_new_features_rel = None
         self.selected_features = None
 
-    @profile
+    # @profile
     def construct(self, X):
         if not isinstance(X, csr_matrix):
             raise TypeError()

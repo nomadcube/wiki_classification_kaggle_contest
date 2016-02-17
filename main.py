@@ -10,7 +10,7 @@ from metrics import macro_precision_recall
 from memory_profiler import profile
 
 
-@profile
+# @profile
 def main(in_path, threshold):
     smp = Sample()
     smp.read(in_path)
@@ -45,18 +45,18 @@ if __name__ == '__main__':
 
     start_time = time()
 
-    import cProfile, pstats, StringIO
-
-    pr = cProfile.Profile()
-    pr.enable()
-
+    # import cProfile, pstats, StringIO
+    #
+    # pr = cProfile.Profile()
+    # pr.enable()
+    #
     print(main(in_p, t))
 
-    pr.disable()
-    s = StringIO.StringIO()
-    sortby = 'cumulative'
-    ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
-    ps.print_stats()
-    print s.getvalue()
+    # pr.disable()
+    # s = StringIO.StringIO()
+    # sortby = 'tottime'
+    # ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+    # ps.print_stats()
+    # print s.getvalue()
 
     print(time() - start_time)
