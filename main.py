@@ -8,6 +8,7 @@ from models.mnb import MNB
 from models.lr import LR
 from metrics import macro_precision_recall
 from memory_profiler import profile
+from preprocessing.tf_idf import tf_idf
 
 
 # @profile
@@ -22,8 +23,8 @@ def main(in_path, threshold):
     x_converter.construct(smp.x)
     print len(x_converter.selected_features)
 
-    mapped_reduced_x = x_converter.convert(smp.x)
-    mapped_reduced_test_x = x_converter.convert(test_smp.x)
+    mapped_reduced_x = tf_idf(x_converter.convert(smp.x))
+    mapped_reduced_test_x = tf_idf(x_converter.convert(test_smp.x))
 
     y_converter = YConverter()
     y_converter.construct(smp.y)
