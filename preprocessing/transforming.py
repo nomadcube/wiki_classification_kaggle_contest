@@ -61,6 +61,16 @@ class YConverter:
             new_y.append(new_labels)
         return new_y
 
+    def withdraw_convert(self, new_y):
+        new_old_relation = {new: old for old, new in self.label_old_new_relation.items()}
+        y = list()
+        for labels in new_y:
+            new_labels = array('I')
+            for each_label in labels:
+                new_labels.append(new_old_relation[each_label])
+            y.append(new_labels)
+        return y
+
 
 def convert_y_to_csr(y, element_dtype='float', max_n_dim=None):
     elements = array('f')
@@ -90,3 +100,4 @@ if __name__ == '__main__':
     y_converter = YConverter()
     y_converter.construct(y)
     print y_converter.convert(y)
+    print y_converter.withdraw_convert(y_converter.convert(y))

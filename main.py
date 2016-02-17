@@ -3,7 +3,7 @@ import sys
 from time import time
 
 from read import Sample
-from preprocessing.transforming import label_mapping, XConverter
+from preprocessing.transforming import YConverter, XConverter
 from models.mnb import MNB
 from models.lr import LR
 from metrics import macro_precision_recall
@@ -21,7 +21,10 @@ def main(in_path, subset_cnt, threshold, mnb_alpha):
     mapped_reduced_x = x_converter.convert(smp.x)
     mapped_reduced_test_x = x_converter.convert(test_smp.x)
 
-    mapped_y = label_mapping(smp.y)
+    y_converter = YConverter()
+    y_converter.construct(smp.y)
+
+    mapped_y = y_converter.convert(smp.y)
 
     m = LR(0, 2)
     m.fit(mapped_y, mapped_reduced_x.todense())
