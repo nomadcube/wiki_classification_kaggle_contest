@@ -7,11 +7,13 @@ from preprocessing.transforming import YConverter, XConverter
 from models.mnb import MNB
 from models.lr import LR
 from metrics import macro_precision_recall
+from data_analysis.labels import occurrence_distribution
 
 
 def main(in_path, subset_cnt, threshold, mnb_alpha):
     smp = Sample()
     smp.read(in_path)
+    print occurrence_distribution(smp.y)
     test_smp = smp.extract_and_update(subset_cnt)
 
     x_converter = XConverter(threshold)
