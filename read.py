@@ -15,6 +15,9 @@ class Sample:
         self._row_indptr.append(0)
         self._col_index = array('I')
 
+    def __len__(self):
+        return len(self.y)
+
     def read(self, data_file_path):
         with open(data_file_path) as f:
             for line_no, line in enumerate(f.__iter__()):

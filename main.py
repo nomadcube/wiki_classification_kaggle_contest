@@ -10,11 +10,12 @@ from metrics import macro_precision_recall
 from data_analysis.labels import occurrence
 
 
-def main(in_path, subset_cnt, threshold, mnb_alpha):
+def main(in_path, threshold):
     smp = Sample()
     smp.read(in_path)
-    print occurrence(smp.y)
-    test_smp = smp.extract_and_update(subset_cnt)
+    smp, test_smp = smp.extract_and_update()
+    print len(smp.y)
+    print len(test_smp.y)
 
     x_converter = XConverter(threshold)
     x_converter.construct(smp.x)
@@ -50,7 +51,7 @@ if __name__ == '__main__':
     pr = cProfile.Profile()
     pr.enable()
 
-    print(main(in_p, sc, t, alpha))
+    print(main(in_p, sc))
 
     pr.disable()
     s = StringIO.StringIO()
