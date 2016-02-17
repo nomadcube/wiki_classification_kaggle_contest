@@ -35,7 +35,7 @@ def main(in_path, threshold):
     # m_lr.fit(mapped_y, mapped_reduced_x.todense())
     # test_predicted_y = m_lr.predict(mapped_reduced_test_x.todense())
 
-    mnb = MNB(0.)
+    mnb = MNB(1.)
     mnb.fit(convert_y_to_csr(mapped_y), mapped_reduced_x)
     test_predicted_y = mnb.predict(mapped_reduced_test_x)
     old_test_predicted_y = y_converter.withdraw_convert(test_predicted_y)
