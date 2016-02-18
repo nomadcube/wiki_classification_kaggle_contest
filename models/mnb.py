@@ -1,6 +1,8 @@
+# coding=utf-8
 import numpy as np
 from scipy.sparse import csr_matrix, csc_matrix, lil_matrix
 from functools import partial
+from multiprocessing import Pool
 
 
 class MNB:
@@ -37,33 +39,33 @@ class MNB:
 
     def predict(self, x, k=1):
         x = x.tolil()
-        labels = list()
-        for sample_no in xrange(len(x.data)):
-            class_scores = self._one_sample_predict(x, sample_no)
-            labels.append(top_k_keys(class_scores, k))
-        return labels
+        partial_one_sample_predict = partial(_one_sample_predict, b=self.b, w=self.w, x=x, k=k)
+        pool = Pool(processes=4)
+        return pool.map(partial_one_sample_predict, xrange(len(x.data)))
 
-    def _one_sample_predict(self, x, sample_no):
-        class_scores = dict()
-        x_row_tmp = x.rows[sample_no]
-        x_data_tmp = x.data[sample_no]
-        sample_indices_data = {x_row_tmp[i]: x_data_tmp[i] for i in xrange(len(x_data_tmp))}
-        for label_no in xrange(1, len(self.w.data)):
-            w_data_tmp = self.w.data[label_no]
-            w_row_tmp = self.w.rows[label_no]
-            label_indices_data = dict()
-            for i in xrange(len(w_data_tmp)):
-                label_indices_data[w_row_tmp[i]] = w_data_tmp[i]
-            if len(label_indices_data) == 0:
-                continue
-            sample_class_score = self.b[label_no]
-            if sample_class_score == -float("inf") or len(
-                    set(sample_indices_data.keys()).difference(set(label_indices_data.keys()))) > 0:
-                continue
-            for feature in set(sample_indices_data.keys()).intersection(set(label_indices_data.keys())):
-                sample_class_score += sample_indices_data[feature] * label_indices_data[feature]
-            class_scores[label_no] = sample_class_score
-        return class_scores
+
+def _one_sample_predict(sample_no, b, w, x, k):
+    class_scores = dict()
+    x_row_tmp = x.rows[sample_no]
+    x_data_tmp = x.data[sample_no]
+    sample_indices_data = {x_row_tmp[i]: x_data_tmp[i] for i in xrange(len(x_data_tmp))}
+    for label_no in xrange(1, len(w.data)):
+        # todo: 用多线程优化
+        w_data_tmp = w.data[label_no]
+        w_row_tmp = w.rows[label_no]
+        label_indices_data = dict()
+        for i in xrange(len(w_data_tmp)):
+            label_indices_data[w_row_tmp[i]] = w_data_tmp[i]
+        if len(label_indices_data) == 0:
+            continue
+        sample_class_score = b[label_no]
+        if sample_class_score == -float("inf") or len(
+                set(sample_indices_data.keys()).difference(set(label_indices_data.keys()))) > 0:
+            continue
+        for feature in set(sample_indices_data.keys()).intersection(set(label_indices_data.keys())):
+            sample_class_score += sample_indices_data[feature] * label_indices_data[feature]
+        class_scores[label_no] = sample_class_score
+    return top_k_keys(class_scores, k)
 
 
 def top_k_keys(d, k):
