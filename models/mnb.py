@@ -42,24 +42,28 @@ class MNB:
             x_row_tmp = x.rows[sample_no]
             x_data_tmp = x.data[sample_no]
             sample_indices_data = {x_row_tmp[i]: x_data_tmp[i] for i in xrange(len(x_data_tmp))}
-            class_scores = dict()
-            for label_no in xrange(1, len(self.w.data)):
-                w_data_tmp = self.w.data[label_no]
-                w_row_tmp = self.w.rows[label_no]
-                label_indices_data = dict()
-                for i in xrange(len(w_data_tmp)):
-                    label_indices_data[w_row_tmp[i]] = w_data_tmp[i]
-                if len(label_indices_data) == 0:
-                    continue
-                sample_class_score = self.b[label_no]
-                if sample_class_score == -float("inf") or len(
-                        set(sample_indices_data.keys()).difference(set(label_indices_data.keys()))) > 0:
-                    continue
-                for feature in set(sample_indices_data.keys()).intersection(set(label_indices_data.keys())):
-                    sample_class_score += sample_indices_data[feature] * label_indices_data[feature]
-                class_scores[label_no] = sample_class_score
+            class_scores = self._one_sample_predict(sample_indices_data)
             labels.append(top_k_keys(class_scores, k))
         return labels
+
+    def _one_sample_predict(self, one_x):
+        class_scores = dict()
+        for label_no in xrange(1, len(self.w.data)):
+            w_data_tmp = self.w.data[label_no]
+            w_row_tmp = self.w.rows[label_no]
+            label_indices_data = dict()
+            for i in xrange(len(w_data_tmp)):
+                label_indices_data[w_row_tmp[i]] = w_data_tmp[i]
+            if len(label_indices_data) == 0:
+                continue
+            sample_class_score = self.b[label_no]
+            if sample_class_score == -float("inf") or len(
+                    set(one_x.keys()).difference(set(label_indices_data.keys()))) > 0:
+                continue
+            for feature in set(one_x.keys()).intersection(set(label_indices_data.keys())):
+                sample_class_score += one_x[feature] * label_indices_data[feature]
+            class_scores[label_no] = sample_class_score
+        return class_scores
 
 
 def top_k_keys(d, k):
