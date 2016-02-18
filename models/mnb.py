@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.sparse import csr_matrix, csc_matrix, lil_matrix
+from collections import defaultdict
 
 
 class MNB:
@@ -45,7 +46,9 @@ class MNB:
             for label_no in xrange(len(self.w.data)):
                 w_data_tmp = self.w.data[label_no]
                 w_row_tmp = self.w.rows[label_no]
-                label_indices_data = {w_row_tmp[i]: w_data_tmp[i] for i in xrange(len(w_data_tmp))}
+                label_indices_data = dict()
+                for i in xrange(len(w_data_tmp)):
+                    label_indices_data[w_row_tmp[i]] = w_data_tmp[i]
                 if len(label_indices_data) == 0:
                     continue
                 sample_class_score = self.b[label_no]
