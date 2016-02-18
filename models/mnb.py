@@ -38,11 +38,14 @@ class MNB:
         x = x.tolil()
         labels = list()
         for sample_no in xrange(len(x.data)):
-            sample_indices_data = {x.rows[sample_no][i]: x.data[sample_no][i] for i in xrange(len(x.data[sample_no]))}
+            x_row_tmp = x.rows[sample_no]
+            x_data_tmp = x.data[sample_no]
+            sample_indices_data = {x_row_tmp[i]: x_data_tmp[i] for i in xrange(len(x_data_tmp))}
             class_scores = dict()
             for label_no in xrange(len(self.w.data)):
-                label_indices_data = {self.w.rows[label_no][i]: self.w.data[label_no][i] for i in
-                                      xrange(len(self.w.data[label_no]))}
+                w_data_tmp = self.w.data[label_no]
+                w_row_tmp = self.w.rows[label_no]
+                label_indices_data = {w_row_tmp[i]: w_data_tmp[i] for i in xrange(len(w_data_tmp))}
                 if len(label_indices_data) == 0:
                     continue
                 sample_class_score = self.b[label_no]
