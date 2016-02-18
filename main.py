@@ -5,7 +5,6 @@ from time import time
 from read import Sample
 from preprocessing.transforming import YConverter, XConverter, convert_y_to_csr
 from models.mnb import MNB
-from models.lr import LR
 from metrics import macro_precision_recall
 from memory_profiler import profile
 from preprocessing.tf_idf import tf_idf
@@ -30,10 +29,6 @@ def main(in_path, threshold):
     y_converter.construct(smp.y)
 
     mapped_y = y_converter.convert(train_smp.y)
-
-    # m_lr = LR(0, 2)
-    # m_lr.fit(mapped_y, mapped_reduced_x.todense())
-    # test_predicted_y = m_lr.predict(mapped_reduced_test_x.todense())
 
     mnb = MNB(1.)
     mnb.fit(convert_y_to_csr(mapped_y), mapped_reduced_x)

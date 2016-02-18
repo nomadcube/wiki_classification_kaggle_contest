@@ -39,8 +39,7 @@ class MNB:
         labels = list()
         for sample_no in xrange(len(x.data)):
             sample_indices_data = {x.rows[sample_no][i]: x.data[sample_no][i] for i in xrange(len(x.data[sample_no]))}
-            max_class = 0
-            max_score = -1e30
+            class_scores = dict()
             for label_no in xrange(len(self.w.data)):
                 label_indices_data = {self.w.rows[label_no][i]: self.w.data[label_no][i] for i in
                                       xrange(len(self.w.data[label_no]))}
@@ -52,14 +51,22 @@ class MNB:
                     continue
                 for feature in set(sample_indices_data.keys()).intersection(set(label_indices_data.keys())):
                     sample_class_score += sample_indices_data[feature] * label_indices_data[feature]
-                if sample_class_score > max_score:
-                    max_score = sample_class_score
-                    max_class = label_no
-            labels.append([max_class])
+                class_scores[label_no] = sample_class_score
+            labels.append(top_k_keys(class_scores, 2))
         return labels
 
 
+def top_k_keys(d, k):
+    if not isinstance(d, dict):
+        raise TypeError()
+    sorted_d = sorted(d, key=lambda x: d[x], reverse=True)
+    return sorted_d[:k]
+
+
 if __name__ == '__main__':
+    test_d = {'a': 2, 'b': 3, 'c': 1}
+    print top_k_keys(test_d, 1)
+
     from preprocessing import tf_idf, transforming
 
     y = transforming.convert_y_to_csr(np.array([[0], [0], [1], [1], [0],
