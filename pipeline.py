@@ -10,7 +10,6 @@ import sys
 
 class PipeLine:
     def __init__(self, threshold, smooth_coef, predict_cnt):
-        # todo: 在PipeLine对象中保存最优模型、XConverter/YConverter的二进制数据
         self._threshold = threshold
         self._smooth_coef = smooth_coef
         self._predict_cnt = predict_cnt
@@ -61,11 +60,6 @@ class PipeLine:
                 self.best_model = mnb
                 self.x_converter = x_converter
                 self.y_converter = y_converter
-
-
-def cross_validation():
-    # todo: 将PipeLine中选模型的功能抽象出来
-    return 'model with highest f-score.'
 
 
 if __name__ == '__main__':
