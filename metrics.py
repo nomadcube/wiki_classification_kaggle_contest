@@ -7,7 +7,7 @@ def macro_precision_recall(y, predicted_y):
     recall = array('f')
 
     y_mat = convert_y_to_csr(y, element_dtype='float').transpose().tolil()
-    pred_mat = convert_y_to_csr(predicted_y, element_dtype='float', max_n_dim=y_mat.shape[0]).transpose().tolil()
+    pred_mat = convert_y_to_csr(predicted_y, element_dtype='float').transpose().tolil()
 
     for row_no in range(y_mat.shape[0]):
         if y_mat[row_no].nnz == 0:
