@@ -9,6 +9,7 @@ from models.lr import LR
 from metrics import macro_precision_recall
 from memory_profiler import profile
 from preprocessing.tf_idf import tf_idf
+from models.lr import _max_class
 
 
 # @profile
@@ -37,10 +38,11 @@ def main(in_path, threshold):
 
     mnb = MNB(1.)
     mnb.fit(convert_y_to_csr(mapped_y), mapped_reduced_x)
-    test_predicted_y = mnb.predict(mapped_reduced_test_x)
-    old_test_predicted_y = y_converter.withdraw_convert(test_predicted_y)
+    mapped_test_predicted_y = mnb.predict(mapped_reduced_test_x)
 
-    return macro_precision_recall(test_smp.y, old_test_predicted_y, smp.class_cnt)
+    mapped_test_y = y_converter.convert(test_smp.y)
+
+    return macro_precision_recall(mapped_test_y, mapped_test_predicted_y)
 
 
 if __name__ == '__main__':

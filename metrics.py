@@ -1,47 +1,28 @@
-from collections import namedtuple
-
-import numpy as np
-import numpy.ma as nma
-
 from preprocessing.transforming import convert_y_to_csr
 
 
-def confusion_matrix(y, predicted_y, total_class_cnt):
-    """
-    :param y: list
-    :param predicted_y: list
-    :param total_class_cnt: int
-    :return: confusion_matrix
-    """
-    res = namedtuple('confusion_matrix', 'true_positive false_negative false_positive true_negative')
+def macro_precision_recall(y, predicted_y):
+    precision = array('f')
+    recall = array('f')
 
-    y_mat = convert_y_to_csr(y, element_dtype='bool', max_n_dim=total_class_cnt).transpose()
-    pred_mat = convert_y_to_csr(predicted_y, element_dtype='bool', max_n_dim=total_class_cnt).transpose()
+    y_mat = convert_y_to_csr(y, element_dtype='float').transpose().tolil()
+    pred_mat = convert_y_to_csr(predicted_y, element_dtype='float', max_n_dim=y_mat.shape[0]).transpose().tolil()
 
-    y_pred_logical_and = y_mat.multiply(pred_mat)
-
-    y_pred_positive = np.array(y_pred_logical_and.sum(axis=1).ravel(), dtype='float')[0]
-    y_positive = np.array(y_mat.sum(axis=1).ravel(), dtype='float')[0]
-    pred_positive = np.array(pred_mat.sum(axis=1).ravel(), dtype='float')[0]
-    return res(y_pred_positive, (y_positive - y_pred_positive), (pred_positive - y_pred_positive),
-               (y_mat.shape[0] - (y_positive + (pred_positive - y_pred_positive))))
-
-
-def macro_precision_recall(y, predicted_y, max_n_dim):
-    confusion_mat = confusion_matrix(y, predicted_y, max_n_dim)
-    y_positive = nma.masked_values(confusion_mat.true_positive + confusion_mat.false_negative, 0.)
-    pred_positive = nma.masked_values(confusion_mat.true_positive + confusion_mat.false_positive, 0.)
-    precision = nma.masked_array(confusion_mat.true_positive, y_positive.mask) / y_positive
-    recall = nma.masked_array(confusion_mat.true_positive, pred_positive.mask) / pred_positive
-    return precision.mean(), recall.mean()
+    for row_no in range(y_mat.shape[0]):
+        if y_mat[row_no].nnz == 0:
+            continue
+        true_positive = (y_mat[row_no].multiply(pred_mat[row_no])).data.sum()
+        y_pos = y_mat[row_no].data.sum()
+        pred_pos = pred_mat[row_no].data.sum() if pred_mat[row_no].nnz > 0 else 0.
+        precision.append(true_positive / y_pos) if y_pos > 0. else precision.append(0.)
+        recall.append(true_positive / pred_pos) if pred_pos > 0. else recall.append(0.)
+    return sum(precision) / len(precision), sum(recall) / len(recall)
 
 
 if __name__ == '__main__':
     from array import array
 
-    test_y = [array('I', [407027L]), array('I', [382729L]), array('I', [407027L]), array('I', [407027L]),
-              array('I', [382729L]), array('I', [382729L]), array('I', [382729L]), array('I', [407027L]),
-              array('I', [382729L]), array('I', [407027L])]
-    test_predicted_y = [[407027], [0], [0], [0], [382729], [0], [382729], [0], [0], [0]]
-    print(macro_precision_recall(test_y, test_predicted_y, 416828)[0])
-    print(macro_precision_recall(test_y, test_predicted_y, 416828)[1])
+    test_y = [array('I', [65L, 66L, 67L, 68L, 69L]), array('I', [15L, 16L, 17L, 18L])]
+    test_predicted_y = [[0], [15]]
+    print(macro_precision_recall(test_y, test_predicted_y)[0])
+    print(macro_precision_recall(test_y, test_predicted_y)[1])
