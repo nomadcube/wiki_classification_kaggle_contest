@@ -1,3 +1,4 @@
 {
+  "models/test_mnb.py::TestMNB::()::test_predict": true, 
   "test_metrics.py::TestMetrics::()::test_macro_precision_recall": true
 }
