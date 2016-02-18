@@ -43,7 +43,7 @@ class MNB:
             x_data_tmp = x.data[sample_no]
             sample_indices_data = {x_row_tmp[i]: x_data_tmp[i] for i in xrange(len(x_data_tmp))}
             class_scores = dict()
-            for label_no in xrange(len(self.w.data)):
+            for label_no in xrange(1, len(self.w.data)):
                 w_data_tmp = self.w.data[label_no]
                 w_row_tmp = self.w.rows[label_no]
                 label_indices_data = dict()
