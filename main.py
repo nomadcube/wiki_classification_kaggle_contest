@@ -9,7 +9,6 @@ from models.lr import LR
 from metrics import macro_precision_recall
 from memory_profiler import profile
 from preprocessing.tf_idf import tf_idf
-from models.lr import _max_class
 
 
 # @profile
