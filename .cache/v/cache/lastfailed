@@ -1,1 +1,3 @@
-{}
+{
+  "preprocessing/test_transforming.py::TestTransformation::()::test_y_convert": true
+}
