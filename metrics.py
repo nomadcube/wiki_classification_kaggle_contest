@@ -18,8 +18,6 @@ def macro_precision_recall(y, predicted_y):
         pred_pos = sum(pred_mat[row_no].data[0])
         precision.append(true_positive / y_pos) if y_pos > 0. else precision.append(0.)
         recall.append(true_positive / pred_pos) if pred_pos > 0. else recall.append(0.)
-    print precision
-    print recall
     return sum(precision) / len(precision), sum(recall) / len(recall)
 
 
