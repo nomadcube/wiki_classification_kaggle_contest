@@ -49,8 +49,8 @@ class CrossValidation:
             mapped_test_y = y_converter.convert(test_smp.y)
 
             mpr_mre = macro_precision_recall(mapped_test_y, mapped_test_predicted_y)
-            self.pipeline_info[experiment_no]['macro_precision'] = mpr_mre[0]
-            self.pipeline_info[experiment_no]['macro_recall'] = mpr_mre[1]
+            self.pipeline_info[experiment_no]['macro_precision'] = round(mpr_mre[0], 3)
+            self.pipeline_info[experiment_no]['macro_recall'] = round(mpr_mre[1], 3)
 
 
 if __name__ == '__main__':
