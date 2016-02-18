@@ -33,6 +33,6 @@ class TestTransformation:
         yc.construct(y)
         new_y = yc.convert(y)
         assert len(new_y) == 3
-        assert new_y[0] == array('I', [0L, 1L, 2L])
-        assert new_y[1] == array('I', [3L])
-        assert new_y[2] == array('I', [4L, 1L])
+        assert new_y[0] == array('I', [1L, 2L, 3L])
+        assert new_y[1] == array('I', [4L])
+        assert new_y[2] == array('I', [5L, 2L])
