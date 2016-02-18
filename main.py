@@ -44,7 +44,7 @@ if __name__ == '__main__':
         sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/input_data/small_origin_train_subset.csv'
     TF_IDF_THRESHOLD = float(sys.argv[2]) if len(sys.argv) > 2 else 99.5
     MNB_SMOOTH_COEF = float(sys.argv[3]) if len(sys.argv) > 3 else 1.
-    PREDICT_CNT = int(sys.argv[4]) if len(sys.argv) > 4 else 1.
+    PREDICT_CNT = int(sys.argv[4]) if len(sys.argv) > 4 else 1
 
     start_time = time()
 
