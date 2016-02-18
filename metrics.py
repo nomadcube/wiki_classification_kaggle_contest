@@ -14,8 +14,8 @@ def macro_precision_recall(y, predicted_y):
             continue
         inter_mat = y_mat[row_no].multiply(pred_mat[row_no])
         true_positive = inter_mat.data.sum() if inter_mat.nnz > 0 else 0.
-        y_pos = y_mat[row_no].data.sum()[0]
-        pred_pos = pred_mat[row_no].data.sum()[0] if pred_mat[row_no].nnz > 0 else 0.
+        y_pos = sum(y_mat[row_no].data[0])
+        pred_pos = sum(pred_mat[row_no].data[0])
         precision.append(true_positive / y_pos) if y_pos > 0. else precision.append(0.)
         recall.append(true_positive / pred_pos) if pred_pos > 0. else recall.append(0.)
     print precision
@@ -24,7 +24,7 @@ def macro_precision_recall(y, predicted_y):
 
 
 if __name__ == '__main__':
-    test_y = [array('I', [65L, 66L, 67L, 68L, 69L]), array('I', [15L, 16L, 17L, 18L])]
+    test_y = [array('I', [65L, 66L, 67L, 68L, 69L]), array('I', [15L, 66L, 17L, 18L])]
     test_predicted_y = [[0], [15]]
     print(macro_precision_recall(test_y, test_predicted_y)[0])
     print(macro_precision_recall(test_y, test_predicted_y)[1])
