@@ -3,6 +3,8 @@ from read import Sample
 
 
 def submission(test_file_path, output_file_path, pipeline):
+    print pipeline.best_f_score
+
     exam_smp = Sample()
     exam_smp.read(test_file_path)
 
@@ -19,7 +21,7 @@ def submission(test_file_path, output_file_path, pipeline):
 if __name__ == '__main__':
     from pipeline import PipeLine
 
-    pl = PipeLine([97, 95, 93], [1.0, 0.0], [1, 2, 3])
+    pl = PipeLine([97], [1.0], [3])
     in_file = '/Users/wumengling/PycharmProjects/kaggle/input_data/small_origin_train_subset.csv'
     pl.run(in_file)
     out_file = '/Users/wumengling/PycharmProjects/kaggle/output_data/submission.csv'
