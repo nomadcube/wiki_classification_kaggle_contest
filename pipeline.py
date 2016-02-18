@@ -54,6 +54,6 @@ class CrossValidation:
 
 
 if __name__ == '__main__':
-    cv = CrossValidation([99.9, 99.7, 99.5], [1.0], [1, 2, 3])
+    cv = CrossValidation([97, 95, 93], [1.0, 0.0], [1, 2, 3])
     cv.run('/Users/wumengling/PycharmProjects/kaggle/input_data/small_origin_train_subset.csv')
     print cv.pipeline_info
