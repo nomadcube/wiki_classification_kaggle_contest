@@ -6,13 +6,13 @@ def submission(test_file_path, output_file_path, pipeline):
     exam_smp = Sample()
     exam_smp.read(test_file_path)
 
-    transformed_x = pipeline.x_converter.convert(exam_smp.x)
-    predicted_y = pipeline.best_model.predict(transformed_x)
-    origin_predicted_y = pipeline.y_converter.withdraw_convert(predicted_y)
+    transformed_x = pipeline.best_x_converter.convert(exam_smp.x)
+    predicted_y = pipeline.best_model.predict(transformed_x, pipeline.best_predicted_cnt)
+    origin_predicted_y = pipeline.best_y_converter.withdraw_convert(predicted_y)
 
     with open(output_file_path, 'w') as out:
         for i, each_predicted_y in enumerate(origin_predicted_y):
-            out.write(repr(i) + ',' + ','.join([str(i) for i in each_predicted_y]) + '\n')
+            out.write(repr(i) + ',' + ' '.join([str(i) for i in each_predicted_y]) + '\n')
         out.flush()
 
 
