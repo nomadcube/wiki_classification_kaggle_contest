@@ -4,6 +4,7 @@ from preprocessing.transforming import YConverter, XConverter, convert_y_to_csr
 from models.mnb import MNB
 from metrics import macro_precision_recall
 from preprocessing.tf_idf import tf_idf
+import sys
 
 
 class CrossValidation:
@@ -54,6 +55,8 @@ class CrossValidation:
 
 
 if __name__ == '__main__':
+    PATH = sys.argv[1] if len(
+        sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/input_data/small_origin_train_subset.csv'
     cv = CrossValidation([97, 95, 93], [1.0, 0.0], [1, 2, 3])
-    cv.run('/Users/wumengling/PycharmProjects/kaggle/input_data/small_origin_train_subset.csv')
+    cv.run(PATH)
     print cv.pipeline_info
