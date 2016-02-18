@@ -34,7 +34,7 @@ class MNB:
             self.w = y_x_param.tolil()
         return self
 
-    def predict(self, x):
+    def predict(self, x, k=1):
         x = x.tolil()
         labels = list()
         for sample_no in xrange(len(x.data)):
@@ -52,7 +52,7 @@ class MNB:
                 for feature in set(sample_indices_data.keys()).intersection(set(label_indices_data.keys())):
                     sample_class_score += sample_indices_data[feature] * label_indices_data[feature]
                 class_scores[label_no] = sample_class_score
-            labels.append(top_k_keys(class_scores, 2))
+            labels.append(top_k_keys(class_scores, k))
         return labels
 
 
