@@ -12,9 +12,10 @@ def macro_precision_recall(y, predicted_y):
     for row_no in range(y_mat.shape[0]):
         if y_mat[row_no].nnz == 0:
             continue
-        true_positive = (y_mat[row_no].multiply(pred_mat[row_no])).data.sum()
-        y_pos = y_mat[row_no].data.sum()
-        pred_pos = pred_mat[row_no].data.sum() if pred_mat[row_no].nnz > 0 else 0.
+        inter_mat = y_mat[row_no].multiply(pred_mat[row_no])
+        true_positive = inter_mat.data.sum() if inter_mat.nnz > 0 else 0.
+        y_pos = y_mat[row_no].data.sum()[0]
+        pred_pos = pred_mat[row_no].data.sum()[0] if pred_mat[row_no].nnz > 0 else 0.
         precision.append(true_positive / y_pos) if y_pos > 0. else precision.append(0.)
         recall.append(true_positive / pred_pos) if pred_pos > 0. else recall.append(0.)
     return sum(precision) / len(precision), sum(recall) / len(recall)

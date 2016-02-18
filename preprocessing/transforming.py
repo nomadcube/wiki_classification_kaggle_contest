@@ -52,7 +52,7 @@ class YConverter:
         for labels in y:
             for each_label in labels:
                 if each_label not in self.label_old_new_relation.keys():
-                    self.label_old_new_relation[each_label] = len(self.label_old_new_relation)
+                    self.label_old_new_relation[each_label] = len(self.label_old_new_relation) + 1
 
     def convert(self, y):
         new_y = list()
