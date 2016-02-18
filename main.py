@@ -16,21 +16,21 @@ from models.lr import _max_class
 def main(in_path, threshold):
     smp = Sample()
     smp.read(in_path)
-    smp, test_smp = smp.extract_and_update()
-    print len(smp)
+    train_smp, test_smp = smp.extract_and_update()
+    print len(train_smp)
     print len(test_smp)
 
     x_converter = XConverter(threshold)
-    x_converter.construct(smp.x)
+    x_converter.construct(train_smp.x)
     print len(x_converter.selected_features)
 
-    mapped_reduced_x = tf_idf(x_converter.convert(smp.x))
+    mapped_reduced_x = tf_idf(x_converter.convert(train_smp.x))
     mapped_reduced_test_x = tf_idf(x_converter.convert(test_smp.x))
 
     y_converter = YConverter()
     y_converter.construct(smp.y)
 
-    mapped_y = y_converter.convert(smp.y)
+    mapped_y = y_converter.convert(train_smp.y)
 
     # m_lr = LR(0, 2)
     # m_lr.fit(mapped_y, mapped_reduced_x.todense())
