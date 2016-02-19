@@ -62,3 +62,4 @@ class TestMNB:
     def test_predict(self, x, fitted_m):
         predict_res = fitted_m.predict(x)
         assert len(predict_res) == 15
+        assert predict_res == [[0], [0], [0], [0], [0], [0], [1], [1], [1], [1], [1], [1], [1], [1], [1]]
