@@ -12,6 +12,7 @@ class BaseMNB:
     def fit(self, y, x):
         self.b = self._estimate_b(y)
         self.w = self._estimate_w(y, x)
+        return self
 
     @staticmethod
     def _estimate_b(y):
