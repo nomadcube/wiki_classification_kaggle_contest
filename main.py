@@ -7,14 +7,15 @@ import sys
 if __name__ == '__main__':
     in_file = sys.argv[1] if len(
         sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/input_data/origin_train_subset.csv'
-    # out_file = '/Users/wumengling/PycharmProjects/kaggle/output_data/submission.csv'
-    pipeline = PipeLine(LaplaceSmoothedMNB, [90, 80, 50], [5, 3])
+    out_file = sys.argv[2] if len(
+        sys.argv) > 2 else '/Users/wumengling/PycharmProjects/kaggle/output_data/submission.csv'
+    pipeline = PipeLine(LaplaceSmoothedMNB, [90], [3])
 
     pr = cProfile.Profile()
     pr.enable()
 
     pipeline.run(in_file)
-    # submission(in_file, out_file, pipeline)
+    submission(in_file, out_file, pipeline)
 
     pr.disable()
     s = StringIO.StringIO()

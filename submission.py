@@ -13,6 +13,7 @@ def submission(test_file_path, output_file_path, pipeline):
     origin_predicted_y = pipeline.best_y_converter.withdraw_convert(predicted_y)
 
     with open(output_file_path, 'w') as out:
+        out.write('Id,Predicted' + '\n')
         for i, each_predicted_y in enumerate(origin_predicted_y):
             out.write(repr(i) + ',' + ' '.join([str(i) for i in each_predicted_y]) + '\n')
         out.flush()
