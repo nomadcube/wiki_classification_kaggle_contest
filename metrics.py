@@ -1,7 +1,7 @@
 # coding=utf-8
 from preprocessing.transforming import convert_y_to_csr
 from array import array
-from numpy.ma import masked_values, masked
+from numpy.ma import masked_values
 
 
 def macro_precision_recall(y, predicted_y, common_labels_cnt):
