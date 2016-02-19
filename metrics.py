@@ -2,7 +2,7 @@ from preprocessing.transforming import convert_y_to_csr
 from array import array
 
 
-def macro_precision_recall(y, predicted_y):
+def macro_precision_recall(y, predicted_y, common_labels_cnt):
     precision = array('f')
     recall = array('f')
 
@@ -18,7 +18,7 @@ def macro_precision_recall(y, predicted_y):
         pred_pos = sum(pred_mat[row_no].data[0])
         precision.append(true_positive / y_pos) if y_pos > 0. else precision.append(0.)
         recall.append(true_positive / pred_pos) if pred_pos > 0. else recall.append(0.)
-    return sum(precision) / len(precision), sum(recall) / len(recall)
+    return sum(precision) / common_labels_cnt, sum(recall) / common_labels_cnt
 
 
 if __name__ == '__main__':

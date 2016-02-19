@@ -22,7 +22,7 @@ class PipeLine:
     def run(self, in_path):
         smp = Sample()
         smp.read(in_path)
-        train_smp, test_smp = smp.extract_and_update()
+        train_smp, test_smp, common_labels_cnt = smp.extract_and_update()
 
         y_converter = YConverter()
         y_converter.construct(smp.y)
@@ -43,7 +43,7 @@ class PipeLine:
             mapped_test_predicted_y = mnb.predict(mapped_reduced_test_x, predict_cnt)
             mapped_test_y = y_converter.convert(test_smp.y)
 
-            mpr_mre = macro_precision_recall(mapped_test_y, mapped_test_predicted_y)
+            mpr_mre = macro_precision_recall(mapped_test_y, mapped_test_predicted_y, common_labels_cnt)
             f_score = 1. / (1. / mpr_mre[0] + 1. / mpr_mre[1]) if mpr_mre[0] != 0. and mpr_mre[1] != 0. else float(
                 "inf")
             print mpr_mre

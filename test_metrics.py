@@ -10,6 +10,6 @@ class TestMetrics:
         return [[0], [15]]
 
     def test_macro_precision_recall(self, y, predicted_y):
-        mpr = metrics.macro_precision_recall(y, predicted_y)
+        mpr = metrics.macro_precision_recall(y, predicted_y, 8)
         assert mpr[0] == 0.125
         assert mpr[1] == 0.125
