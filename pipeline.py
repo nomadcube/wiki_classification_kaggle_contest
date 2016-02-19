@@ -46,6 +46,8 @@ class PipeLine:
             mpr_mre = macro_precision_recall(mapped_test_y, mapped_test_predicted_y)
             f_score = 1. / (1. / mpr_mre[0] + 1. / mpr_mre[1]) if mpr_mre[0] != 0. and mpr_mre[1] != 0. else float(
                 "inf")
+            print mpr_mre
+            print f_score
 
             if f_score > self.best_f_score:
                 self.best_f_score = round(f_score, 3)
