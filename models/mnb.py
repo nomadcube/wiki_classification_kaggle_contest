@@ -38,6 +38,15 @@ class MNB:
         return self
 
     def predict(self, x, k=1):
+        if self._alpha == 0.:
+            return self._non_smoothed_predict(x, k)
+        else:
+            return self._smooth_predict(x, k)
+
+    def _smooth_predict(self, x, k=1):
+        pass
+
+    def _non_smoothed_predict(self, x, k=1):
         x = x.tolil()
         labels = list()
         for sample_no in xrange(len(x.data)):
@@ -60,8 +69,8 @@ def _one_sample_top_labels(sample_no, b, w, x, k):
 def _one_label_score(label_no, b, w, one_x):
     w_data_tmp = w.data[label_no]
     w_row_tmp = w.rows[label_no]
-    label_indices_data = {w_row_tmp[i]: w_data_tmp[i] for i in xrange(len(w_data_tmp))}
-    if len(label_indices_data) > 0:
+    if len(w_data_tmp) > 0:
+        label_indices_data = {w_row_tmp[i]: w_data_tmp[i] for i in xrange(len(w_data_tmp))}
         sample_class_score = b[label_no]
         if not (sample_class_score == -float("inf") or len(
                 set(one_x.keys()).difference(set(label_indices_data.keys())))) > 0:
