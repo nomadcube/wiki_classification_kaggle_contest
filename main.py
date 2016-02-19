@@ -1,5 +1,6 @@
 from submission import submission
 from pipeline import PipeLine
+from models.mnb import LaplaceSmoothedMNB
 
 if __name__ == '__main__':
     import cProfile, pstats, StringIO
@@ -9,7 +10,7 @@ if __name__ == '__main__':
 
     in_file = '/Users/wumengling/PycharmProjects/kaggle/input_data/origin_train_subset.csv'
     out_file = '/Users/wumengling/PycharmProjects/kaggle/output_data/submission.csv'
-    pl = PipeLine([97, 95], [1.], [3, 2])
+    pl = PipeLine(LaplaceSmoothedMNB, [97, 95], [3, 2])
     pl.run(in_file)
     submission(in_file, out_file, pl)
 
