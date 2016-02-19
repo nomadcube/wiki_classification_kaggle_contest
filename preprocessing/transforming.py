@@ -74,7 +74,7 @@ class YConverter:
         return y
 
 
-def convert_y_to_csr(y, element_dtype='float', max_n_dim=None):
+def convert_y_to_csr(y, element_dtype='float', max_n_dim=0):
     elements = array('f')
     rows = array('I')
     columns = array('I')
@@ -83,7 +83,7 @@ def convert_y_to_csr(y, element_dtype='float', max_n_dim=None):
         elements.extend(array('f', [1.0] * row_size))
         rows.extend(array('I', [row_index] * row_size))
         columns.extend(array('I', row))
-    n_dim = max_n_dim if max_n_dim else (max(columns) + 1)
+    n_dim = max(max_n_dim, max(columns) + 1)
     return csr_matrix((elements, (rows, columns)), shape=(len(y), n_dim), dtype=element_dtype)
 
 
