@@ -2,7 +2,7 @@
 from itertools import product
 from read import Sample
 from preprocessing.transforming import YConverter, XConverter, convert_y_to_csr
-from models.mnb import MNB
+from models.mnb import SmoothedMNB
 from metrics import macro_precision_recall
 from preprocessing.tf_idf import tf_idf
 import sys
@@ -38,7 +38,7 @@ class PipeLine:
             mapped_reduced_x = tf_idf(x_converter.convert(train_smp.x))
             mapped_reduced_test_x = tf_idf(x_converter.convert(test_smp.x))
 
-            mnb = MNB(mnb_smooth_coef)
+            mnb = SmoothedMNB(mnb_smooth_coef)
             mnb.fit(convert_y_to_csr(mapped_y), mapped_reduced_x)
 
             mapped_test_predicted_y = mnb.predict(mapped_reduced_test_x, predict_cnt)

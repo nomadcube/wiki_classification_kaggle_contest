@@ -1,49 +1,49 @@
 # coding=utf-8
 import numpy as np
-from scipy.sparse import csr_matrix, csc_matrix, lil_matrix
-from functools import partial
-from multiprocessing import Pool
+from scipy.sparse import csr_matrix, lil_matrix
+from abc import abstractmethod
 
 
-class MNB:
-    def __init__(self, alpha):
-        self._alpha = alpha
+class BaseMNB:
+    def __init__(self):
         self.w = None
         self.b = None
 
     def fit(self, y, x):
-        if not isinstance(x, csr_matrix):
-            raise TypeError()
-        if not isinstance(y, csr_matrix):
-            raise TypeError()
+        self.b = self._estimate_b(y)
+        self.w = self._estimate_w(y, x)
+
+    @staticmethod
+    def _estimate_b(y):
         y_col_sum = np.array(y.sum(axis=0))[0]
         total_label_occurrence_cnt = y_col_sum.sum()
         y_col_sum /= total_label_occurrence_cnt
         y_col_sum = np.log(y_col_sum)
-        self.b = y_col_sum
+        return y_col_sum
 
-        if self._alpha != 0.:
-            y_x_param = y.transpose().dot(x).todense()
-            y_x_param += self._alpha
-            tmp = np.array(y_x_param.sum(axis=1).ravel())[0]
-            y_x_param /= tmp.repeat(y_x_param.shape[1]).reshape(y_x_param.shape)
-            y_x_param = np.log(y_x_param)
-            self.w = lil_matrix(y_x_param)
-        else:
-            y_x_param = y.transpose().dot(x).tocsr()
-            tmp = np.array(y_x_param.sum(axis=1).ravel())[0]
-            y_x_param.data /= tmp.repeat(np.diff(y_x_param.indptr))
-            y_x_param.data = np.log(y_x_param.data)
-            self.w = y_x_param
-        return self
+    @abstractmethod
+    def _estimate_w(self, y, x):
+        pass
 
-    def predict(self, x, k=1):
-        if self._alpha == 0.:
-            return self._non_smoothed_predict(x, k)
-        else:
-            return self._smooth_predict(x, k)
+    @abstractmethod
+    def predict(self, x):
+        pass
 
-    def _smooth_predict(self, x, k=1):
+
+class SmoothedMNB(BaseMNB):
+    def __init__(self, alpha):
+        BaseMNB.__init__(self)
+        self._alpha = alpha
+
+    def _estimate_w(self, y, x):
+        y_x_param = y.transpose().dot(x).todense()
+        y_x_param += self._alpha
+        tmp = np.array(y_x_param.sum(axis=1).ravel())[0]
+        y_x_param /= tmp.repeat(y_x_param.shape[1]).reshape(y_x_param.shape)
+        y_x_param = np.log(y_x_param)
+        return csr_matrix(y_x_param)
+
+    def predict(self, x):
         labels = list()
         log_likelihood_mat = self.w.dot(x.transpose())
         prior_prob = csr_matrix(self.b).transpose().toarray()
@@ -53,7 +53,16 @@ class MNB:
             labels.append([each_x.indices[np.argmax(each_x.data)]])
         return labels
 
-    def _non_smoothed_predict(self, x, k=1):
+
+class NonSmoothedMNB(BaseMNB):
+    def _estimate_w(self, y, x):
+        y_x_param = y.transpose().dot(x).tocsr()
+        tmp = np.array(y_x_param.sum(axis=1).ravel())[0]
+        y_x_param.data /= tmp.repeat(np.diff(y_x_param.indptr))
+        y_x_param.data = np.log(y_x_param.data)
+        return lil_matrix(y_x_param)
+
+    def predict(self, x, k=1):
         x = x.tolil()
         labels = list()
         for sample_no in xrange(len(x.data)):
@@ -123,7 +132,7 @@ if __name__ == '__main__':
                  2, 5,
                  2, 5]
     x = csr_matrix((element, (row_index, col_index)), shape=(15, 6))
-    m = MNB(1.)
+    m = NonSmoothedMNB()
     m.fit(y, x)
     print m.w
     print m.predict(x)
