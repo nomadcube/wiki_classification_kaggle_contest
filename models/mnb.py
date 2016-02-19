@@ -37,12 +37,6 @@ class MNB:
             self.w = y_x_param.tolil()
         return self
 
-    # def predict(self, x, k=1):
-    #     x = x.tolil()
-    #     partial_one_sample_predict = partial(_one_sample_predict, b=self.b, w=self.w, x=x, k=k)
-    #     pool = Pool(processes=4)
-    #     return pool.map(partial_one_sample_predict, xrange(len(x.data)))
-
     def predict(self, x, k=1):
         x = x.tolil()
         labels = list()
