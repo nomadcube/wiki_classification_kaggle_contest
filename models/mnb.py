@@ -20,6 +20,7 @@ class BaseMNB:
         y_col_sum = np.array(y.sum(axis=0))[0]
         total_label_occurrence_cnt = y_col_sum.sum()
         y_col_sum /= total_label_occurrence_cnt
+        y_col_sum = masked_values(y_col_sum, 0.)
         y_col_sum = np.log(y_col_sum)
         return y_col_sum
 
