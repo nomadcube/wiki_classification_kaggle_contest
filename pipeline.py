@@ -42,17 +42,18 @@ class PipeLine:
             mnb.fit(convert_y_to_csr(mapped_y), mapped_reduced_x)
 
             mapped_test_predicted_y = mnb.predict(mapped_reduced_test_x, predict_cnt)
-            mapped_test_y = y_converter.convert(test_smp.y)
-
-            mpr_mre = macro_precision_recall(mapped_test_y, mapped_test_predicted_y)
-            f_score = 1. / (1. / mpr_mre[0] + 1. / mpr_mre[1])
-
-            if f_score > self.best_f_score:
-                self.best_f_score = round(f_score, 3)
-                self.best_model = mnb
-                self.best_x_converter = x_converter
-                self.best_y_converter = y_converter
-                self.best_predicted_cnt = predict_cnt
+            print mapped_test_predicted_y
+            # mapped_test_y = y_converter.convert(test_smp.y)
+            #
+            # mpr_mre = macro_precision_recall(mapped_test_y, mapped_test_predicted_y)
+            # f_score = 1. / (1. / mpr_mre[0] + 1. / mpr_mre[1])
+            #
+            # if f_score > self.best_f_score:
+            #     self.best_f_score = round(f_score, 3)
+            #     self.best_model = mnb
+            #     self.best_x_converter = x_converter
+            #     self.best_y_converter = y_converter
+            #     self.best_predicted_cnt = predict_cnt
 
 
 if __name__ == '__main__':
