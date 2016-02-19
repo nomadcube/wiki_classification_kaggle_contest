@@ -93,7 +93,7 @@ if __name__ == '__main__':
     print smp.y
     print smp.x
     print smp.class_cnt
-    tr_smp, te_smp = smp.extract_and_update()
+    tr_smp, te_smp, common_lab_cnt = smp.extract_and_update()
     print "================"
     print tr_smp.y
     print tr_smp.x
