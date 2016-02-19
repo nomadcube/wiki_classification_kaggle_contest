@@ -41,7 +41,6 @@ class PipeLine:
             mnb.fit(convert_y_to_csr(mapped_y), mapped_reduced_x)
 
             mapped_test_predicted_y = mnb.predict(mapped_reduced_test_x, predict_cnt)
-            print mapped_test_predicted_y
             mapped_test_y = y_converter.convert(test_smp.y)
 
             mpr_mre = macro_precision_recall(mapped_test_y, mapped_test_predicted_y)

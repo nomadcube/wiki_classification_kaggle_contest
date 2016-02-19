@@ -8,9 +8,9 @@ if __name__ == '__main__':
     pr = cProfile.Profile()
     pr.enable()
 
-    in_file = '/Users/wumengling/PycharmProjects/kaggle/input_data/origin_train_subset.csv'
+    in_file = '/Users/wumengling/PycharmProjects/kaggle/input_data/train_subset.csv'
     out_file = '/Users/wumengling/PycharmProjects/kaggle/output_data/submission.csv'
-    pl = PipeLine(LaplaceSmoothedMNB, [97, 95], [3, 2])
+    pl = PipeLine(LaplaceSmoothedMNB, [95], [2])
     pl.run(in_file)
     submission(in_file, out_file, pl)
 
