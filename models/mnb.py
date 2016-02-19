@@ -41,12 +41,12 @@ class MNB:
         x = x.tolil()
         labels = list()
         for sample_no in xrange(len(x.data)):
-            tmp_top_labels = _one_sample_predict(sample_no, self.b, self.w, x, k)
+            tmp_top_labels = _one_sample_top_labels(sample_no, self.b, self.w, x, k)
             labels.append(tmp_top_labels)
         return labels
 
 
-def _one_sample_predict(sample_no, b, w, x, k):
+def _one_sample_top_labels(sample_no, b, w, x, k):
     class_scores = dict()
     x_row_tmp = x.rows[sample_no]
     x_data_tmp = x.data[sample_no]
