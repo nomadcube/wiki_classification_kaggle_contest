@@ -6,6 +6,7 @@ from models.mnb import MNB
 from metrics import macro_precision_recall
 from preprocessing.tf_idf import tf_idf
 import sys
+from memory_profiler import profile
 
 
 class PipeLine:
@@ -20,6 +21,7 @@ class PipeLine:
         self.best_model = None
         self.best_predicted_cnt = None
 
+    @profile
     def run(self, in_path):
         smp = Sample()
         smp.read(in_path)
