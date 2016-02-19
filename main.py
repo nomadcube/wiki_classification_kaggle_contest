@@ -15,7 +15,7 @@ if __name__ == '__main__':
     pr.enable()
 
     pipeline.run(in_file)
-    submission(in_file, out_file, pipeline)
+    # submission(in_file, out_file, pipeline)
 
     pr.disable()
     s = StringIO.StringIO()
