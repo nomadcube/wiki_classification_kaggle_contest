@@ -34,7 +34,7 @@ class MNB:
             tmp = np.array(y_x_param.sum(axis=1).ravel())[0]
             y_x_param.data /= tmp.repeat(np.diff(y_x_param.indptr))
             y_x_param.data = np.log(y_x_param.data)
-            self.w = y_x_param.tolil()
+            self.w = y_x_param
         return self
 
     def predict(self, x, k=1):
@@ -44,7 +44,14 @@ class MNB:
             return self._smooth_predict(x, k)
 
     def _smooth_predict(self, x, k=1):
-        pass
+        labels = list()
+        log_likelihood_mat = self.w.dot(x.transpose())
+        prior_prob = csr_matrix(self.b).transpose().toarray()
+        log_likelihood_mat.data += np.array(prior_prob.repeat(np.diff(log_likelihood_mat.indptr)))[0]
+        ll_mat = log_likelihood_mat.transpose()
+        for i, each_x in enumerate(ll_mat):
+            labels.append([each_x.indices[np.argmax(each_x.data)]])
+        return labels
 
     def _non_smoothed_predict(self, x, k=1):
         x = x.tolil()
@@ -116,7 +123,7 @@ if __name__ == '__main__':
                  2, 5,
                  2, 5]
     x = csr_matrix((element, (row_index, col_index)), shape=(15, 6))
-    m = MNB(0.)
+    m = MNB(1.)
     m.fit(y, x)
     print m.w
     print m.predict(x)

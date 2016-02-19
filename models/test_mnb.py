@@ -35,7 +35,7 @@ class TestMNB:
         return csr_matrix((element, (row_index, col_index)), shape=(15, 6))
 
     def pytest_funcarg__m(self):
-        return mnb.MNB(0.)
+        return mnb.MNB(1.)
 
     def test_fit(self, y, x, m):
         m.fit(y, x)
