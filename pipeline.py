@@ -43,7 +43,8 @@ class PipeLine:
             mapped_test_predicted_y = mnb.predict(mapped_reduced_test_x, predict_cnt)
             mapped_test_y = y_converter.convert(test_smp.y)
 
-            mpr_mre = macro_precision_recall(mapped_test_y, mapped_test_predicted_y, common_labels_cnt)
+            mpr_mre = macro_precision_recall(mapped_test_y, mapped_test_predicted_y,
+                                             len(y_converter.label_old_new_relation), common_labels_cnt)
             f_score = 1. / (1. / mpr_mre[0] + 1. / mpr_mre[1]) if mpr_mre[0] != 0. and mpr_mre[1] != 0. else float(
                 "inf")
             print mpr_mre

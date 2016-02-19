@@ -9,7 +9,7 @@ if __name__ == '__main__':
         sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/input_data/origin_train_subset.csv'
     out_file = sys.argv[2] if len(
         sys.argv) > 2 else '/Users/wumengling/PycharmProjects/kaggle/output_data/submission.csv'
-    pipeline = PipeLine(LaplaceSmoothedMNB, [90], [3])
+    pipeline = PipeLine(LaplaceSmoothedMNB, [95], [3])
 
     # pr = cProfile.Profile()
     # pr.enable()
