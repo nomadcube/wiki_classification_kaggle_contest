@@ -61,7 +61,7 @@ if __name__ == '__main__':
 
     PATH = sys.argv[1] if len(
         sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/input_data/small_origin_train_subset.csv'
-    cv = PipeLine(LaplaceSmoothedMNB, [97, 95, 93], [1, 2, 3])
+    cv = PipeLine(LaplaceSmoothedMNB, [97], [1])
     cv.run(PATH)
     print cv.best_predicted_cnt
     print cv.best_f_score

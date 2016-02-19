@@ -135,5 +135,7 @@ if __name__ == '__main__':
     x = csr_matrix((element, (row_index, col_index)), shape=(15, 6))
     m = LaplaceSmoothedMNB()
     m.fit(y, x)
+    print x
+    print "=========="
     print m.w
     print m.predict(x)
