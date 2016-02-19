@@ -22,5 +22,5 @@ def macro_precision_recall(y, predicted_y, total_label_cnt, common_labels_cnt):
 if __name__ == '__main__':
     test_y = [array('I', [65L, 66L, 67L, 68L, 69L]), array('I', [15L, 66L, 17L, 18L])]
     test_predicted_y = [[0], [15]]
-    print(macro_precision_recall(test_y, test_predicted_y, 8)[0])
-    print(macro_precision_recall(test_y, test_predicted_y, 8)[1])
+    print(macro_precision_recall(test_y, test_predicted_y, 70, 8)[0])
+    print(macro_precision_recall(test_y, test_predicted_y, 70, 8)[1])
