@@ -51,7 +51,7 @@ def _one_sample_predict(sample_no, b, w, x, k):
     x_data_tmp = x.data[sample_no]
     sample_indices_data = {x_row_tmp[i]: x_data_tmp[i] for i in xrange(len(x_data_tmp))}
     partial_one_label_score = partial(_one_label_score, b=b, w=w, one_x=sample_indices_data)
-    pool = Pool(processes=1)
+    pool = Pool()
     label_score = pool.map(partial_one_label_score, xrange(w.shape[0]))
     class_scores = {l: s for [l, s] in label_score}
     return top_k_keys(class_scores, k)
