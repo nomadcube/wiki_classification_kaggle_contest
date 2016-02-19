@@ -43,7 +43,7 @@ class SmoothedMNB(BaseMNB):
         y_x_param = np.log(y_x_param)
         return csr_matrix(y_x_param)
 
-    def predict(self, x):
+    def predict(self, x, k=1):
         labels = list()
         log_likelihood_mat = self.w.dot(x.transpose())
         prior_prob = csr_matrix(self.b).transpose().toarray()
