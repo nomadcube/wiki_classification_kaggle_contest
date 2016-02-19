@@ -30,10 +30,10 @@ class BaseMNB:
         pass
 
 
-class SmoothedMNB(BaseMNB):
-    def __init__(self, alpha):
+class LaplaceSmoothedMNB(BaseMNB):
+    def __init__(self):
         BaseMNB.__init__(self)
-        self._alpha = alpha
+        self._alpha = 1.
 
     def _estimate_w(self, y, x):
         y_x_param = y.transpose().dot(x).todense()
@@ -132,7 +132,7 @@ if __name__ == '__main__':
                  2, 5,
                  2, 5]
     x = csr_matrix((element, (row_index, col_index)), shape=(15, 6))
-    m = NonSmoothedMNB()
+    m = LaplaceSmoothedMNB()
     m.fit(y, x)
     print m.w
     print m.predict(x)
