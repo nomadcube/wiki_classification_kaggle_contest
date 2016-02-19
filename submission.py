@@ -25,5 +25,5 @@ if __name__ == '__main__':
     pl = PipeLine([97], [1.0], [3])
     in_file = '/Users/wumengling/PycharmProjects/kaggle/input_data/small_origin_train_subset.csv'
     pl.run(in_file)
-    out_file = '/Users/wumengling/PycharmProjects/kaggle/output_data/submission.csv'
+    out_file = '/Users/wumengling/PycharmProjects/kaggle/output_data/submission.txt'
     submission(in_file, out_file, pl)
