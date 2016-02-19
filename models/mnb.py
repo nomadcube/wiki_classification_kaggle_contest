@@ -1,5 +1,6 @@
 # coding=utf-8
 import numpy as np
+from numpy.ma import masked_values
 from scipy.sparse import csr_matrix, lil_matrix
 from abc import abstractmethod
 
@@ -51,7 +52,7 @@ class LaplaceSmoothedMNB(BaseMNB):
         log_likelihood_mat.data += np.array(prior_prob.repeat(np.diff(log_likelihood_mat.indptr)))[0]
         ll_mat = log_likelihood_mat.transpose()
         for i, each_x in enumerate(ll_mat):
-            labels.append([each_x.indices[np.argmax(each_x.data)]])
+            labels.append([c for c in _top_k_argmax(each_x.data, k)])
         return labels
 
 
@@ -102,6 +103,15 @@ def top_k_keys(d, k):
         raise TypeError()
     sorted_d = sorted(d, key=lambda x: d[x], reverse=True)
     return sorted_d[:k]
+
+
+def _top_k_argmax(arr, k):
+    if not isinstance(arr, np.ndarray):
+        raise TypeError()
+    for i in xrange(k):
+        tmp_am = arr.argmax()
+        yield tmp_am
+        arr = masked_values(arr, value=arr[tmp_am])
 
 
 if __name__ == '__main__':
