@@ -17,6 +17,7 @@ class PipeLine:
         self.best_x_converter = None
         self.best_y_converter = None
         self.best_model = None
+        self.best_threshold = None
         self.best_predicted_cnt = None
 
     def run(self, in_path):
@@ -55,7 +56,11 @@ class PipeLine:
                 self.best_model = mnb
                 self.best_x_converter = x_converter
                 self.best_y_converter = y_converter
+                self.best_threshold = tf_idf_threshold
                 self.best_predicted_cnt = predict_cnt
+
+    def __repr__(self):
+        return "best_threshold: {0}\nbest_predicted_cnt: {1}".format(self.best_threshold, self.best_predicted_cnt)
 
 
 if __name__ == '__main__':
