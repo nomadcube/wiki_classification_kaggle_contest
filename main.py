@@ -13,16 +13,16 @@ if __name__ == '__main__':
         sys.argv) > 3 else '/Users/wumengling/PycharmProjects/kaggle/output_data/submission.csv'
     pipeline = PipeLine(LaplaceSmoothedMNB, [80], [5])
 
-    # pr = cProfile.Profile()
-    # pr.enable()
+    pr = cProfile.Profile()
+    pr.enable()
 
     pipeline.run(train_file)
     print repr(pipeline)
     submission(exam_file, exam_out_file, pipeline)
 
-    # pr.disable()
-    # s = StringIO.StringIO()
-    # sortby = 'tottime'
-    # ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
-    # ps.print_stats()
-    # print s.getvalue()
+    pr.disable()
+    s = StringIO.StringIO()
+    sortby = 'tottime'
+    ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+    ps.print_stats()
+    print s.getvalue()
