@@ -51,11 +51,10 @@ class LaplaceSmoothedMNB(BaseMNB):
     def predict(self, x, k=1):
         labels = list()
         log_likelihood_mat = self.w.dot(x.transpose())
-        prior_prob = csr_matrix(self.b).transpose().toarray()
-        log_likelihood_mat.data += np.array(prior_prob.repeat(np.diff(log_likelihood_mat.indptr)))[0]
         ll_mat = log_likelihood_mat.transpose()
         for i, each_x in enumerate(ll_mat):
-            labels.append([c for c in _top_k_argmax(each_x.data, k)])
+            tmp = np.array(each_x.todense())[0] + self.b
+            labels.append([c for c in _top_k_argmax(tmp, k)])
         return labels
 
 
