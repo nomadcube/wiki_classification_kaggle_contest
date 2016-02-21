@@ -42,9 +42,10 @@ class LaplaceSmoothedMNB(BaseMNB):
         y_x_param = y.transpose().dot(x).todense()
         y_x_param += self._alpha
         tmp = np.array(y_x_param.sum(axis=1).ravel())[0]
-        y_x_param /= tmp.repeat(y_x_param.shape[1]).reshape(y_x_param.shape)
+        y_x_param = y_x_param.transpose()
+        y_x_param /= tmp
         y_x_param = np.log(y_x_param)
-        return csr_matrix(y_x_param)
+        return csr_matrix(y_x_param.transpose())
 
     def predict(self, x, k=1):
         labels = list()
