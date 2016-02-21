@@ -39,7 +39,8 @@ class LaplaceSmoothedMNB(BaseMNB):
         self._alpha = 1.
 
     def _estimate_w(self, y, x):
-        y_x_param = y.transpose().dot(x).todense()
+        y_x_param = y.transpose().dot(x)
+        y_x_param = y_x_param.todense()
         y_x_param += self._alpha
         tmp = np.array(y_x_param.sum(axis=1).ravel())[0]
         y_x_param = y_x_param.transpose()
