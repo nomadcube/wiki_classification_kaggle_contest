@@ -24,7 +24,7 @@ class BaseMNB:
         total_label_occurrence_cnt = y_col_sum.sum()
         y_col_sum /= total_label_occurrence_cnt
         y_col_sum = masked_values(y_col_sum, 0.)
-        # y_col_sum = np.log(y_col_sum)
+        y_col_sum = np.log(y_col_sum)
         return y_col_sum
 
     @abstractmethod
@@ -49,8 +49,9 @@ class LaplaceSmoothedMNB(BaseMNB):
         tmp = np.array(y_x_param.sum(axis=1).ravel())[0]
         y_x_param = y_x_param.transpose()
         y_x_param /= tmp
-        # y_x_param = np.log(y_x_param)
-        return csr_matrix(y_x_param.transpose())
+        y_x_param = np.log(y_x_param)
+        return csr_matrix(
+            y_x_param.transpose())
 
     @profile
     def predict(self, x, k=1):
