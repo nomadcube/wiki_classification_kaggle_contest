@@ -1,6 +1,6 @@
 from submission import submission
 from pipeline import PipeLine
-from models.mnb import LaplaceSmoothedMNB
+from models.mnb import LaplaceSmoothedMNB, NonSmoothedMNB
 import cProfile, pstats, StringIO
 import sys
 
@@ -11,7 +11,7 @@ if __name__ == '__main__':
         sys.argv) > 2 else '/Users/wumengling/PycharmProjects/kaggle/input_data/test_subset.csv'
     exam_out_file = sys.argv[3] if len(
         sys.argv) > 3 else '/Users/wumengling/PycharmProjects/kaggle/output_data/submission.csv'
-    pipeline = PipeLine(LaplaceSmoothedMNB, [99.5], [5])
+    pipeline = PipeLine(NonSmoothedMNB, [97], [5])
 
     pr = cProfile.Profile()
     pr.enable()
