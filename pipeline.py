@@ -28,7 +28,7 @@ class PipeLine:
         train_smp, test_smp, common_labels_cnt = smp.extract_and_update()
 
         y_converter = YConverter()
-        y_converter.construct(smp.y)
+        y_converter.construct(smp.label_old_new_relation)
         mapped_y = y_converter.convert(train_smp.y)
 
         for param in product(self._threshold, self._predict_cnt):

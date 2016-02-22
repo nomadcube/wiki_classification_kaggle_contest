@@ -14,6 +14,7 @@ class Sample:
         self._row_indptr = array('I')
         self._row_indptr.append(0)
         self._col_index = array('I')
+        self.label_old_new_relation = dict()
 
     def __len__(self):
         return len(self.y)
@@ -62,6 +63,8 @@ class Sample:
         all_labels = array('I', [int(l) for l in multi_label.split(',')])
         self.y.append(all_labels)
         for label in all_labels:
+            if self.label_old_new_relation.get(label) is None:
+                self.label_old_new_relation[label] = len(self.label_old_new_relation)
             self.class_cnt = label + 1 if label > self.class_cnt else self.class_cnt
 
         all_features = instance.split(' ')
