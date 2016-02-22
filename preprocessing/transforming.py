@@ -51,7 +51,7 @@ class YConverter:
     def construct(self, y):
         for labels in y:
             for each_label in labels:
-                if each_label not in self.label_old_new_relation.keys():
+                if self.label_old_new_relation.get(each_label) is None:
                     self.label_old_new_relation[each_label] = len(self.label_old_new_relation)
 
     def convert(self, y):
