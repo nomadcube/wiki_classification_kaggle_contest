@@ -33,9 +33,10 @@ class Sample:
 
         row_cnt, feature_dimension = self.x.shape
 
+        max_test_row_cnt = 1000
         for row_no in range(len(self.y)):
             begin, end = self._row_indptr[row_no], self._row_indptr[row_no + 1]
-            if row_no in list(test_instances)[:min(1000, len(test_instances))]:
+            if row_no in list(test_instances)[:min(max_test_row_cnt, len(test_instances))]:
                 test_smp.y.append(self.y[row_no])
                 test_smp._element.extend(self._element[begin: end])
                 test_smp._col_index.extend(self._col_index[begin: end])
@@ -47,10 +48,11 @@ class Sample:
                 train_smp._row_indptr.append(train_smp._row_indptr[-1] + (end - begin))
 
         test_smp.x = csr_matrix((test_smp._element, test_smp._col_index, test_smp._row_indptr),
-                                shape=(len(test_instances), feature_dimension), dtype='float')
+                                shape=(min(max_test_row_cnt, len(test_instances)), feature_dimension), dtype='float')
         test_smp.class_cnt = self.class_cnt
         train_smp.x = csr_matrix((train_smp._element, train_smp._col_index, train_smp._row_indptr),
-                                 shape=(len(self.y) - len(test_instances), feature_dimension), dtype='float')
+                                 shape=(len(self.y) - min(max_test_row_cnt, len(test_instances)), feature_dimension),
+                                 dtype='float')
         train_smp.class_cnt = self.class_cnt
         return train_smp, test_smp, common_labels_cnt
 
