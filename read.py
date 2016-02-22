@@ -35,7 +35,7 @@ class Sample:
 
         for row_no in range(len(self.y)):
             begin, end = self._row_indptr[row_no], self._row_indptr[row_no + 1]
-            if row_no in test_instances:
+            if row_no in list(test_instances)[:min(1000, len(test_instances))]:
                 test_smp.y.append(self.y[row_no])
                 test_smp._element.extend(self._element[begin: end])
                 test_smp._col_index.extend(self._col_index[begin: end])
