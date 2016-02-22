@@ -49,8 +49,7 @@ class LaplaceSmoothedMNB(BaseMNB):
         tmp = np.array(y_x_param.sum(axis=1).ravel())[0]
         y_x_param = y_x_param.transpose()
         y_x_param /= tmp
-        for i, j in product(xrange(y_x_param.shape[0]), xrange(y_x_param.shape[1])):
-            y_x_param.__setitem__((i, j), math.log(y_x_param.__getitem__((i, j))))
+        y_x_param = np.log(y_x_param)
         return csr_matrix(y_x_param.transpose())
 
     @profile
