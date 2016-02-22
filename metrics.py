@@ -5,7 +5,7 @@ from numpy.ma import masked_values
 
 
 def macro_precision_recall(y, predicted_y, total_label_cnt, common_labels_cnt):
-    print predicted_y
+    # print predicted_y
     y_mat = convert_y_to_csr(y, element_dtype='float',
                              total_label_cnt=total_label_cnt).transpose()  # y_mat/pred_mat: 类别数x样本数
     pred_mat = convert_y_to_csr(predicted_y, element_dtype='float', total_label_cnt=total_label_cnt).transpose()

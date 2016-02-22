@@ -4,6 +4,7 @@ from read import Sample
 from preprocessing.transforming import YConverter, XConverter, convert_y_to_csr
 from metrics import macro_precision_recall
 from preprocessing.tf_idf import tf_idf
+from memory_profiler import profile
 import sys
 
 
@@ -20,6 +21,7 @@ class PipeLine:
         self.best_threshold = None
         self.best_predicted_cnt = None
 
+    @profile
     def run(self, in_path):
         smp = Sample()
         smp.read(in_path)
