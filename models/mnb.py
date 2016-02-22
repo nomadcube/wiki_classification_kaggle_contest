@@ -3,6 +3,7 @@ import numpy as np
 from numpy.ma import masked_values
 from scipy.sparse import csr_matrix, lil_matrix
 from abc import abstractmethod
+from memory_profiler import profile
 
 
 class BaseMNB:
@@ -48,6 +49,7 @@ class LaplaceSmoothedMNB(BaseMNB):
         y_x_param = np.log(y_x_param)
         return csr_matrix(y_x_param.transpose())
 
+    @profile
     def predict(self, x, k=1):
         labels = list()
         log_likelihood_mat = self.w.dot(x.transpose())
