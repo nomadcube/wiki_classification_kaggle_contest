@@ -9,7 +9,6 @@ class Sample:
     def __init__(self):
         self.y = list()
         self.x = None
-        self.class_cnt = -1
         self._element = array('f')
         self._row_indptr = array('I')
         self._row_indptr.append(0)
@@ -50,11 +49,9 @@ class Sample:
 
         test_smp.x = csr_matrix((test_smp._element, test_smp._col_index, test_smp._row_indptr),
                                 shape=(min(max_test_row_cnt, len(test_instances)), feature_dimension), dtype='float')
-        test_smp.class_cnt = self.class_cnt
         train_smp.x = csr_matrix((train_smp._element, train_smp._col_index, train_smp._row_indptr),
                                  shape=(len(self.y) - min(max_test_row_cnt, len(test_instances)), feature_dimension),
                                  dtype='float')
-        train_smp.class_cnt = self.class_cnt
         return train_smp, test_smp, common_labels_cnt
 
     def _read_one_line(self, line):
@@ -65,7 +62,6 @@ class Sample:
         for label in all_labels:
             if self.label_old_new_relation.get(label) is None:
                 self.label_old_new_relation[label] = len(self.label_old_new_relation)
-            self.class_cnt = label + 1 if label > self.class_cnt else self.class_cnt
 
         all_features = instance.split(' ')
         self._row_indptr.append(len(all_features) + self._row_indptr[-1])
@@ -97,13 +93,10 @@ if __name__ == '__main__':
     smp.read('/Users/wumengling/PycharmProjects/kaggle/unit_test_data/sample.txt')
     print smp.y
     print smp.x
-    print smp.class_cnt
     tr_smp, te_smp, common_lab_cnt = smp.extract_and_update()
     print "================"
     print tr_smp.y
     print tr_smp.x
-    print tr_smp.class_cnt
     print "==============="
     print te_smp.y
     print te_smp.x
-    print te_smp.class_cnt
