@@ -4,6 +4,8 @@ from numpy.ma import masked_values
 from scipy.sparse import csr_matrix, lil_matrix
 from abc import abstractmethod
 from memory_profiler import profile
+import math
+from itertools import product
 
 
 class BaseMNB:
@@ -39,6 +41,7 @@ class LaplaceSmoothedMNB(BaseMNB):
         BaseMNB.__init__(self)
         self._alpha = 1.
 
+    @profile
     def _estimate_w(self, y, x):
         y_x_param = y.transpose().dot(x)
         y_x_param = y_x_param.todense()
@@ -46,7 +49,8 @@ class LaplaceSmoothedMNB(BaseMNB):
         tmp = np.array(y_x_param.sum(axis=1).ravel())[0]
         y_x_param = y_x_param.transpose()
         y_x_param /= tmp
-        y_x_param = np.log(y_x_param)
+        for i, j in product(xrange(y_x_param.shape[0]), xrange(y_x_param.shape[1])):
+            y_x_param.__setitem__((i, j), math.log(y_x_param.__getitem__((i, j))))
         return csr_matrix(y_x_param.transpose())
 
     @profile
