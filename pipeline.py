@@ -40,16 +40,16 @@ class PipeLine:
             mapped_reduced_x = tf_idf(x_converter.convert(train_smp.x))
             mapped_reduced_test_x = tf_idf(x_converter.convert(test_smp.x))
 
-            mnb = self._model()
             csr_mapped_y = convert_y_to_csr(mapped_y)
             print "label count: {0}\ntrain set size: {1}\nfeature count: {2}".format(csr_mapped_y.shape[1],
                                                                                      csr_mapped_y.shape[0],
                                                                                      mapped_reduced_x.shape[1])
+
+            mnb = self._model()
             mnb.fit(csr_mapped_y, mapped_reduced_x)
-
             mapped_test_predicted_y = mnb.predict(mapped_reduced_test_x, predict_cnt)
-            mapped_test_y = y_converter.convert(test_smp.y)
 
+            mapped_test_y = y_converter.convert(test_smp.y)
             mpr_mre = macro_precision_recall(mapped_test_y, mapped_test_predicted_y,
                                              len(y_converter.label_old_new_relation), common_labels_cnt)
             f_score = 1. / (1. / mpr_mre[0] + 1. / mpr_mre[1]) if mpr_mre[0] != 0. and mpr_mre[1] != 0. else float(
