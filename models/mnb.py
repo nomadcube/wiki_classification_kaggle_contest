@@ -98,18 +98,16 @@ def _one_label_score(label_no, b, w, one_x):
     if len(w_data_tmp) > 0:
         label_indices_data = dict(zip(w_row_tmp, w_data_tmp))
         sample_class_score = b[label_no]
-        if not (sample_class_score == -float("inf") or len(
-                set(one_x.keys()).difference(set(label_indices_data.keys())))) > 0:
-            for feature in set(one_x.keys()).intersection(set(label_indices_data.keys())):
+        if sample_class_score != -float("inf") and len(set(one_x.keys()).difference(set(w_row_tmp))) == 0:
+            for feature in one_x.keys():
                 sample_class_score += one_x[feature] * label_indices_data[feature]
             return label_no, sample_class_score
     return label_no, 1e-30
 
 
 def top_k_keys(d, k):
-    if not isinstance(d, dict):
-        raise TypeError()
-    sorted_d = sorted(d, key=lambda x: d[x], reverse=True)
+    f = lambda x: d[x]
+    sorted_d = sorted(d, key=f, reverse=True)
     return sorted_d[:k]
 
 
