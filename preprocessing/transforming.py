@@ -84,6 +84,13 @@ def convert_y_to_csr(y, element_dtype='float', total_label_cnt=0):
     return csr_matrix((elements, (rows, columns)), shape=(len(y), n_dim), dtype=element_dtype)
 
 
+def part_csr_y_generator(lil_y, part_size):
+    total_size = lil_y.shape[0]
+    part_cnt = total_size / part_size + 1
+    for p in xrange(part_cnt):
+        yield lil_y[p * part_size: min(total_size, (p + 1) * part_size)].tocsr().transpose()
+
+
 if __name__ == '__main__':
     element = np.array([1., 1., 1., 4., 1., 1.])
     row_index = np.array([0, 1, 1, 1, 2, 2])

@@ -13,9 +13,9 @@ class BaseMNB:
         self.w = None
         self.b = None
 
-    def fit(self, y, x):
-        self.b = self._estimate_b(y)
-        self.w = self._estimate_w(y, x)
+    def fit(self, whole_y, part_y, x):
+        self.b = self._estimate_b(whole_y)
+        self.w = self._estimate_w(part_y, x)
         return self
 
     @staticmethod
@@ -32,7 +32,7 @@ class BaseMNB:
         pass
 
     @abstractmethod
-    def predict(self, x):
+    def predict(self, i, size, x):
         pass
 
 
@@ -53,12 +53,12 @@ class LaplaceSmoothedMNB(BaseMNB):
         return csr_matrix(y_x_param.transpose())
 
     # @profile
-    def predict(self, x, k=1):
+    def predict(self, i, size, x, k=1):
         labels = list()
         log_likelihood_mat = self.w.dot(x.transpose()).transpose()
-        for i, each_x in enumerate(log_likelihood_mat):
-            tmp = np.array(each_x.todense())[0] + self.b
-            labels.append(tmp.argsort()[-k:][::-1])
+        for j, each_x in enumerate(log_likelihood_mat):
+            tmp = np.array(each_x.todense())[0] + self.b[i * size: min((i + 1) * size, len(self.b))]
+            labels.append((np.argmax(tmp), max(tmp)))
         return labels
 
 
