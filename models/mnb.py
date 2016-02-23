@@ -85,7 +85,7 @@ def _one_sample_top_labels(sample_no, b, w, x, k):
     class_scores = dict()
     x_row_tmp = x.rows[sample_no]
     x_data_tmp = x.data[sample_no]
-    sample_indices_data = {x_row_tmp[i]: x_data_tmp[i] for i in xrange(len(x_data_tmp))}
+    sample_indices_data = dict(zip(x_row_tmp, x_data_tmp))
     for label_no in xrange(w.shape[0]):
         label_no, sample_class_score = _one_label_score(label_no, b, w, sample_indices_data)
         class_scores[label_no] = sample_class_score
@@ -96,7 +96,7 @@ def _one_label_score(label_no, b, w, one_x):
     w_data_tmp = w.data[label_no]
     w_row_tmp = w.rows[label_no]
     if len(w_data_tmp) > 0:
-        label_indices_data = {w_row_tmp[i]: w_data_tmp[i] for i in xrange(len(w_data_tmp))}
+        label_indices_data = dict(zip(w_row_tmp, w_data_tmp))
         sample_class_score = b[label_no]
         if not (sample_class_score == -float("inf") or len(
                 set(one_x.keys()).difference(set(label_indices_data.keys())))) > 0:
