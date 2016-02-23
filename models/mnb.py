@@ -60,7 +60,7 @@ class LaplaceSmoothedMNB(BaseMNB):
         ll_mat = log_likelihood_mat.transpose()
         for i, each_x in enumerate(ll_mat):
             tmp = np.array(each_x.todense())[0] + self.b
-            labels.append([c for c in _top_k_argmax(tmp, k)])
+            labels.append(tmp.argsort()[-k:][::-1])
         return labels
 
 
