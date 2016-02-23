@@ -50,15 +50,13 @@ class LaplaceSmoothedMNB(BaseMNB):
         y_x_param = y_x_param.transpose()
         y_x_param /= tmp
         y_x_param = np.log(y_x_param)
-        return csr_matrix(
-            y_x_param.transpose())
+        return csr_matrix(y_x_param.transpose())
 
     # @profile
     def predict(self, x, k=1):
         labels = list()
-        log_likelihood_mat = self.w.dot(x.transpose())
-        ll_mat = log_likelihood_mat.transpose()
-        for i, each_x in enumerate(ll_mat):
+        log_likelihood_mat = self.w.dot(x.transpose()).transpose()
+        for i, each_x in enumerate(log_likelihood_mat):
             tmp = np.array(each_x.todense())[0] + self.b
             labels.append(tmp.argsort()[-k:][::-1])
         return labels

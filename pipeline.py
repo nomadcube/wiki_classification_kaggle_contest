@@ -41,7 +41,11 @@ class PipeLine:
             mapped_reduced_test_x = tf_idf(x_converter.convert(test_smp.x))
 
             mnb = self._model()
-            mnb.fit(convert_y_to_csr(mapped_y), mapped_reduced_x)
+            csr_mapped_y = convert_y_to_csr(mapped_y)
+            print "label count: {0}\ntrain set size: {1}\nfeature count: {2}".format(csr_mapped_y.shape[1],
+                                                                                     csr_mapped_y.shape[0],
+                                                                                     mapped_reduced_x.shape[1])
+            mnb.fit(csr_mapped_y, mapped_reduced_x)
 
             mapped_test_predicted_y = mnb.predict(mapped_reduced_test_x, predict_cnt)
             mapped_test_y = y_converter.convert(test_smp.y)
