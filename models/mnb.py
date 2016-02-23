@@ -41,7 +41,7 @@ class LaplaceSmoothedMNB(BaseMNB):
         BaseMNB.__init__(self)
         self._alpha = 1.
 
-    @profile
+    # @profile
     def _estimate_w(self, y, x):
         y_x_param = y.transpose().dot(x)
         y_x_param = y_x_param.todense()
@@ -53,7 +53,7 @@ class LaplaceSmoothedMNB(BaseMNB):
         return csr_matrix(
             y_x_param.transpose())
 
-    @profile
+    # @profile
     def predict(self, x, k=1):
         labels = list()
         log_likelihood_mat = self.w.dot(x.transpose())
