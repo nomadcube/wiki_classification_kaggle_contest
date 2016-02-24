@@ -20,7 +20,7 @@ if __name__ == '__main__':
 
     pipeline.run(train_file)
     print repr(pipeline)
-    submission(exam_file, exam_out_file, pipeline)
+    # submission(exam_file, exam_out_file, pipeline)
 
     print time() - t
     # pr.disable()

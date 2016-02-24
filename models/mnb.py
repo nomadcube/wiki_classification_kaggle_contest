@@ -6,6 +6,7 @@ from abc import abstractmethod
 from memory_profiler import profile
 import math
 from itertools import product
+import heapq
 
 
 class OnePrediction:
@@ -41,7 +42,7 @@ class BaseMNB:
         pass
 
     @abstractmethod
-    def predict(self, real_labels, x):
+    def predict(self, all_part_predict, real_labels, x):
         pass
 
 
@@ -62,13 +63,11 @@ class LaplaceSmoothedMNB(BaseMNB):
         return csr_matrix(y_x_param.transpose())
 
     # @profile
-    def predict(self, real_labels, x, k=1):
-        labels = list()
+    def predict(self, all_part_predict, real_labels, x, k=1):
         log_likelihood_mat = self.w.dot(x.transpose()).transpose()
         for i, each_x in enumerate(log_likelihood_mat):
             tmp = np.array(each_x.todense())[0] + self.b[real_labels[0]: real_labels[-1] + 1]
-            labels.append(OnePrediction(real_labels[np.argmax(tmp)], max(tmp)))
-        return labels
+            heapq.heappush(all_part_predict[i], OnePrediction(real_labels[np.argmax(tmp)], max(tmp)))
 
 
 class NonSmoothedMNB(BaseMNB):
