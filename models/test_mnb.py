@@ -38,7 +38,7 @@ class TestMNB:
         return mnb.NonSmoothedMNB()
 
     def test_fit(self, y, x, m):
-        m.fit(y, x)
+        m.fit_and_predict(y, x)
         assert m.w.nnz == 12
         assert m.w.shape == (2, 6)
         assert m.b[0] == math.log(6. / 15.)
@@ -57,7 +57,7 @@ class TestMNB:
         assert abs(m.w[1, 5] - (-1.50407739678)) < 1e-6
 
     def pytest_funcarg__fitted_m(self, y, x, m):
-        return m.fit(y, x)
+        return m.fit_and_predict(y, x)
 
     def test_predict(self, x, fitted_m):
         predict_res = fitted_m.partial_predict(x)
@@ -70,7 +70,7 @@ class TestSmoothedMNB(TestMNB):
         return mnb.LaplaceSmoothedMNB()
 
     def test_fit(self, y, x, m):
-        m.fit(y, x)
+        m.fit_and_predict(y, x)
         assert m.w.nnz == 12
         assert m.w.shape == (2, 6)
         assert m.b[0] == math.log(6. / 15.)

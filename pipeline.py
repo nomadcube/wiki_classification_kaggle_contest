@@ -1,8 +1,7 @@
 # coding=utf-8
 from itertools import product
 from read import Sample
-from preprocessing.transforming import YConverter, XConverter, convert_y_to_csr, part_csr_y_generator, \
-    join_part_prediction
+from preprocessing.transforming import YConverter, XConverter, convert_y_to_csr
 from metrics import macro_precision_recall
 from preprocessing.tf_idf import tf_idf
 from memory_profiler import profile
@@ -47,14 +46,8 @@ class PipeLine:
                                                                                      csr_mapped_y.shape[0],
                                                                                      mapped_reduced_x.shape[1])
 
-            cnt_instance = mapped_reduced_test_x.shape[0]
-            all_part_predict = [[] for _ in range(cnt_instance)]
-            for i, (part_y, real_labels) in enumerate(part_csr_y_generator(csr_mapped_y, 100)):
-                mnb = self._model()
-                mnb.fit(csr_mapped_y, part_y, mapped_reduced_x)
-                mnb.predict(all_part_predict, real_labels, mapped_reduced_test_x, predict_cnt)
-            mapped_test_predicted_y = [[heapq.heappop(part_pred).label for _ in range(2)] for part_pred in
-                                       all_part_predict]
+            mnb = self._model()
+            mapped_test_predicted_y = mnb.fit_and_predict(csr_mapped_y, mapped_reduced_x, mapped_reduced_test_x, 100, 2)
 
             mpr_mre = macro_precision_recall(test_smp.y, y_converter.withdraw_convert(mapped_test_predicted_y),
                                              len(y_converter.label_old_new_relation), common_labels_cnt)

@@ -20,13 +20,17 @@ class OnePrediction:
 
 class BaseMNB:
     def __init__(self):
-        self.w = None
+        self.part_w = None
         self.b = None
 
-    def fit(self, whole_y, part_y, x):
-        self.b = self._estimate_b(whole_y)
-        self.w = self._estimate_w(part_y, x)
-        return self
+    def fit_and_predict(self, train_y, train_x, test_x, part_size, predict_cnt):
+        cnt_instance = test_x.shape[0]
+        all_part_predict = [[] for _ in range(cnt_instance)]
+        self.b = self._estimate_b(train_y)
+        for i, (part_y, real_labels) in enumerate(self._y_split(train_y, part_size)):
+            self.part_w = self._part_estimate_w(part_y, train_x)
+            self._part_scoring(all_part_predict, real_labels, test_x, predict_cnt)
+        return [[heapq.heappop(part_pred).label for _ in range(2)] for part_pred in all_part_predict]
 
     @staticmethod
     def _estimate_b(y):
@@ -38,12 +42,22 @@ class BaseMNB:
         return y_col_sum
 
     @abstractmethod
-    def _estimate_w(self, y, x):
+    def _part_estimate_w(self, part_y, x):
         pass
 
     @abstractmethod
-    def predict(self, all_part_predict, real_labels, x):
+    def _part_scoring(self, all_part_predict, real_labels, x):
         pass
+
+    @staticmethod
+    def _y_split(whole_y, part_size):
+        lil_y = whole_y.transpose().tolil()
+        total_size = lil_y.shape[0]
+        part_cnt = int(math.ceil(float(total_size) / part_size))
+        for p in xrange(part_cnt):
+            begin = p * part_size
+            end = min(total_size, (p + 1) * part_size)
+            yield lil_y[begin: end].tocsr().transpose(), range(whole_y.shape[1])[begin: end]
 
 
 class LaplaceSmoothedMNB(BaseMNB):
@@ -52,8 +66,8 @@ class LaplaceSmoothedMNB(BaseMNB):
         self._alpha = 1.
 
     # @profile
-    def _estimate_w(self, y, x):
-        y_x_param = y.transpose().dot(x)
+    def _part_estimate_w(self, part_y, x):
+        y_x_param = part_y.transpose().dot(x)
         y_x_param = y_x_param.todense()
         y_x_param += self._alpha
         tmp = np.array(y_x_param.sum(axis=1).ravel())[0]
@@ -63,26 +77,26 @@ class LaplaceSmoothedMNB(BaseMNB):
         return csr_matrix(y_x_param.transpose())
 
     # @profile
-    def predict(self, all_part_predict, real_labels, x, k=1):
-        log_likelihood_mat = self.w.dot(x.transpose()).transpose()
+    def _part_scoring(self, all_part_predict, real_labels, x, k=1):
+        log_likelihood_mat = self.part_w.dot(x.transpose()).transpose()
         for i, each_x in enumerate(log_likelihood_mat):
             tmp = np.array(each_x.todense())[0] + self.b[real_labels[0]: real_labels[-1] + 1]
             heapq.heappush(all_part_predict[i], OnePrediction(real_labels[np.argmax(tmp)], max(tmp)))
 
 
 class NonSmoothedMNB(BaseMNB):
-    def _estimate_w(self, y, x):
-        y_x_param = y.transpose().dot(x).tocsr()
+    def _part_estimate_w(self, part_y, x):
+        y_x_param = part_y.transpose().dot(x).tocsr()
         tmp = np.array(y_x_param.sum(axis=1).ravel())[0]
         y_x_param.data /= tmp.repeat(np.diff(y_x_param.indptr))
         y_x_param.data = np.log(y_x_param.data)
         return lil_matrix(y_x_param)
 
-    def predict(self, x, k=1):
+    def _part_scoring(self, x, k=1):
         x = x.tolil()
         labels = list()
         for sample_no in xrange(len(x.data)):
-            tmp_top_labels = _one_sample_top_labels(sample_no, self.b, self.w, x, k)
+            tmp_top_labels = _one_sample_top_labels(sample_no, self.b, self.part_w, x, k)
             labels.append(tmp_top_labels)
         return labels
 
@@ -156,8 +170,8 @@ if __name__ == '__main__':
                  2, 5]
     x = csr_matrix((element, (row_index, col_index)), shape=(15, 6))
     m = LaplaceSmoothedMNB()
-    m.fit(y, x)
+    m.fit_and_predict(y, x)
     print x
     print "=========="
-    print m.w
-    print m.predict(x)
+    print m.part_w
+    print m._part_scoring(x)
