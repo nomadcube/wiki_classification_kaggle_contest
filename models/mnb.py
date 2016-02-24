@@ -44,13 +44,14 @@ class BaseMNB:
 
     @staticmethod
     def _y_split(whole_y, part_size):
+        total_label_list = np.unique(whole_y.indices)
         lil_y = whole_y.transpose().tolil()
         total_size = lil_y.shape[0]
         part_cnt = int(math.ceil(float(total_size) / part_size))
         for p in xrange(part_cnt):
             begin = p * part_size
             end = min(total_size, (p + 1) * part_size)
-            yield lil_y[begin: end].tocsr().transpose(), whole_y.indices[begin: end]
+            yield lil_y[begin: end].tocsr().transpose(), total_label_list[begin: end]
 
     @abstractmethod
     def _part_estimate_w(self, part_y, x):

@@ -57,4 +57,4 @@ class TestSmoothedMNB(TestMNB):
         assert abs(m.part_w[1, 3] - (-2.48490664979)) < 1e-6
         assert abs(m.part_w[1, 4] - (-1.56861591791)) < 1e-6
         assert abs(m.part_w[1, 5] - (-1.56861591791)) < 1e-6
-        assert predict_res == [[0], [0], [0], [0], [0], [0], [1], [1], [1], [1], [1], [1], [1], [1], [1]]
+        assert predict_res == [[0], [1], [1], [0], [0], [0], [1], [1], [1], [1], [1], [1], [1], [1], [1]]
