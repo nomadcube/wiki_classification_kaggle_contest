@@ -50,7 +50,7 @@ class BaseMNB:
         for p in xrange(part_cnt):
             begin = p * part_size
             end = min(total_size, (p + 1) * part_size)
-            yield lil_y[begin: end].tocsr().transpose(), range(whole_y.shape[1])[begin: end]
+            yield lil_y[begin: end].tocsr().transpose(), whole_y.indices[begin: end]
 
     @abstractmethod
     def _part_estimate_w(self, part_y, x):
@@ -81,7 +81,7 @@ class LaplaceSmoothedMNB(BaseMNB):
     def _part_scoring(self, all_part_predict, real_labels, x, k=1):
         log_likelihood_mat = x.dot(self.part_w.transpose())
         for i, each_x in enumerate(log_likelihood_mat):
-            tmp = np.array(each_x.todense())[0] + self.b[real_labels[0]: real_labels[-1] + 1]
+            tmp = np.array(each_x.todense())[0] + np.array([self.b[label] for label in real_labels])
             heapq.heappush(all_part_predict[i], OnePrediction(real_labels[np.argmax(tmp)], max(tmp)))
 
 
