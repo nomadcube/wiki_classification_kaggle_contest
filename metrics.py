@@ -6,9 +6,8 @@ from numpy.ma import masked_values
 
 def macro_precision_recall(y, predicted_y, total_label_cnt, common_labels_cnt):
     # print predicted_y
-    y_mat = convert_y_to_csr(y, element_dtype='float',
-                             total_label_cnt=total_label_cnt).transpose()  # y_mat/pred_mat: 类别数x样本数
-    pred_mat = convert_y_to_csr(predicted_y, element_dtype='float', total_label_cnt=total_label_cnt).transpose()
+    y_mat = convert_y_to_csr(y, element_dtype='float').transpose()  # y_mat/pred_mat: 类别数x样本数
+    pred_mat = convert_y_to_csr(predicted_y, element_dtype='float', total_label_cnt=y_mat.shape[0]).transpose()
 
     inter_mat = y_mat.multiply(pred_mat)  # 可能有些类别在训练集上有而在测试集上没有，这会导致pred_mat的列数可能比y_mat大
     y_pos = masked_values(y_mat.sum(axis=1), 0.)

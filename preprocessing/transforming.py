@@ -2,6 +2,7 @@ import numpy as np
 from array import array
 from scipy.sparse import coo_matrix, csr_matrix
 from tf_idf import tf_idf
+import math
 from memory_profiler import profile
 
 
@@ -85,6 +86,16 @@ def convert_y_to_csr(y, element_dtype='float', total_label_cnt=0):
         columns.extend(array('I', row))
     n_dim = max(total_label_cnt, max(columns) + 1)
     return csr_matrix((elements, (rows, columns)), shape=(len(y), n_dim), dtype=element_dtype)
+
+
+def part_csr_y_generator(csr_mapped_y, part_size):
+    lil_y = csr_mapped_y.transpose().tolil()
+    total_size = lil_y.shape[0]
+    part_cnt = int(math.ceil(float(total_size) / part_size))
+    for p in xrange(part_cnt):
+        begin = p * part_size
+        end = min(total_size, (p + 1) * part_size)
+        yield lil_y[begin: end].tocsr().transpose(), csr_mapped_y.indices[begin: end]
 
 
 if __name__ == '__main__':
