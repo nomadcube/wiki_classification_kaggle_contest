@@ -7,6 +7,7 @@ from preprocessing.tf_idf import tf_idf
 from memory_profiler import profile
 import sys
 import heapq
+import math
 
 
 class PipeLine:
@@ -42,13 +43,15 @@ class PipeLine:
             mapped_reduced_test_x = tf_idf(x_converter.convert(test_smp.x))
 
             csr_mapped_y = convert_y_to_csr(mapped_y)
-            print "label count: {0}\ntrain set size: {1}\nfeature count: {2}".format(csr_mapped_y.shape[1],
-                                                                                     csr_mapped_y.shape[0],
-                                                                                     mapped_reduced_x.shape[1])
+            print "finish read and convert data.\n" \
+                  "num of labels in train set: {0}\ntrain set size: {1}\nfeature count in train set: {2}".format(
+                csr_mapped_y.shape[1], csr_mapped_y.shape[0], mapped_reduced_x.shape[1])
 
-            mnb = self._model()
-            mapped_test_predicted_y = mnb.fit_and_predict(csr_mapped_y, mapped_reduced_x, mapped_reduced_test_x,
-                                                          part_size, predict_cnt)
+            print "\nall y split into {0} parts, each with at most {1} label".format(
+                int(math.ceil(csr_mapped_y.shape[1] / float(part_size))), part_size)
+            model = self._model()
+            mapped_test_predicted_y = model.fit_and_predict(csr_mapped_y, mapped_reduced_x, mapped_reduced_test_x,
+                                                            part_size, predict_cnt)
 
             mpr_mre = macro_precision_recall(test_smp.y, y_converter.withdraw_convert(mapped_test_predicted_y),
                                              len(y_converter.label_old_new_relation), common_labels_cnt)
