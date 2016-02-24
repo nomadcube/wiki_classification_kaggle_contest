@@ -13,13 +13,13 @@ if __name__ == '__main__':
         sys.argv) > 2 else '/Users/wumengling/PycharmProjects/kaggle/input_data/test_subset.csv'
     exam_out_file = sys.argv[3] if len(
         sys.argv) > 3 else '/Users/wumengling/PycharmProjects/kaggle/output_data/submission.csv'
-    pipeline = PipeLine(LaplaceSmoothedMNB, [99], [5])
+    pipeline = PipeLine(LaplaceSmoothedMNB, [20], [5])
 
     # pr = cProfile.Profile()
     # pr.enable()
     t = time()
 
-    pipeline.run(train_file, 201)  # 分块大小和预测目标个数的乘积必须小于总分类数
+    pipeline.run(train_file, 100)  # 分块大小和预测目标个数的乘积必须小于总分类数
     print repr(pipeline)
     # submission(exam_file, exam_out_file, pipeline)
 
