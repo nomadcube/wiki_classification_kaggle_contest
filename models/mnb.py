@@ -33,7 +33,8 @@ class BaseMNB:
             print "{0} parts have been trained and scored.".format(j)
             self.part_w = self._part_estimate_w(part_y, train_x)
             self._part_scoring(all_part_predict, label_list, test_x, predict_cnt)
-        return [[heapq.heappop(part_pred).label for _ in range(predict_cnt)] for part_pred in all_part_predict]
+        return [[heapq.heappop(part_pred).label for _ in range(min(predict_cnt, len(part_pred)))] for part_pred in
+                all_part_predict]
 
     @staticmethod
     def _estimate_b(y):
