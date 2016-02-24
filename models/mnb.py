@@ -35,9 +35,11 @@ class BaseMNB:
         for j, (part_y, label_list) in enumerate(self._y_split(train_y, part_size)):
             print "{0} parts have been trained and scored.".format(j)
             self.part_w = self._part_estimate_w(part_y, train_x)
-            self._part_scoring(all_part_predict, label_list, test_x, predict_cnt)
+            self._part_scoring(self.part_w, all_part_predict, label_list, test_x, predict_cnt)
             with open('{0}/w_{1}.dat'.format(model_store_dir, j), 'w') as w_f:
                 pickle.dump(self.part_w, w_f)
+            with open('{0}/label_list_{1}.dat'.format(model_store_dir, j), 'w') as label_list_f:
+                pickle.dump(label_list, label_list_f)
         return [[heapq.heappop(part_pred).label for _ in range(min(predict_cnt, len(part_pred)))] for part_pred in
                 all_part_predict]
 
@@ -66,7 +68,7 @@ class BaseMNB:
         pass
 
     @abstractmethod
-    def _part_scoring(self, all_part_predict, real_labels, x):
+    def _part_scoring(self, w, all_part_predict, real_labels, x):
         pass
 
 
@@ -87,11 +89,12 @@ class LaplaceSmoothedMNB(BaseMNB):
         return csr_matrix(y_x_param.transpose())
 
     # @profile
-    def _part_scoring(self, all_part_predict, real_labels, x, k=1):
-        log_likelihood_mat = x.dot(self.part_w.transpose())
+    def _part_scoring(self, part_w, all_part_predict, real_labels, x, k=1):
+        log_likelihood_mat = x.dot(part_w.transpose())
         for i, each_x in enumerate(log_likelihood_mat):
             tmp = np.array(each_x.todense())[0] + np.array([self.b[label] for label in real_labels])
             heapq.heappush(all_part_predict[i], OnePrediction(real_labels[np.argmax(tmp)], max(tmp)))
+
 
 if __name__ == '__main__':
     from preprocessing import transforming
