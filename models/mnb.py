@@ -16,7 +16,8 @@ class OnePrediction(object):
         self.score = score
 
     def __le__(self, other):
-        return self.score < other.score
+        # todo: 符号不一致因为heapq默认是最小堆
+        return self.score > other.score
 
 
 class BaseMNB:
@@ -85,7 +86,6 @@ class LaplaceSmoothedMNB(BaseMNB):
             tmp = np.array(each_x.todense())[0] + np.array([self.b[label] for label in real_labels])
             heapq.heappush(all_part_predict[i], OnePrediction(real_labels[np.argmax(tmp)], max(tmp)))
 
-
 if __name__ == '__main__':
     from preprocessing import transforming
 
@@ -114,4 +114,4 @@ if __name__ == '__main__':
     x = csr_matrix((element, (row_index, col_index)), shape=(15, 6))
     m = LaplaceSmoothedMNB()
     print m.fit_and_predict(y, x, x, 2, 1)
-    print x
+    print m.fit_and_predict(y, x, x, 1, 1)

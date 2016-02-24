@@ -1,3 +1,4 @@
+# coding=utf-8
 from submission import submission
 from pipeline import PipeLine
 from models.mnb import LaplaceSmoothedMNB
@@ -18,7 +19,7 @@ if __name__ == '__main__':
     # pr.enable()
     t = time()
 
-    pipeline.run(train_file)
+    pipeline.run(train_file, 30)  # 分块大小和预测目标个数的乘积必须小于总样本量
     print repr(pipeline)
     # submission(exam_file, exam_out_file, pipeline)
 

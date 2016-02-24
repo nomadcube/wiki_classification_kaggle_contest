@@ -23,7 +23,7 @@ class PipeLine:
         self.best_predicted_cnt = None
 
     # @profile
-    def run(self, in_path):
+    def run(self, in_path, part_size):
         smp = Sample()
         smp.read(in_path)
         train_smp, test_smp, common_labels_cnt = smp.extract_and_update()
@@ -47,7 +47,8 @@ class PipeLine:
                                                                                      mapped_reduced_x.shape[1])
 
             mnb = self._model()
-            mapped_test_predicted_y = mnb.fit_and_predict(csr_mapped_y, mapped_reduced_x, mapped_reduced_test_x, 100, 2)
+            mapped_test_predicted_y = mnb.fit_and_predict(csr_mapped_y, mapped_reduced_x, mapped_reduced_test_x,
+                                                          part_size, predict_cnt)
 
             mpr_mre = macro_precision_recall(test_smp.y, y_converter.withdraw_convert(mapped_test_predicted_y),
                                              len(y_converter.label_old_new_relation), common_labels_cnt)
@@ -66,7 +67,7 @@ if __name__ == '__main__':
     PATH = sys.argv[1] if len(
         sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/input_data/small_origin_train_subset.csv'
     cv = PipeLine(LaplaceSmoothedMNB, [90], [1])
-    cv.run(PATH)
+    cv.run(PATH, 100, 2)
     print cv.best_predicted_cnt
     print cv.best_f_score
     print cv.best_model
