@@ -95,7 +95,7 @@ def part_csr_y_generator(csr_mapped_y, part_size):
     for p in xrange(part_cnt):
         begin = p * part_size
         end = min(total_size, (p + 1) * part_size)
-        yield lil_y[begin: end].tocsr().transpose(), csr_mapped_y.indices[begin: end]
+        yield lil_y[begin: end].tocsr().transpose(), range(csr_mapped_y.shape[1])[begin: end]
 
 
 if __name__ == '__main__':
@@ -114,4 +114,9 @@ if __name__ == '__main__':
     y_converter.construct(y)
     print y_converter.convert(y)
     print y_converter.withdraw_convert(y_converter.convert(y))
-    print convert_y_to_csr(y)
+    mapped_csr_y = convert_y_to_csr(y_converter.convert(y))
+    print mapped_csr_y
+    all_part = [i for i in part_csr_y_generator(mapped_csr_y, 1)]
+    for i in all_part:
+        print i[0]
+        print i[1]
