@@ -6,6 +6,7 @@ from abc import abstractmethod
 from memory_profiler import profile
 import math
 import heapq
+import pickle
 
 
 class OnePrediction(object):
@@ -25,14 +26,18 @@ class BaseMNB:
         self.part_w = None
         self.b = None
 
-    def fit_and_predict(self, train_y, train_x, test_x, part_size, predict_cnt):
+    def fit_and_predict(self, train_y, train_x, test_x, part_size, predict_cnt, model_store_dir):
         cnt_instance = test_x.shape[0]
         all_part_predict = [[] for _ in range(cnt_instance)]
         self.b = self._estimate_b(train_y)
+        with open('{0}/b.dat'.format(model_store_dir), 'w') as b_f:
+            pickle.dump(self.b, b_f)
         for j, (part_y, label_list) in enumerate(self._y_split(train_y, part_size)):
             print "{0} parts have been trained and scored.".format(j)
             self.part_w = self._part_estimate_w(part_y, train_x)
             self._part_scoring(all_part_predict, label_list, test_x, predict_cnt)
+            with open('{0}/w_{1}.dat'.format(model_store_dir, j), 'w') as w_f:
+                pickle.dump(self.part_w, w_f)
         return [[heapq.heappop(part_pred).label for _ in range(min(predict_cnt, len(part_pred)))] for part_pred in
                 all_part_predict]
 

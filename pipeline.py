@@ -10,7 +10,7 @@ import math
 
 
 class PipeLine:
-    def __init__(self, model_class, threshold, predict_cnt):
+    def __init__(self, model_class, threshold, predict_cnt, model_store_dir):
         self._model = model_class
         self._threshold = threshold
         self._predict_cnt = predict_cnt
@@ -20,6 +20,8 @@ class PipeLine:
         self.best_y_converter = None
         self.best_threshold = None
         self.best_predicted_cnt = None
+
+        self.model_store_dir = model_store_dir
 
     # @profile
     def model_selection(self, in_path, part_size):
@@ -48,7 +50,7 @@ class PipeLine:
                 int(math.ceil(csr_mapped_y.shape[1] / float(part_size))), part_size)
             model = self._model()
             mapped_test_predicted_y = model.fit_and_predict(csr_mapped_y, mapped_reduced_x, mapped_reduced_test_x,
-                                                            part_size, predict_cnt)
+                                                            part_size, predict_cnt, self.model_store_dir)
 
             mpr_mre = macro_precision_recall(test_smp.y, y_converter.withdraw_convert(mapped_test_predicted_y),
                                              len(y_converter.label_old_new_relation), common_labels_cnt)
