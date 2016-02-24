@@ -14,7 +14,7 @@ if __name__ == '__main__':
         sys.argv) > 3 else '/Users/wumengling/PycharmProjects/kaggle/output_data/submission.csv'
     chuck_size = int(sys.argv[4]) if len(sys.argv) > 4 else 400
     tf_idf_thresholds = [int(t) for t in sys.argv[5].split(',')] if len(sys.argv) > 5 else [99]
-    model_file = sys.argv[5] if len(sys.argv) > 5 else '/Users/wumengling/PycharmProjects/kaggle/output_data'
+    model_file = sys.argv[6] if len(sys.argv) > 6 else '/Users/wumengling/PycharmProjects/kaggle/output_data'
 
     pr = cProfile.Profile()
     pr.enable()
