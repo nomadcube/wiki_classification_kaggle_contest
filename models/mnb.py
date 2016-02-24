@@ -22,26 +22,34 @@ class OnePrediction(object):
 
 
 class BaseMNB:
-    def __init__(self):
-        self.part_w = None
-        self.b = None
+    def __init__(self, model_store_dir):
+        self.model_store_dir = model_store_dir
 
-    def fit_and_predict(self, train_y, train_x, test_x, part_size, predict_cnt, model_store_dir):
+    def fit_and_predict(self, train_y, train_x, test_x, part_size, predict_cnt):
         cnt_instance = test_x.shape[0]
         all_part_predict = [[] for _ in range(cnt_instance)]
-        self.b = self._estimate_b(train_y)
-        with open('{0}/b.dat'.format(model_store_dir), 'w') as b_f:
-            pickle.dump(self.b, b_f)
+        b = self._estimate_b(train_y)
+        with open('{0}/b.dat'.format(self.model_store_dir), 'w') as b_f:
+            pickle.dump(b, b_f)
         for j, (part_y, label_list) in enumerate(self._y_split(train_y, part_size)):
             print "{0} parts have been trained and scored.".format(j)
-            self.part_w = self._part_estimate_w(part_y, train_x)
-            self._part_scoring(self.part_w, all_part_predict, label_list, test_x, predict_cnt)
-            with open('{0}/w_{1}.dat'.format(model_store_dir, j), 'w') as w_f:
-                pickle.dump(self.part_w, w_f)
-            with open('{0}/label_list_{1}.dat'.format(model_store_dir, j), 'w') as label_list_f:
+            part_w = self._part_estimate_w(part_y, train_x)
+            self._part_scoring(b, part_w, all_part_predict, label_list, test_x, predict_cnt)
+            with open('{0}/w_{1}.dat'.format(self.model_store_dir, j), 'w') as w_f:
+                pickle.dump(part_w, w_f)
+            with open('{0}/label_list_{1}.dat'.format(self.model_store_dir, j), 'w') as label_list_f:
                 pickle.dump(label_list, label_list_f)
         return [[heapq.heappop(part_pred).label for _ in range(min(predict_cnt, len(part_pred)))] for part_pred in
                 all_part_predict]
+
+    #
+    # def predict(self, test_x, predict_cnt):
+    #     cnt_instance = test_x.shape[0]
+    #     all_part_predict = [[] for _ in range(cnt_instance)]
+    #     with open('{0}/b.dat'.format(self.model_store_dir), 'r') as b_f:
+    #         b = pickle.load(b_f)
+
+
 
     @staticmethod
     def _estimate_b(y):
@@ -68,13 +76,13 @@ class BaseMNB:
         pass
 
     @abstractmethod
-    def _part_scoring(self, w, all_part_predict, real_labels, x):
+    def _part_scoring(self, b, w, all_part_predict, real_labels, x):
         pass
 
 
 class LaplaceSmoothedMNB(BaseMNB):
-    def __init__(self):
-        BaseMNB.__init__(self)
+    def __init__(self, model_store_dir):
+        BaseMNB.__init__(self, model_store_dir)
         self._alpha = 1.
 
     # @profile
@@ -89,10 +97,10 @@ class LaplaceSmoothedMNB(BaseMNB):
         return csr_matrix(y_x_param.transpose())
 
     # @profile
-    def _part_scoring(self, part_w, all_part_predict, real_labels, x, k=1):
+    def _part_scoring(self, b, part_w, all_part_predict, real_labels, x, k=1):
         log_likelihood_mat = x.dot(part_w.transpose())
         for i, each_x in enumerate(log_likelihood_mat):
-            tmp = np.array(each_x.todense())[0] + np.array([self.b[label] for label in real_labels])
+            tmp = np.array(each_x.todense())[0] + np.array([b[label] for label in real_labels])
             heapq.heappush(all_part_predict[i], OnePrediction(real_labels[np.argmax(tmp)], max(tmp)))
 
 

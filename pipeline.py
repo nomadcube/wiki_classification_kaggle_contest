@@ -48,9 +48,9 @@ class PipeLine:
 
             print "\nall y split into {0} parts, each with at most {1} label".format(
                 int(math.ceil(csr_mapped_y.shape[1] / float(part_size))), part_size)
-            model = self._model()
+            model = self._model(self.model_store_dir)
             mapped_test_predicted_y = model.fit_and_predict(csr_mapped_y, mapped_reduced_x, mapped_reduced_test_x,
-                                                            part_size, predict_cnt, self.model_store_dir)
+                                                            part_size, predict_cnt)
 
             mpr_mre = macro_precision_recall(test_smp.y, y_converter.withdraw_convert(mapped_test_predicted_y),
                                              len(y_converter.label_old_new_relation), common_labels_cnt)
