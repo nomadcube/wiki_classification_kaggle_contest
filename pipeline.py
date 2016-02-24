@@ -6,7 +6,6 @@ from metrics import macro_precision_recall
 from preprocessing.tf_idf import tf_idf
 from memory_profiler import profile
 import sys
-import heapq
 import math
 
 
@@ -19,12 +18,11 @@ class PipeLine:
         self.best_f_score = 0.
         self.best_x_converter = None
         self.best_y_converter = None
-        self.best_model = None
         self.best_threshold = None
         self.best_predicted_cnt = None
 
     # @profile
-    def run(self, in_path, part_size):
+    def model_selection(self, in_path, part_size):
         smp = Sample()
         smp.read(in_path)
         train_smp, test_smp, common_labels_cnt = smp.extract_and_update()
@@ -59,6 +57,13 @@ class PipeLine:
             print mpr_mre
             print f_score
 
+            if f_score > self.best_f_score:
+                self.best_f_score = round(f_score, 3)
+                self.best_x_converter = x_converter
+                self.best_y_converter = y_converter
+                self.best_threshold = tf_idf_threshold
+                self.best_predicted_cnt = predict_cnt
+
     def __repr__(self):
         return "best_threshold: {0}\nbest_predicted_cnt: {1}".format(self.best_threshold, self.best_predicted_cnt)
 
@@ -69,7 +74,7 @@ if __name__ == '__main__':
     PATH = sys.argv[1] if len(
         sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/input_data/small_origin_train_subset.csv'
     cv = PipeLine(LaplaceSmoothedMNB, [90], [1])
-    cv.run(PATH, 100, 2)
+    cv.model_selection(PATH, 100, 2)
     print cv.best_predicted_cnt
     print cv.best_f_score
     print cv.best_model
