@@ -64,6 +64,21 @@ class PipeLine:
                 self.best_threshold = tf_idf_threshold
                 self.best_predicted_cnt = predict_cnt
 
+    def submission(self, test_file_path, output_file_path):
+        exam_smp = Sample()
+        exam_smp.read(test_file_path)
+
+        transformed_x = self.best_x_converter.convert(exam_smp.x)
+        m = self._model()
+        predicted_y = m.fit_and_predict(csr_mapped_y, mapped_reduced_x, mapped_reduced_test_x, part_size, predict_cnt)
+        origin_predicted_y = self.best_y_converter.withdraw_convert(predicted_y)
+
+        with open(output_file_path, 'w') as out:
+            out.write('Id,Predicted' + '\n')
+            for i, each_predicted_y in enumerate(origin_predicted_y):
+                out.write(repr(i) + ',' + ' '.join([str(i) for i in each_predicted_y]) + '\n')
+            out.flush()
+
     def __repr__(self):
         return "best_threshold: {0}\nbest_predicted_cnt: {1}".format(self.best_threshold, self.best_predicted_cnt)
 
