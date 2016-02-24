@@ -93,7 +93,7 @@ class NonSmoothedMNB(BaseMNB):
         y_x_param.data = np.log(y_x_param.data)
         return lil_matrix(y_x_param)
 
-    def _part_scoring(self, x, k=1):
+    def _part_scoring(self, all_part_predict, real_labels, x, k=1):
         x = x.tolil()
         labels = list()
         for sample_no in xrange(len(x.data)):
@@ -133,6 +133,7 @@ class NonSmoothedMNB(BaseMNB):
 
 if __name__ == '__main__':
     from preprocessing import transforming
+
     y = transforming.convert_y_to_csr(np.array([[0], [0], [1], [1], [0],
                                                 [0], [0], [1], [1], [1],
                                                 [1], [1], [1], [1], [0]]))
