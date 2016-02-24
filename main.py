@@ -23,7 +23,7 @@ if __name__ == '__main__':
     pipeline = PipeLine(LaplaceSmoothedMNB, tf_idf_thresholds, [5], model_file)
     pipeline.model_selection(train_file, chuck_size)  # 分块大小和预测目标个数的乘积必须小于总分类数
     print repr(pipeline)
-    # submission(exam_file, exam_out_file, pipeline)
+    pipeline.submission(exam_file, exam_out_file)
 
     print time() - t
     pr.disable()

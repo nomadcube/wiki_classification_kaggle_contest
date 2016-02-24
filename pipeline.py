@@ -20,6 +20,7 @@ class PipeLine:
         self.best_y_converter = None
         self.best_threshold = None
         self.best_predicted_cnt = None
+        self.best_model = None
 
         self.model_store_dir = model_store_dir
 
@@ -65,14 +66,13 @@ class PipeLine:
                 self.best_y_converter = y_converter
                 self.best_threshold = tf_idf_threshold
                 self.best_predicted_cnt = predict_cnt
+                self.best_model = model
 
     def submission(self, test_file_path, output_file_path):
         exam_smp = Sample()
         exam_smp.read(test_file_path)
-
         transformed_x = self.best_x_converter.convert(exam_smp.x)
-        m = self._model()
-        predicted_y = m.fit(csr_mapped_y, mapped_reduced_x, mapped_reduced_test_x, part_size, predict_cnt)
+        predicted_y = self.best_model.predict(transformed_x, self.best_predicted_cnt)
         origin_predicted_y = self.best_y_converter.withdraw_convert(predicted_y)
 
         with open(output_file_path, 'w') as out:
