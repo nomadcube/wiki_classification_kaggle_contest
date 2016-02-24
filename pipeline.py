@@ -1,7 +1,8 @@
 # coding=utf-8
 from itertools import product
 from read import Sample
-from preprocessing.transforming import YConverter, XConverter, convert_y_to_csr
+from preprocessing.transforming import YConverter, XConverter, convert_y_to_csr, part_csr_y_generator, \
+    join_part_prediction
 from metrics import macro_precision_recall
 from preprocessing.tf_idf import tf_idf
 from memory_profiler import profile
@@ -45,27 +46,29 @@ class PipeLine:
                                                                                      csr_mapped_y.shape[0],
                                                                                      mapped_reduced_x.shape[1])
 
-            mnb = self._model()
-            mnb.fit(csr_mapped_y, mapped_reduced_x)
-            mapped_test_predicted_y = mnb.predict(mapped_reduced_test_x, predict_cnt)
+            all_part_predict = list()
+            for i, (part_y, real_labels) in enumerate(part_csr_y_generator(csr_mapped_y, 100)):
+                mnb = self._model()
+                mnb.fit(csr_mapped_y, part_y, mapped_reduced_x)
+                mapped_test_predicted_y = mnb.predict(real_labels, mapped_reduced_test_x, predict_cnt)
+                all_part_predict.append(mapped_test_predicted_y)
+            print all_part_predict
+            print join_part_prediction(all_part_predict)
 
-            print y_converter.withdraw_convert(mapped_test_predicted_y)
-            print smp.y
-
-            mpr_mre = macro_precision_recall(test_smp.y, y_converter.withdraw_convert(mapped_test_predicted_y),
-                                             len(y_converter.label_old_new_relation), common_labels_cnt)
-            f_score = 1. / (1. / mpr_mre[0] + 1. / mpr_mre[1]) if mpr_mre[0] != 0. and mpr_mre[1] != 0. else float(
-                "inf")
-            print mpr_mre
-            print f_score
-
-            if f_score > self.best_f_score:
-                self.best_f_score = round(f_score, 3)
-                self.best_model = mnb
-                self.best_x_converter = x_converter
-                self.best_y_converter = y_converter
-                self.best_threshold = tf_idf_threshold
-                self.best_predicted_cnt = predict_cnt
+            # mpr_mre = macro_precision_recall(test_smp.y, y_converter.withdraw_convert(mapped_test_predicted_y),
+            #                                  len(y_converter.label_old_new_relation), common_labels_cnt)
+            # f_score = 1. / (1. / mpr_mre[0] + 1. / mpr_mre[1]) if mpr_mre[0] != 0. and mpr_mre[1] != 0. else float(
+            #     "inf")
+            # print mpr_mre
+            # print f_score
+            #
+            # if f_score > self.best_f_score:
+            #     self.best_f_score = round(f_score, 3)
+            #     self.best_model = mnb
+            #     self.best_x_converter = x_converter
+            #     self.best_y_converter = y_converter
+            #     self.best_threshold = tf_idf_threshold
+            #     self.best_predicted_cnt = predict_cnt
 
     def __repr__(self):
         return "best_threshold: {0}\nbest_predicted_cnt: {1}".format(self.best_threshold, self.best_predicted_cnt)

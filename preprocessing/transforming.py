@@ -4,6 +4,7 @@ from scipy.sparse import coo_matrix, csr_matrix
 from tf_idf import tf_idf
 import math
 from memory_profiler import profile
+import heapq
 
 
 class XConverter:
@@ -96,6 +97,14 @@ def part_csr_y_generator(csr_mapped_y, part_size):
         begin = p * part_size
         end = min(total_size, (p + 1) * part_size)
         yield lil_y[begin: end].tocsr().transpose(), range(csr_mapped_y.shape[1])[begin: end]
+
+
+def join_part_prediction(all_part_pred):
+    tmp = list()
+    for i in xrange(len(all_part_pred)):
+        tmp.append(all_part_pred[i][0])
+    heapq.heapify(tmp)
+    return tmp.pop().label, tmp.pop().score
 
 
 if __name__ == '__main__':
