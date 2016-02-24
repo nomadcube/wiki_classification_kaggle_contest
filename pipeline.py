@@ -49,19 +49,12 @@ class PipeLine:
 
             cnt_instance = mapped_reduced_test_x.shape[0]
             all_part_predict = [[] for _ in range(cnt_instance)]
-
             for i, (part_y, real_labels) in enumerate(part_csr_y_generator(csr_mapped_y, 100)):
                 mnb = self._model()
                 mnb.fit(csr_mapped_y, part_y, mapped_reduced_x)
                 mnb.predict(all_part_predict, real_labels, mapped_reduced_test_x, predict_cnt)
-            print all_part_predict.__len__()
-            print all_part_predict[0].__len__()
-            print heapq.heappop(all_part_predict[0]).label
-            print heapq.heappop(all_part_predict[0]).score
             mapped_test_predicted_y = [[heapq.heappop(part_pred).label for _ in range(2)] for part_pred in
                                        all_part_predict]
-            print mapped_test_predicted_y
-            print mapped_test_predicted_y.__len__()
 
             mpr_mre = macro_precision_recall(test_smp.y, y_converter.withdraw_convert(mapped_test_predicted_y),
                                              len(y_converter.label_old_new_relation), common_labels_cnt)
@@ -69,14 +62,6 @@ class PipeLine:
                 "inf")
             print mpr_mre
             print f_score
-            #
-            # if f_score > self.best_f_score:
-            #     self.best_f_score = round(f_score, 3)
-            #     self.best_model = mnb
-            #     self.best_x_converter = x_converter
-            #     self.best_y_converter = y_converter
-            #     self.best_threshold = tf_idf_threshold
-            #     self.best_predicted_cnt = predict_cnt
 
     def __repr__(self):
         return "best_threshold: {0}\nbest_predicted_cnt: {1}".format(self.best_threshold, self.best_predicted_cnt)

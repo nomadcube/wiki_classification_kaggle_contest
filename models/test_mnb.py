@@ -60,7 +60,7 @@ class TestMNB:
         return m.fit(y, x)
 
     def test_predict(self, x, fitted_m):
-        predict_res = fitted_m.predict(x)
+        predict_res = fitted_m.partial_predict(x)
         assert len(predict_res) == 15
         assert predict_res == [[0], [0], [0], [0], [0], [0], [1], [1], [1], [1], [1], [1], [1], [1], [1]]
 
