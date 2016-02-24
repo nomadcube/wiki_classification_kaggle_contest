@@ -43,8 +43,7 @@ class PipeLine:
             mapped_reduced_test_x = tf_idf(x_converter.convert(test_smp.x))
 
             csr_mapped_y = convert_y_to_csr(mapped_y)
-            print "finish read and convert data.\n" \
-                  "num of labels in train set: {0}\ntrain set size: {1}\nfeature count in train set: {2}".format(
+            print "num of labels in train set: {0}\ntrain set size: {1}\nfeature count in train set: {2}".format(
                 csr_mapped_y.shape[1], csr_mapped_y.shape[0], mapped_reduced_x.shape[1])
 
             print "\nall y split into {0} parts, each with at most {1} label".format(
