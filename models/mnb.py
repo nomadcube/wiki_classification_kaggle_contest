@@ -30,6 +30,7 @@ class BaseMNB:
         all_part_predict = [[] for _ in range(cnt_instance)]
         self.b = self._estimate_b(train_y)
         for j, (part_y, label_list) in enumerate(self._y_split(train_y, part_size)):
+            print "{0} parts have been trained and scored.".format(j)
             self.part_w = self._part_estimate_w(part_y, train_x)
             self._part_scoring(all_part_predict, label_list, test_x, predict_cnt)
         return [[heapq.heappop(part_pred).label for _ in range(predict_cnt)] for part_pred in all_part_predict]
