@@ -24,32 +24,35 @@ class OnePrediction(object):
 class BaseMNB:
     def __init__(self, model_store_dir):
         self.model_store_dir = model_store_dir
+        self.num_model = None
 
-    def fit_and_predict(self, train_y, train_x, test_x, part_size, predict_cnt):
-        cnt_instance = test_x.shape[0]
-        all_part_predict = [[] for _ in range(cnt_instance)]
+    def fit(self, train_y, train_x, part_size):
         b = self._estimate_b(train_y)
         with open('{0}/b.dat'.format(self.model_store_dir), 'w') as b_f:
             pickle.dump(b, b_f)
         for j, (part_y, label_list) in enumerate(self._y_split(train_y, part_size)):
-            print "{0} parts have been trained and scored.".format(j)
+            print "{0} parts have been trained.".format(j)
             part_w = self._part_estimate_w(part_y, train_x)
-            self._part_scoring(b, part_w, all_part_predict, label_list, test_x, predict_cnt)
             with open('{0}/w_{1}.dat'.format(self.model_store_dir, j), 'w') as w_f:
                 pickle.dump(part_w, w_f)
             with open('{0}/label_list_{1}.dat'.format(self.model_store_dir, j), 'w') as label_list_f:
                 pickle.dump(label_list, label_list_f)
+            self.num_model = j
+
+    def predict(self, test_x, predict_cnt):
+        cnt_instance = test_x.shape[0]
+        all_part_predict = [[] for _ in range(cnt_instance)]
+        with open('{0}/b.dat'.format(self.model_store_dir), 'r') as b_f:
+            b = pickle.load(b_f)
+        for j in xrange(self.num_model):
+            print "{0} parts have been scored.".format(j)
+            with open('{0}/w_{1}.dat'.format(self.model_store_dir, j), 'r') as w_f:
+                part_w = pickle.load(w_f)
+            with open('{0}/label_list_{1}.dat'.format(self.model_store_dir, j), 'r') as label_list_f:
+                label_list = pickle.load(label_list_f)
+            self._part_scoring(b, part_w, all_part_predict, label_list, test_x, predict_cnt)
         return [[heapq.heappop(part_pred).label for _ in range(min(predict_cnt, len(part_pred)))] for part_pred in
                 all_part_predict]
-
-    #
-    # def predict(self, test_x, predict_cnt):
-    #     cnt_instance = test_x.shape[0]
-    #     all_part_predict = [[] for _ in range(cnt_instance)]
-    #     with open('{0}/b.dat'.format(self.model_store_dir), 'r') as b_f:
-    #         b = pickle.load(b_f)
-
-
 
     @staticmethod
     def _estimate_b(y):
@@ -131,5 +134,5 @@ if __name__ == '__main__':
                  2, 5]
     x = csr_matrix((element, (row_index, col_index)), shape=(15, 6))
     m = LaplaceSmoothedMNB()
-    print m.fit_and_predict(y, x, x, 2, 1)
-    print m.fit_and_predict(y, x, x, 1, 1)
+    print m.fit(y, x, x, 2, 1)
+    print m.fit(y, x, x, 1, 1)

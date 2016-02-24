@@ -40,7 +40,7 @@ class TestSmoothedMNB(TestMNB):
         return mnb.LaplaceSmoothedMNB()
 
     def test_fit(self, y, x, m):
-        predict_res = m.fit_and_predict(y, x, x, 2, 1)
+        predict_res = m.fit(y, x, x, 2, 1)
         assert m.part_w.nnz == 12
         assert m.part_w.shape == (2, 6)
         assert m.b[0] == math.log(6. / 15.)
@@ -60,7 +60,7 @@ class TestSmoothedMNB(TestMNB):
 
         assert predict_res == [[0], [1], [1], [0], [0], [0], [1], [1], [1], [1], [1], [1], [1], [1], [1]]
 
-        predict_res = m.fit_and_predict(y, x, x, 1, 1)
+        predict_res = m.fit(y, x, x, 1, 1)
         assert m.part_w.nnz == 6
         assert m.part_w.shape == (1, 6)
         assert m.b[0] == math.log(6. / 15.)
