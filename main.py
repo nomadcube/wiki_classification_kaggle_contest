@@ -19,7 +19,7 @@ if __name__ == '__main__':
     # pr.enable()
     t = time()
 
-    pipeline.run(train_file, 200)  # 分块大小和预测目标个数的乘积必须小于总分类数
+    pipeline.run(train_file, 201)  # 分块大小和预测目标个数的乘积必须小于总分类数
     print repr(pipeline)
     # submission(exam_file, exam_out_file, pipeline)
 
