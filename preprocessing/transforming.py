@@ -48,8 +48,11 @@ class YConverter:
     def __init__(self):
         self.label_old_new_relation = dict()
 
-    def construct(self, label_old_new_relation_from_read):
-        self.label_old_new_relation = label_old_new_relation_from_read
+    def construct(self, y):
+        for labels in y:
+            for each_label in labels:
+                if each_label not in self.label_old_new_relation.keys():
+                    self.label_old_new_relation[each_label] = len(self.label_old_new_relation)
 
     def convert(self, y):
         new_y = list()
