@@ -40,21 +40,21 @@ class TestSmoothedMNB(TestMNB):
         return mnb.LaplaceSmoothedMNB()
 
     def test_fit(self, y, x, m):
-        predict_res = m.fit_and_predict(y, x, x, 1, 1)
-        assert m.part_w.nnz == 6
-        assert m.part_w.shape == (1, 6)
+        predict_res = m.fit_and_predict(y, x, x, 2, 1)
+        assert m.part_w.nnz == 12
+        assert m.part_w.shape == (2, 6)
         assert m.b[0] == math.log(6. / 15.)
         assert m.b[1] == math.log(9. / 15.)
-        # assert abs(m.part_w[0, 0] - (-1.50407739678)) < 1e-6
-        # assert abs(m.part_w[0, 1] - (-1.79175946923)) < 1e-6
-        # assert abs(m.part_w[0, 2] - (-2.19722457734)) < 1e-6
-        # assert abs(m.part_w[0, 3] - (-1.50407739678)) < 1e-6
-        # assert abs(m.part_w[0, 4] - (-1.79175946923)) < 1e-6
-        # assert abs(m.part_w[0, 5] - (-2.19722457734)) < 1e-6
-        assert abs(m.part_w[0, 0] - (-2.07944154168)) < 1e-6
+        assert abs(m.part_w[0, 0] - (-1.50407739678)) < 1e-6
         assert abs(m.part_w[0, 1] - (-1.79175946923)) < 1e-6
-        assert abs(m.part_w[0, 2] - (-1.56861591791)) < 1e-6
-        assert abs(m.part_w[0, 3] - (-2.48490664979)) < 1e-6
-        assert abs(m.part_w[0, 4] - (-1.56861591791)) < 1e-6
-        assert abs(m.part_w[0, 5] - (-1.56861591791)) < 1e-6
+        assert abs(m.part_w[0, 2] - (-2.19722457734)) < 1e-6
+        assert abs(m.part_w[0, 3] - (-1.50407739678)) < 1e-6
+        assert abs(m.part_w[0, 4] - (-1.79175946923)) < 1e-6
+        assert abs(m.part_w[0, 5] - (-2.19722457734)) < 1e-6
+        assert abs(m.part_w[1, 0] - (-2.07944154168)) < 1e-6
+        assert abs(m.part_w[1, 1] - (-1.79175946923)) < 1e-6
+        assert abs(m.part_w[1, 2] - (-1.56861591791)) < 1e-6
+        assert abs(m.part_w[1, 3] - (-2.48490664979)) < 1e-6
+        assert abs(m.part_w[1, 4] - (-1.56861591791)) < 1e-6
+        assert abs(m.part_w[1, 5] - (-1.56861591791)) < 1e-6
         assert predict_res == [[0], [0], [0], [0], [0], [0], [1], [1], [1], [1], [1], [1], [1], [1], [1]]

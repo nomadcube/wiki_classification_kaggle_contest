@@ -1,6 +1,6 @@
 from submission import submission
 from pipeline import PipeLine
-from models.mnb import LaplaceSmoothedMNB, NonSmoothedMNB
+from models.mnb import LaplaceSmoothedMNB
 import cProfile, pstats, StringIO
 import sys
 from time import time

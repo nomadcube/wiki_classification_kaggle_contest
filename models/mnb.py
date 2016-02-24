@@ -1,7 +1,7 @@
 # coding=utf-8
 import numpy as np
 from numpy.ma import masked_values
-from scipy.sparse import csr_matrix, lil_matrix
+from scipy.sparse import csr_matrix
 from abc import abstractmethod
 from memory_profiler import profile
 import math
@@ -28,9 +28,9 @@ class BaseMNB:
         cnt_instance = test_x.shape[0]
         all_part_predict = [[] for _ in range(cnt_instance)]
         self.b = self._estimate_b(train_y)
-        for i, (part_y, real_labels) in enumerate(self._y_split(train_y, part_size)):
+        for j, (part_y, label_list) in enumerate(self._y_split(train_y, part_size)):
             self.part_w = self._part_estimate_w(part_y, train_x)
-            self._part_scoring(all_part_predict, real_labels, test_x, predict_cnt)
+            self._part_scoring(all_part_predict, label_list, test_x, predict_cnt)
         return [[heapq.heappop(part_pred).label for _ in range(predict_cnt)] for part_pred in all_part_predict]
 
     @staticmethod
@@ -79,7 +79,7 @@ class LaplaceSmoothedMNB(BaseMNB):
 
     # @profile
     def _part_scoring(self, all_part_predict, real_labels, x, k=1):
-        log_likelihood_mat = self.part_w.dot(x.transpose()).transpose()
+        log_likelihood_mat = x.dot(self.part_w.transpose())
         for i, each_x in enumerate(log_likelihood_mat):
             tmp = np.array(each_x.todense())[0] + self.b[real_labels[0]: real_labels[-1] + 1]
             heapq.heappush(all_part_predict[i], OnePrediction(real_labels[np.argmax(tmp)], max(tmp)))
@@ -112,4 +112,5 @@ if __name__ == '__main__':
                  2, 5]
     x = csr_matrix((element, (row_index, col_index)), shape=(15, 6))
     m = LaplaceSmoothedMNB()
-    print m.fit_and_predict(y, x, x, 1, 1)
+    print m.fit_and_predict(y, x, x, 2, 1)
+    print x
