@@ -85,52 +85,6 @@ class LaplaceSmoothedMNB(BaseMNB):
             heapq.heappush(all_part_predict[i], OnePrediction(real_labels[np.argmax(tmp)], max(tmp)))
 
 
-class NonSmoothedMNB(BaseMNB):
-    def _part_estimate_w(self, part_y, x):
-        y_x_param = part_y.transpose().dot(x).tocsr()
-        tmp = np.array(y_x_param.sum(axis=1).ravel())[0]
-        y_x_param.data /= tmp.repeat(np.diff(y_x_param.indptr))
-        y_x_param.data = np.log(y_x_param.data)
-        return lil_matrix(y_x_param)
-
-    def _part_scoring(self, all_part_predict, real_labels, x, k=1):
-        x = x.tolil()
-        labels = list()
-        for sample_no in xrange(len(x.data)):
-            tmp_top_labels = self._one_sample_top_labels(sample_no, self.b, self.part_w, x, k)
-            labels.append(tmp_top_labels)
-        return labels
-
-    def _one_sample_top_labels(self, sample_no, b, w, x, k):
-        class_scores = dict()
-        x_row_tmp = x.rows[sample_no]
-        x_data_tmp = x.data[sample_no]
-        sample_indices_data = dict(zip(x_row_tmp, x_data_tmp))
-        for label_no in xrange(w.shape[0]):
-            label_no, sample_class_score = self._one_label_score(label_no, b, w, sample_indices_data)
-            class_scores[label_no] = sample_class_score
-        return self.top_k_keys(class_scores, k)
-
-    @staticmethod
-    def _one_label_score(label_no, b, w, one_x):
-        w_data_tmp = w.data[label_no]
-        w_row_tmp = w.rows[label_no]
-        if len(w_data_tmp) > 0:
-            label_indices_data = dict(zip(w_row_tmp, w_data_tmp))
-            sample_class_score = b[label_no]
-            if sample_class_score != -float("inf") and len(set(one_x.keys()).difference(set(w_row_tmp))) == 0:
-                for feature in one_x.keys():
-                    sample_class_score += one_x[feature] * label_indices_data[feature]
-                return label_no, sample_class_score
-        return label_no, 1e-30
-
-    @staticmethod
-    def top_k_keys(d, k):
-        f = lambda x: d[x]
-        sorted_d = sorted(d, key=f, reverse=True)
-        return sorted_d[:k]
-
-
 if __name__ == '__main__':
     from preprocessing import transforming
 

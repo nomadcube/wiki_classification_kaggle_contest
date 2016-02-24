@@ -34,36 +34,6 @@ class TestMNB:
                      2, 5]
         return csr_matrix((element, (row_index, col_index)), shape=(15, 6))
 
-        # def pytest_funcarg__m(self):
-        #     return mnb.NonSmoothedMNB()
-        #
-        # def test_fit(self, y, x, m):
-        #     m.fit_and_predict(y, x)
-        #     assert m.w.nnz == 12
-        #     assert m.w.shape == (2, 6)
-        #     assert m.b[0] == math.log(6. / 15.)
-        #     assert m.b[1] == math.log(9. / 15.)
-        #     assert abs(m.w[0, 0] - (-1.38629436112)) < 1e-6
-        #     assert abs(m.w[0, 1] - (-1.79175946923)) < 1e-6
-        #     assert abs(m.w[0, 2] - (-2.48490664979)) < 1e-6
-        #     assert abs(m.w[0, 3] - (-1.38629436112)) < 1e-6
-        #     assert abs(m.w[0, 4] - (-1.79175946923)) < 1e-6
-        #     assert abs(m.w[0, 5] - (-2.48490664979)) < 1e-6
-        #     assert abs(m.w[1, 0] - (-2.19722457734)) < 1e-6
-        #     assert abs(m.w[1, 1] - (-1.79175946923)) < 1e-6
-        #     assert abs(m.w[1, 2] - (-1.50407739678)) < 1e-6
-        #     assert abs(m.w[1, 3] - (-2.8903717579)) < 1e-6
-        #     assert abs(m.w[1, 4] - (-1.50407739678)) < 1e-6
-        #     assert abs(m.w[1, 5] - (-1.50407739678)) < 1e-6
-        #
-        # def pytest_funcarg__fitted_m(self, y, x, m):
-        #     return m.fit_and_predict(y, x)
-        #
-        # def test_predict(self, x, fitted_m):
-        #     predict_res = fitted_m.partial_predict(x)
-        #     assert len(predict_res) == 15
-        #     assert predict_res == [[0], [0], [0], [0], [0], [0], [1], [1], [1], [1], [1], [1], [1], [1], [1]]
-
 
 class TestSmoothedMNB(TestMNB):
     def pytest_funcarg__m(self):
