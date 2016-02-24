@@ -12,8 +12,9 @@ if __name__ == '__main__':
         sys.argv) > 2 else '/Users/wumengling/PycharmProjects/kaggle/input_data/test_subset.csv'
     exam_out_file = sys.argv[3] if len(
         sys.argv) > 3 else '/Users/wumengling/PycharmProjects/kaggle/output_data/submission.csv'
-    pipeline = PipeLine(LaplaceSmoothedMNB, [90], [5])
     chuck_size = int(sys.argv[4]) if len(sys.argv) > 4 else 400
+    tf_idf_thresholds = [int(t) for t in sys.argv[5].split(',')] if len(sys.argv) > 5 else [90]
+    pipeline = PipeLine(LaplaceSmoothedMNB, tf_idf_thresholds, [5])
 
     pr = cProfile.Profile()
     pr.enable()
