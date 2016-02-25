@@ -29,14 +29,14 @@ class BaseMNB:
     def fit(self, train_y, train_x, part_size):
         b = self._estimate_b(train_y)
         with open('{0}/b.dat'.format(self.model_store_dir), 'wb') as b_f:
-            dump(b, b_f)
+            dump(b, b_f, protocol=2)
         for j, (part_y, label_list) in enumerate(self._y_split(train_y, part_size)):
             print "{0} parts have been trained.".format(j)
             part_w = self._part_estimate_w(part_y, train_x)
             with open('{0}/w_{1}.dat'.format(self.model_store_dir, j), 'wb') as w_f:
-                dump(part_w, w_f)
+                dump(part_w, w_f, protocol=2)
             with open('{0}/label_list_{1}.dat'.format(self.model_store_dir, j), 'wb') as label_list_f:
-                dump(label_list, label_list_f)
+                dump(label_list, label_list_f, protocol=2)
             self.num_model = j
 
     def predict(self, test_x, predict_cnt):
