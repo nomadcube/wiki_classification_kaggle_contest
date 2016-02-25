@@ -12,8 +12,8 @@ if __name__ == '__main__':
         sys.argv) > 2 else '/Users/wumengling/PycharmProjects/kaggle/input_data/test_subset.csv'
     exam_out_file = sys.argv[3] if len(
         sys.argv) > 3 else '/Users/wumengling/PycharmProjects/kaggle/output_data/submission.csv'
-    chuck_size = int(sys.argv[4]) if len(sys.argv) > 4 else 400
-    tf_idf_thresholds = [int(t) for t in sys.argv[5].split(',')] if len(sys.argv) > 5 else [99]
+    chuck_size = int(sys.argv[4]) if len(sys.argv) > 4 else 3000
+    tf_idf_thresholds = [int(t) for t in sys.argv[5].split(',')] if len(sys.argv) > 5 else [97]
     model_file = sys.argv[6] if len(sys.argv) > 6 else '/Users/wumengling/PycharmProjects/kaggle/output_data'
 
     pr = cProfile.Profile()
@@ -21,7 +21,7 @@ if __name__ == '__main__':
     t = time()
 
     pipeline = PipeLine(LaplaceSmoothedMNB, tf_idf_thresholds, [5], model_file)
-    pipeline.model_selection(train_file, chuck_size)  # 分块大小和预测目标个数的乘积必须小于总分类数
+    pipeline.model_selection(train_file, chuck_size)
     print repr(pipeline)
     pipeline.submission(exam_file, exam_out_file)
 
