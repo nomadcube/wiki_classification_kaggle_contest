@@ -60,7 +60,6 @@ class BaseMNB:
         each_label_occurrence = np.array(y.sum(axis=1).ravel())[0]
         total_occurrence = each_label_occurrence.sum()
         each_label_occurrence /= total_occurrence
-        each_label_occurrence = masked_values(each_label_occurrence, 0.)
         each_label_occurrence = np.log(each_label_occurrence)
         return each_label_occurrence
 
