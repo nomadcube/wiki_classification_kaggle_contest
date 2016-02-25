@@ -72,7 +72,7 @@ class BaseMNB:
         for p in xrange(part_cnt):
             begin = p * part_size
             end = min(total_size, (p + 1) * part_size)
-            yield lil_y[begin: end].tocsr().transpose(), total_label_list[begin: end]
+            yield lil_y[begin: end].transpose().tocsr(), total_label_list[begin: end]
 
     @abstractmethod
     def _part_estimate_w(self, part_y, x):
