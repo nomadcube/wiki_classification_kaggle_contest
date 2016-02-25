@@ -7,10 +7,11 @@ from preprocessing.tf_idf import tf_idf
 from memory_profiler import profile
 import sys
 import math
+import pickle
 
 
 class PipeLine:
-    def __init__(self, model_class, threshold, predict_cnt, model_store_dir):
+    def __init__(self, model_class, threshold, predict_cnt, model_store_dir, test_data_store_dir):
         self._model = model_class
         self._threshold = threshold
         self._predict_cnt = predict_cnt
@@ -23,6 +24,7 @@ class PipeLine:
         self.best_model = None
 
         self.model_store_dir = model_store_dir
+        self.test_data_store_dir = test_data_store_dir
 
     # @profile
     def model_selection(self, in_path, part_size):
@@ -68,18 +70,32 @@ class PipeLine:
                 self.best_predicted_cnt = predict_cnt
                 self.best_model = model
 
-    def submission(self, test_file_path, output_file_path):
-        exam_smp = Sample()
-        exam_smp.read(test_file_path)
-        transformed_x = self.best_x_converter.convert(exam_smp.x)
-        predicted_y = self.best_model.predict(transformed_x, self.best_predicted_cnt)
-        origin_predicted_y = self.best_y_converter.withdraw_convert(predicted_y)
+    def submission(self, test_file_path, output_file_path, transformed_x_exited=False):
+        if not transformed_x_exited:
+            exam_smp = Sample()
+            exam_smp.read(test_file_path)
+            transformed_x = self.best_x_converter.convert(exam_smp.x)
+            with open('{0}/transformed_x.dat'.format(self.test_data_store_dir), 'wb') as transformed_x_f:
+                pickle.dump(transformed_x, transformed_x_f)
+            predicted_y = self.best_model.predict(transformed_x, self.best_predicted_cnt)
+            origin_predicted_y = self.best_y_converter.withdraw_convert(predicted_y)
 
-        with open(output_file_path, 'w') as out:
-            out.write('Id,Predicted' + '\n')
-            for i, each_predicted_y in enumerate(origin_predicted_y):
-                out.write("{0},{1}\n".format(i, ' '.join([str(i) for i in each_predicted_y])))
-            out.flush()
+            with open(output_file_path, 'w') as out:
+                out.write('Id,Predicted' + '\n')
+                for i, each_predicted_y in enumerate(origin_predicted_y):
+                    out.write("{0},{1}\n".format(i, ' '.join([str(i) for i in each_predicted_y])))
+                out.flush()
+        else:
+            with open('{0}/transformed_x.dat'.format(self.test_data_store_dir), 'r') as transformed_x_f:
+                transformed_x = pickle.load(transformed_x_f)
+            predicted_y = self.best_model.predict(transformed_x, self.best_predicted_cnt)
+            origin_predicted_y = self.best_y_converter.withdraw_convert(predicted_y)
+
+            with open(output_file_path, 'w') as out:
+                out.write('Id,Predicted' + '\n')
+                for i, each_predicted_y in enumerate(origin_predicted_y):
+                    out.write("{0},{1}\n".format(i, ' '.join([str(i) for i in each_predicted_y])))
+                out.flush()
 
     def __repr__(self):
         return "best_threshold: {0}\nbest_predicted_cnt: {1}".format(self.best_threshold, self.best_predicted_cnt)

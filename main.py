@@ -15,15 +15,16 @@ if __name__ == '__main__':
     chuck_size = int(sys.argv[4]) if len(sys.argv) > 4 else 400
     tf_idf_thresholds = [int(t) for t in sys.argv[5].split(',')] if len(sys.argv) > 5 else [97]
     model_file = sys.argv[6] if len(sys.argv) > 6 else '/Users/wumengling/PycharmProjects/kaggle/output_data'
+    test_data_save_dir = sys.argv[7] if len(sys.argv) > 7 else '/Users/wumengling/PycharmProjects/kaggle/input_data'
 
     pr = cProfile.Profile()
     pr.enable()
     t = time()
 
-    pipeline = PipeLine(LaplaceSmoothedMNB, tf_idf_thresholds, [5], model_file)
+    pipeline = PipeLine(LaplaceSmoothedMNB, tf_idf_thresholds, [5], model_file, test_data_save_dir)
     pipeline.model_selection(train_file, chuck_size)
     print repr(pipeline)
-    pipeline.submission(exam_file, exam_out_file)
+    # pipeline.submission(exam_file, exam_out_file, transformed_x_exited=True)
 
     print time() - t
     pr.disable()
