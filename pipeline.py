@@ -1,7 +1,7 @@
 # coding=utf-8
 from itertools import product
 from read import Sample
-from preprocessing.transforming import YConverter, XConverter, convert_y_to_coo
+from preprocessing.transforming import YConverter, XConverter, convert_y_to_csr
 from metrics import macro_precision_recall
 from preprocessing.tf_idf import tf_idf
 from memory_profiler import profile
@@ -45,14 +45,14 @@ class PipeLine:
             mapped_reduced_x = tf_idf(x_converter.convert(train_smp.x))
             mapped_reduced_test_x = tf_idf(x_converter.convert(test_smp.x))
 
-            coo_mapped_y = convert_y_to_coo(mapped_y)
+            csr_mapped_y = convert_y_to_csr(mapped_y)
             print "num of labels in train set: {0}\ntrain set size: {1}\nfeature count in train set: {2}".format(
-                coo_mapped_y.shape[0], coo_mapped_y.shape[1], mapped_reduced_x.shape[1])
+                csr_mapped_y.shape[0], csr_mapped_y.shape[1], mapped_reduced_x.shape[1])
 
             print "\nall y split into {0} parts, each with at most {1} label".format(
-                int(math.ceil(coo_mapped_y.shape[0] / float(part_size))), part_size)
+                int(math.ceil(csr_mapped_y.shape[0] / float(part_size))), part_size)
             model = self._model(self.model_store_dir)
-            model.fit(coo_mapped_y, mapped_reduced_x, part_size)
+            model.fit(csr_mapped_y, mapped_reduced_x, part_size)
             mapped_test_predicted_y = model.predict(mapped_reduced_test_x, predict_cnt)
 
             mpr_mre = macro_precision_recall(test_smp.y, y_converter.withdraw_convert(mapped_test_predicted_y),

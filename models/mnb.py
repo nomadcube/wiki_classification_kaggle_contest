@@ -56,7 +56,6 @@ class BaseMNB:
 
     @staticmethod
     def _estimate_b(y):
-        y = y.tocsr()
         each_label_occurrence = np.array(y.sum(axis=1).ravel())[0]
         total_occurrence = each_label_occurrence.sum()
         each_label_occurrence /= total_occurrence
@@ -65,7 +64,7 @@ class BaseMNB:
 
     @staticmethod
     def _y_split(whole_y, part_size):
-        total_label_list = np.unique(whole_y.row)
+        total_label_list = range(whole_y.shape[0])
         lil_y = whole_y.tolil()
         total_size = lil_y.shape[0]
         part_cnt = int(math.ceil(float(total_size) / part_size))
