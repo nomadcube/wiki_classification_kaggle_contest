@@ -110,38 +110,37 @@ class LaplaceSmoothedMNB(BaseMNB):
 
     @staticmethod
     def _top_k_argmax(arr, k):
-        for i in xrange(k):
-            tmp_am = arr.argmax()
-            yield (tmp_am, arr.max())
-            arr = masked_values(arr, value=arr[tmp_am])
+        return zip(np.argsort(arr)[-k:], np.sort(arr)[-k:])
 
 
 if __name__ == '__main__':
-    from preprocessing import transforming
-
-    y = transforming.convert_y_to_csr(np.array([[0], [0], [1], [1], [0],
-                                                [0], [0], [1], [1], [1],
-                                                [1], [1], [1], [1], [0]]))
-    element = [1.] * 30
-    row_index = list()
-    for i in range(15):
-        row_index.extend([i] * 2)
-    col_index = [0, 3,
-                 0, 4,
-                 0, 4,
-                 0, 3,
-                 0, 3,
-                 1, 3,
-                 1, 4,
-                 1, 4,
-                 1, 5,
-                 1, 5,
-                 2, 5,
-                 2, 4,
-                 2, 4,
-                 2, 5,
-                 2, 5]
-    x = csr_matrix((element, (row_index, col_index)), shape=(15, 6))
-    m = LaplaceSmoothedMNB()
-    print m.fit(y, x, x, 2, 1)
-    print m.fit(y, x, x, 1, 1)
+    # from preprocessing import transforming
+    #
+    # y = transforming.convert_y_to_csr(np.array([[0], [0], [1], [1], [0],
+    #                                             [0], [0], [1], [1], [1],
+    #                                             [1], [1], [1], [1], [0]]))
+    # element = [1.] * 30
+    # row_index = list()
+    # for i in range(15):
+    #     row_index.extend([i] * 2)
+    # col_index = [0, 3,
+    #              0, 4,
+    #              0, 4,
+    #              0, 3,
+    #              0, 3,
+    #              1, 3,
+    #              1, 4,
+    #              1, 4,
+    #              1, 5,
+    #              1, 5,
+    #              2, 5,
+    #              2, 4,
+    #              2, 4,
+    #              2, 5,
+    #              2, 5]
+    # x = csr_matrix((element, (row_index, col_index)), shape=(15, 6))
+    # m = LaplaceSmoothedMNB()
+    # print m.fit(y, x, x, 2, 1)
+    # print m.fit(y, x, x, 1, 1)
+    arr = np.array([2, 3, 5, 1])
+    print _top_k_argmax(arr, 2)
