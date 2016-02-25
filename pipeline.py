@@ -78,7 +78,7 @@ class PipeLine:
         with open(output_file_path, 'w') as out:
             out.write('Id,Predicted' + '\n')
             for i, each_predicted_y in enumerate(origin_predicted_y):
-                out.write(repr(i) + ',' + ' '.join([str(i) for i in each_predicted_y]) + '\n')
+                out.write("{0},{1}\n".format(i, ' '.join([str(i) for i in each_predicted_y])))
             out.flush()
 
     def __repr__(self):
