@@ -17,8 +17,8 @@ if __name__ == '__main__':
     model_file = sys.argv[6] if len(sys.argv) > 6 else '/Users/wumengling/PycharmProjects/kaggle/output_data'
     test_data_save_dir = sys.argv[7] if len(sys.argv) > 7 else '/Users/wumengling/PycharmProjects/kaggle/input_data'
 
-    pr = cProfile.Profile()
-    pr.enable()
+    # pr = cProfile.Profile()
+    # pr.enable()
     t = time()
 
     pipeline = PipeLine(LaplaceSmoothedMNB, tf_idf_thresholds, [5], model_file, test_data_save_dir)
@@ -27,9 +27,9 @@ if __name__ == '__main__':
     # pipeline.submission(exam_file, exam_out_file, transformed_x_exited=True)
 
     print time() - t
-    pr.disable()
-    s = StringIO.StringIO()
-    sortby = 'tottime'
-    ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
-    ps.print_stats()
-    print s.getvalue()
+    # pr.disable()
+    # s = StringIO.StringIO()
+    # sortby = 'tottime'
+    # ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+    # ps.print_stats()
+    # print s.getvalue()
