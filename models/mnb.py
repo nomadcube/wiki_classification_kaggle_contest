@@ -56,23 +56,24 @@ class BaseMNB:
 
     @staticmethod
     def _estimate_b(y):
-        y_col_sum = np.array(y.sum(axis=0))[0]
-        total_label_occurrence_cnt = y_col_sum.sum()
-        y_col_sum /= total_label_occurrence_cnt
-        y_col_sum = masked_values(y_col_sum, 0.)
-        y_col_sum = np.log(y_col_sum)
-        return y_col_sum
+        y = y.tocsr()
+        each_label_occurrence = np.array(y.sum(axis=1).ravel())[0]
+        total_occurrence = each_label_occurrence.sum()
+        each_label_occurrence /= total_occurrence
+        each_label_occurrence = masked_values(each_label_occurrence, 0.)
+        each_label_occurrence = np.log(each_label_occurrence)
+        return each_label_occurrence
 
     @staticmethod
     def _y_split(whole_y, part_size):
-        total_label_list = np.unique(whole_y.indices)
-        lil_y = whole_y.transpose().tolil()
+        total_label_list = np.unique(whole_y.row)
+        lil_y = whole_y.tolil()
         total_size = lil_y.shape[0]
         part_cnt = int(math.ceil(float(total_size) / part_size))
         for p in xrange(part_cnt):
             begin = p * part_size
             end = min(total_size, (p + 1) * part_size)
-            yield lil_y[begin: end].transpose().tocsr(), total_label_list[begin: end]
+            yield lil_y[begin: end].tocsr(), total_label_list[begin: end]
 
     @abstractmethod
     def _part_estimate_w(self, part_y, x):
@@ -90,7 +91,7 @@ class LaplaceSmoothedMNB(BaseMNB):
 
     # @profile
     def _part_estimate_w(self, part_y, x):
-        y_x_param = part_y.transpose().dot(x)
+        y_x_param = part_y.dot(x)
         y_x_param = y_x_param.todense()
         y_x_param += self._alpha
         tmp = np.array(y_x_param.sum(axis=1).ravel())[0]

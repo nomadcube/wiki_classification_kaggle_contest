@@ -10,7 +10,7 @@ class TestMNB:
         tmp = np.array([[0], [0], [1], [1], [0],
                         [0], [0], [1], [1], [1],
                         [1], [1], [1], [1], [0]])
-        return transforming.convert_y_to_csr(tmp)
+        return transforming.convert_y_to_coo(tmp)
 
     def pytest_funcarg__x(self):
         element = [1.] * 30

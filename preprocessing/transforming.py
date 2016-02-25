@@ -74,17 +74,17 @@ class YConverter:
         return y
 
 
-def convert_y_to_csr(y, element_dtype='float', total_label_cnt=0):
+def convert_y_to_coo(y, element_dtype='float', total_label_cnt=0):
     elements = array('f')
-    rows = array('I')
-    columns = array('I')
+    instance_nos = array('I')
+    labels = array('I')
     for row_index, row in enumerate(y):
         row_size = len(row)
         elements.extend(array('f', [1.0] * row_size))
-        rows.extend(array('I', [row_index] * row_size))
-        columns.extend(array('I', row))
-    n_dim = max(total_label_cnt, max(columns) + 1)
-    return csr_matrix((elements, (rows, columns)), shape=(len(y), n_dim), dtype=element_dtype)
+        instance_nos.extend(array('I', [row_index] * row_size))
+        labels.extend(array('I', row))
+    cnt_label = max(total_label_cnt, max(labels) + 1)
+    return coo_matrix((elements, (labels, instance_nos)), shape=(cnt_label, len(y)), dtype=element_dtype)
 
 
 if __name__ == '__main__':
@@ -103,7 +103,7 @@ if __name__ == '__main__':
     y_converter.construct(y)
     print y_converter.convert(y)
     print y_converter.withdraw_convert(y_converter.convert(y))
-    mapped_csr_y = convert_y_to_csr(y_converter.convert(y))
+    mapped_csr_y = convert_y_to_coo(y_converter.convert(y))
     print mapped_csr_y
     all_part = [i for i in part_csr_y_generator(mapped_csr_y, 1)]
     for i in all_part:
