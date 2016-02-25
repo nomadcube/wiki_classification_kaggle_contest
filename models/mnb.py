@@ -37,7 +37,7 @@ class BaseMNB:
                 dump(part_w, w_f, protocol=2)
             with open('{0}/label_list_{1}.dat'.format(self.model_store_dir, j), 'wb') as label_list_f:
                 dump(label_list, label_list_f, protocol=2)
-            self.num_model = j
+            self.num_model = j + 1
 
     def predict(self, test_x, predict_cnt):
         cnt_instance = test_x.shape[0]
