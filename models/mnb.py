@@ -101,17 +101,16 @@ class LaplaceSmoothedMNB(BaseMNB):
 
     # @profile
     def _part_scoring(self, b, part_w, all_part_predict, real_labels, x, k=1):
-        # todo: 若最终要得到k个预测结果，那么各个子问题都必须要返回至少k个局部预测结果
         log_likelihood_mat = x.dot(part_w.transpose())
         part_b = np.array([b[label] for label in real_labels])
         for i, each_x in enumerate(log_likelihood_mat):
             tmp = np.array(each_x.todense())[0] + part_b
-            for j, (max_label, max_score) in enumerate(self._top_k_argmax(tmp, k)):
-                all_part_predict[i].append(OnePrediction(max_label, max_score))
+            for j, max_label in enumerate(self._top_k_argmax(tmp, k)):
+                all_part_predict[i].append(OnePrediction(real_labels[max_label], tmp[max_label]))
 
     @staticmethod
     def _top_k_argmax(arr, k):
-        return zip(np.argsort(arr)[-k:], np.sort(arr)[-k:])
+        return np.argsort(arr)[-k:]
 
 
 if __name__ == '__main__':
