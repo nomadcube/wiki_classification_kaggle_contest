@@ -1,7 +1,7 @@
 # coding=utf-8
 import numpy as np
 from numpy.ma import masked_values
-from scipy.sparse import csr_matrix
+from scipy.sparse import csr_matrix, csc_matrix
 from abc import abstractmethod
 from memory_profiler import profile
 import math
@@ -98,7 +98,7 @@ class LaplaceSmoothedMNB(BaseMNB):
         y_x_param = y_x_param.transpose()
         y_x_param /= tmp
         y_x_param = np.log(y_x_param)
-        return csr_matrix(y_x_param.transpose())
+        return csc_matrix(y_x_param.transpose())
 
     # @profile
     def _part_scoring(self, b, part_w, all_part_predict, real_labels, x, k=1):
