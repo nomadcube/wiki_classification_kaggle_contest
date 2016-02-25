@@ -30,7 +30,8 @@ class BaseMNB:
         b = self._estimate_b(train_y)
         with open('{0}/b.dat'.format(self.model_store_dir), 'wb') as b_f:
             dump(b, b_f, protocol=2)
-        for j, (part_y, label_list) in enumerate(self._y_split(train_y, part_size)):
+        part_gen = self._y_split(train_y, part_size)
+        for j, (part_y, label_list) in enumerate(part_gen):
             print "{0} parts have been trained.".format(j)
             part_w = self._part_estimate_w(part_y, train_x)
             with open('{0}/w_{1}.dat'.format(self.model_store_dir, j), 'wb') as w_f:
@@ -65,13 +66,12 @@ class BaseMNB:
     @staticmethod
     def _y_split(whole_y, part_size):
         total_label_list = range(whole_y.shape[0])
-        lil_y = whole_y.tolil()
-        total_size = lil_y.shape[0]
+        total_size = whole_y.shape[0]
         part_cnt = int(math.ceil(float(total_size) / part_size))
         for p in xrange(part_cnt):
             begin = p * part_size
             end = min(total_size, (p + 1) * part_size)
-            yield lil_y[begin: end].tocsr(), total_label_list[begin: end]
+            yield whole_y[begin: end, :], total_label_list[begin: end]
 
     @abstractmethod
     def _part_estimate_w(self, part_y, x):
@@ -88,9 +88,8 @@ class LaplaceSmoothedMNB(BaseMNB):
         self._alpha = 1.
 
     # @profile
-    def _part_estimate_w(self, part_y, x):
-        y_x_param = part_y.dot(x)
-        y_x_param = y_x_param.todense()
+    def _part_estimate_w(self, part_y, x):  # 10.0906298161
+        y_x_param = part_y.dot(x).todense()
         y_x_param += self._alpha
         tmp = np.array(y_x_param.sum(axis=1).ravel())[0]
         y_x_param = y_x_param.transpose()

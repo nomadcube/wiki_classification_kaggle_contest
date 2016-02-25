@@ -17,8 +17,8 @@ if __name__ == '__main__':
     chuck_size = int(sys.argv[6]) if len(sys.argv) > 6 else 400
     tf_idf_thresholds = [int(t) for t in sys.argv[7].split(',')] if len(sys.argv) > 7 else [97]
 
-    # pr = cProfile.Profile()
-    # pr.enable()
+    pr = cProfile.Profile()
+    pr.enable()
     t = time()
 
     pipeline = PipeLine(LaplaceSmoothedMNB, tf_idf_thresholds, [5], model_file, test_data_save_dir)
@@ -27,9 +27,9 @@ if __name__ == '__main__':
     # pipeline.submission(exam_file, exam_out_file, transformed_x_exited=True)
 
     print time() - t
-    # pr.disable()
-    # s = StringIO.StringIO()
-    # sortby = 'tottime'
-    # ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
-    # ps.print_stats()
-    # print s.getvalue()
+    pr.disable()
+    s = StringIO.StringIO()
+    sortby = 'cumtime'
+    ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+    ps.print_stats()
+    print s.getvalue()
