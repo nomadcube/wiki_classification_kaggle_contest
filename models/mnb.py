@@ -6,7 +6,7 @@ from abc import abstractmethod
 from memory_profiler import profile
 import math
 import heapq
-from pickle import dump, load
+from cPickle import dump, load
 
 
 class OnePrediction(object):
