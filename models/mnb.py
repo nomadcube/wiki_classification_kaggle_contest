@@ -114,7 +114,7 @@ class LaplaceSmoothedMNB(BaseMNB):
             raise TypeError()
         for i in xrange(k):
             tmp_am = arr.argmax()
-            yield (tmp_am, max(arr))
+            yield (tmp_am, arr.max())
             arr = masked_values(arr, value=arr[tmp_am])
 
 
