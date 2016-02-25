@@ -110,8 +110,6 @@ class LaplaceSmoothedMNB(BaseMNB):
 
     @staticmethod
     def _top_k_argmax(arr, k):
-        if not isinstance(arr, np.ndarray):
-            raise TypeError()
         for i in xrange(k):
             tmp_am = arr.argmax()
             yield (tmp_am, arr.max())
