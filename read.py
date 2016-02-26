@@ -55,6 +55,7 @@ class Sample:
         _col_index.extend([int(i) for i in compress(all_features, [1, 0] * one_line_feature_len)])
 
     def _select_instances(self):
+        # todo: common_labels_cnt只是个大概的估计，并不是准确的"训练集和测试集共有的label个数"
         test_instances = set()
         label_occurrence = occurrence(self.y)
         common_labels_cnt = 0.
