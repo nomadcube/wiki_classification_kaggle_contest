@@ -27,7 +27,7 @@ class Sample:
         return self
 
     def extract_and_update(self):
-        test_instances, common_labels_cnt = self._select_instances()
+        test_instances = self._select_instances()
         max_test_row_cnt = 1000
         test_instances = list(test_instances)[:min(max_test_row_cnt, len(test_instances))]
         train_instances = list(set(range(len(self.y))).difference(test_instances))
@@ -41,7 +41,7 @@ class Sample:
         train_smp.y = [self.y[i] for i in train_instances]
         train_smp.x = self.x[train_instances, :]
 
-        return train_smp, test_smp, common_labels_cnt
+        return train_smp, test_smp
 
     def _read_one_line(self, line, _element, _row_indptr, _col_index):
         multi_label, instance = line.strip().split(' ', 1)
@@ -58,13 +58,11 @@ class Sample:
     def _select_instances(self):
         test_instances = set()
         label_occurrence = occurrence(self.y)
-        common_label_cnt = 0.
         for label, instance_of_label in label_occurrence.items():
             if len(instance_of_label) > 2:
                 test_instances.add(instance_of_label.pop())
                 test_instances.add(instance_of_label.pop())
-                common_label_cnt += 1
-        return test_instances, common_label_cnt
+        return test_instances
 
 
 if __name__ == '__main__':

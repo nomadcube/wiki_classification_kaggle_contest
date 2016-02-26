@@ -13,7 +13,7 @@ if __name__ == '__main__':
              'submission_out_file': '/Users/wumengling/PycharmProjects/kaggle/output_data/submission.csv',
              'submission_save_dir': '/Users/wumengling/PycharmProjects/kaggle/input_data',
              'model_save_dir': '/Users/wumengling/PycharmProjects/kaggle/output_data',
-             'max_num_label': 2000,
+             'max_num_label': 3000,
              'chuck_num_label': 400,
              'tf_idf_threshold': [97],
              'num_predict': [5]
