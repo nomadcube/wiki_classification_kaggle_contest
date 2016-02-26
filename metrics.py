@@ -4,8 +4,7 @@ from array import array
 from numpy.ma import masked_values
 
 
-def macro_precision_recall(y, predicted_y):
-    # todo: 限制最大的label数越大，一般来说算出来的mpr和mre越好，这是一个需要修正的问题
+def macro_precision_recall(y, predicted_y, common_labels_cnt):
     # print predicted_y
     y_mat = convert_y_to_csr(y, element_dtype='float')  # y_mat/pred_mat: 类别数x样本数
     pred_mat = convert_y_to_csr(predicted_y, element_dtype='float', total_label_cnt=y_mat.shape[0])
@@ -16,7 +15,7 @@ def macro_precision_recall(y, predicted_y):
     true_positive = inter_mat.sum(axis=1)
     precision = true_positive / y_pos
     recall = true_positive / pred_pos
-    return precision.mean(), recall.mean()
+    return precision.sum() / common_labels_cnt, recall.sum() / common_labels_cnt
 
 
 if __name__ == '__main__':

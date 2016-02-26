@@ -31,7 +31,7 @@ class PipeLine:
     def model_selection(self, in_path, part_size):
         smp = Sample()
         smp.read(in_path)
-        train_smp, test_smp = smp.extract_and_update()
+        train_smp, test_smp, common_labels_cnt = smp.extract_and_update()
 
         y_converter = YConverter()
         y_converter.construct(train_smp.y)
@@ -60,7 +60,8 @@ class PipeLine:
             model.fit(csr_mapped_y, mapped_reduced_x, part_size, self.max_label_size)
             mapped_test_predicted_y = model.predict(mapped_reduced_test_x, predict_cnt)
 
-            mpr_mre = macro_precision_recall(test_smp.y, y_converter.withdraw_convert(mapped_test_predicted_y))
+            mpr_mre = macro_precision_recall(test_smp.y, y_converter.withdraw_convert(mapped_test_predicted_y),
+                                             min(self.max_label_size, common_labels_cnt))
             f_score = 1. / (1. / mpr_mre[0] + 1. / mpr_mre[1]) if mpr_mre[0] != 0. and mpr_mre[1] != 0. else float(
                 "inf")
             print mpr_mre
