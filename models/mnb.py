@@ -26,11 +26,11 @@ class BaseMNB:
         self.model_store_dir = model_store_dir
         self.num_model = None
 
-    def fit(self, train_y, train_x, part_size):
+    def fit(self, train_y, train_x, part_size, max_y_size):
         b = self._estimate_b(train_y)
         with open('{0}/b.dat'.format(self.model_store_dir), 'wb') as b_f:
             dump(b, b_f, protocol=2)
-        part_gen = self._y_split(train_y, part_size)
+        part_gen = self._y_split(train_y, part_size, max_y_size)
         for j, (part_y, label_list) in enumerate(part_gen):
             print "{0} parts have been trained.".format(j)
             part_w = self._part_estimate_w(part_y, train_x)
@@ -64,9 +64,9 @@ class BaseMNB:
         return each_label_occurrence
 
     @staticmethod
-    def _y_split(whole_y, part_size):
+    def _y_split(whole_y, part_size, max_y_size):
         total_label_list = range(whole_y.shape[0])
-        total_size = whole_y.shape[0]
+        total_size = min(whole_y.shape[0], max_y_size)
         part_cnt = int(math.ceil(float(total_size) / part_size))
         for p in xrange(part_cnt):
             begin = p * part_size

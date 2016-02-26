@@ -21,7 +21,7 @@ if __name__ == '__main__':
     pr.enable()
     t = time()
 
-    pipeline = PipeLine(LaplaceSmoothedMNB, tf_idf_thresholds, [5], model_file, test_data_save_dir)
+    pipeline = PipeLine(LaplaceSmoothedMNB, tf_idf_thresholds, [5], model_file, test_data_save_dir, 2000)
     pipeline.model_selection(train_file, chuck_size)
     print repr(pipeline)
     # pipeline.submission(exam_file, exam_out_file, transformed_x_exited=True)
