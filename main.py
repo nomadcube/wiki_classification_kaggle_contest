@@ -8,15 +8,15 @@ from time import time
 if __name__ == '__main__':
     debug = sys.argv[1] if len(sys.argv) > 1 else 'debug'
 
-    local = {'train_file': '/Users/wumengling/PycharmProjects/kaggle/input_data/sub_train.csv',
+    local = {'train_file': '/Users/wumengling/PycharmProjects/kaggle/input_data/train_subset.csv',
              'submission_infile': '/Users/wumengling/PycharmProjects/kaggle/input_data/test_subset.csv',
              'submission_out_file': '/Users/wumengling/PycharmProjects/kaggle/output_data/submission.csv',
              'submission_save_dir': '/Users/wumengling/PycharmProjects/kaggle/input_data',
              'model_save_dir': '/Users/wumengling/PycharmProjects/kaggle/output_data',
              'max_num_label': 3000,
              'chuck_num_label': 400,
-             'tf_idf_threshold': [97],
-             'num_predict': [5]
+             'tf_idf_threshold': [0],
+             'num_predict': [1]
              }
 
     server = {'train_file': '/home/wml/wiki_classification_kaggle_contest/input_data/train.csv',
