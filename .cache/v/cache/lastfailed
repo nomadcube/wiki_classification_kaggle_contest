@@ -1,3 +1,6 @@
 {
-  "models/test_mnb.py::TestSmoothedMNB::()::test_predict": true
+  "models/test_mnb.py::TestSmoothedMNB::()::test_fit": true, 
+  "preprocessing/test_tf_idf.py::test_tf_idf": true, 
+  "preprocessing/test_transforming.py::TestTransformation::()::test_y_convert": true, 
+  "test_metrics.py::TestMetrics::()::test_macro_precision_recall": true
 }

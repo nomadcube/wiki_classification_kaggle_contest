@@ -17,7 +17,6 @@ class OnePrediction(object):
         self.score = score
 
     def __le__(self, other):
-        # todo: 符号不一致因为heapq默认是最小堆
         return self.score > other.score
 
 
