@@ -14,36 +14,30 @@ class XConverter:
         self.selected_features = None
 
     # @profile
-    def construct(self, X):
-        if not isinstance(X, csr_matrix):
-            raise TypeError()
-        tf_idf_X = tf_idf(X)
-        self.selected_features = self._pick_features(tf_idf_X.indices, tf_idf_X.data, self._percentile)
+    def construct(self, x):
+        tf_idf_x = tf_idf(x)
+        self.selected_features = self._pick_features(tf_idf_x.indices, tf_idf_x.data, self._percentile)
         self._old_new_features_rel = {old: new for new, old in enumerate(self.selected_features)}
 
-    def convert(self, X):
-        coo_x = X.tocoo()
+    def convert(self, x):
+        coo_x = x.tocoo()
         new_data = array('f')
         new_row = array('I')
         new_col = array('I')
         for i in xrange(len(coo_x.data)):
-            if coo_x.col[i] in self.selected_features:
+            current_feature = coo_x.col[i]
+            if current_feature in self.selected_features:
                 new_data.append(coo_x.data[i])
-                new_col.append(self._old_new_features_rel[coo_x.col[i]])
+                new_col.append(self._old_new_features_rel[current_feature])
                 new_row.append(coo_x.row[i])
-        return coo_matrix((new_data, (new_row, new_col)), shape=(X.shape[0], len(self.selected_features)),
+        return coo_matrix((new_data, (new_row, new_col)), shape=(x.shape[0], len(self.selected_features)),
                           dtype='float').tocsr()
 
     @staticmethod
     def _pick_features(origin_features, scores, percentage):
-        if len(origin_features) != len(scores):
-            raise ValueError('features and scores must be of the same length.')
         threshold = np.percentile(scores, percentage)
-        good_features = set()
-        for i in xrange(len(scores)):
-            if scores[i] >= threshold:
-                good_features.add(origin_features[i])
-        return good_features
+        good_indices = np.where(scores >= threshold)
+        return set(origin_features[good_indices])
 
 
 class YConverter:

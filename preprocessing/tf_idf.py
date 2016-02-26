@@ -10,8 +10,7 @@ def tf_idf(count_mat):
 def _counting_occurrence(arr):
     arr.sort()
     features = np.unique(arr)
-    num_features = len(features
-                       )
+    num_features = len(features)
     diff = np.ones(arr.shape, arr.dtype)
     diff[1:] = np.diff(arr)
     idx = np.where(diff > 0)[0]
@@ -35,9 +34,8 @@ def _idf(count_mat):
     total_doc_count = count_mat.shape[0]
     features = np.array(count_mat.indices)
     feature, occurrence = _counting_occurrence(features)
-    init_row = feature
     init_element = [math.log(float(total_doc_count) / occ) for occ in occurrence]
-    return csr_matrix((init_element, (init_row, init_row)), shape=(count_mat.shape[1], count_mat.shape[1]))
+    return csr_matrix((init_element, (feature, feature)), shape=(count_mat.shape[1], count_mat.shape[1]))
 
 
 if __name__ == '__main__':
