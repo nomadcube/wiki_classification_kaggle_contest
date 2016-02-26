@@ -1,11 +1,10 @@
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 
 
 def occurrence(y):
-    res = dict()
+    res = defaultdict(set)
     for i, labels in enumerate(y):
         for j, each_label in enumerate(labels):
-            res.setdefault(each_label, set())
             res[each_label].add(i)
     return res
 

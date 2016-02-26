@@ -35,10 +35,10 @@ class Sample:
         test_smp = Sample()
         train_smp = Sample()
 
-        test_smp.y = [i for i in compress(self.y, [(k in test_instances) for k in range(len(self.y))])]
+        test_smp.y = [self.y[i] for i in test_instances]
         test_smp.x = self.x[test_instances, :]
 
-        train_smp.y = [j for j in compress(self.y, [(k in train_instances) for k in range(len(self.y))])]
+        train_smp.y = [self.y[i] for i in train_instances]
         train_smp.x = self.x[train_instances, :]
 
         return train_smp, test_smp, common_labels_cnt
