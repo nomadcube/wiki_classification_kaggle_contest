@@ -31,6 +31,7 @@ class PipeLine:
         smp = Sample()
         smp.read(in_path)
         train_smp, test_smp, common_labels_cnt = smp.extract_and_update()
+        # 35053209 function calls in 278.926 seconds (on train.csv)
 
         # y_converter = YConverter()
         # y_converter.construct(train_smp.y)
