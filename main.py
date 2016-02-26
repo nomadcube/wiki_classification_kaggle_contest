@@ -35,4 +35,4 @@ if __name__ == '__main__':
     ps.print_stats()
     print s.getvalue()
 
-    # nohup python main.py /home/wml/wiki_classification_kaggle_contest/input_data/train.csv /home/wml/wiki_classification_kaggle_contest/input_data/test.csv /home/wml/wiki_classification_kaggle_contest/output_data/submission.csv /model /home/wml/wiki_classification_kaggle_contest/input_data/ 1000 99
+    # nohup python main.py /home/wml/wiki_classification_kaggle_contest/input_data/sub_train.csv /home/wml/wiki_classification_kaggle_contest/input_data/test.csv /home/wml/wiki_classification_kaggle_contest/output_data/submission.csv /model /home/wml/wiki_classification_kaggle_contest/input_data/ 1000 99
