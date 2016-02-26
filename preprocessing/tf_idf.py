@@ -17,7 +17,7 @@ def _counting_occurrence(arr):
 
     occurrence = np.ones(num_features)
     occurrence[0:num_features - 1] = np.diff(idx)
-    occurrence[-1] = arr.shape[0] - idx.shape[0]
+    occurrence[-1] = arr.shape[0] + 1 - idx.shape[0]
     return features, occurrence
 
 
