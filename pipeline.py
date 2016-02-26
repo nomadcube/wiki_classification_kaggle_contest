@@ -66,7 +66,7 @@ class PipeLine:
             train_mpr_mre = macro_precision_recall(train_smp.y, y_converter.withdraw_convert(mapped_train_predicted_y),
                                                    min(self.max_label_size, csr_mapped_y.shape[0]))
             test_mpr_mre = macro_precision_recall(test_smp.y, y_converter.withdraw_convert(mapped_test_predicted_y),
-                                                  min(self.max_label_size, common_labels_cnt))
+                                                  min(self.max_label_size, csr_mapped_y.shape[0]))
             test_f_score = 1. / (1. / test_mpr_mre[0] + 1. / test_mpr_mre[1]) if test_mpr_mre[0] != 0. and test_mpr_mre[
                                                                                                                1] != 0. else float(
                 "inf")
