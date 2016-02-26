@@ -11,10 +11,10 @@ import pickle
 
 
 class PipeLine:
-    def __init__(self, model_class, threshold, predict_cnt, model_store_dir, test_data_store_dir, max_y_size):
-        self._model = model_class
+    def __init__(self, model_type, threshold, num_predict, model_save_dir, submission_infile_save_dir, max_label_size):
+        self._model = model_type
         self._threshold = threshold
-        self._predict_cnt = predict_cnt
+        self._predict_cnt = num_predict
 
         self.best_f_score = 0.
         self.best_x_converter = None
@@ -23,9 +23,9 @@ class PipeLine:
         self.best_predicted_cnt = None
         self.best_model = None
 
-        self.model_store_dir = model_store_dir
-        self.test_data_store_dir = test_data_store_dir
-        self.max_y_size = max_y_size
+        self.model_store_dir = model_save_dir
+        self.test_data_store_dir = submission_infile_save_dir
+        self.max_y_size = max_label_size
 
     # @profile
     def model_selection(self, in_path, part_size):
