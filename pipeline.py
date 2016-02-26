@@ -42,65 +42,51 @@ class PipeLine:
             tf_idf_threshold, predict_cnt = param
 
             x_converter = XConverter(tf_idf_threshold)
-            x_converter.construct(train_smp.x)
+            x_converter.construct(smp.x)
 
-            mapped_reduced_x = tf_idf(x_converter.convert(train_smp.x))
-            mapped_reduced_test_x = tf_idf(x_converter.convert(test_smp.x))
+            mapped_reduced_x = x_converter.convert(train_smp.x)
+            mapped_reduced_test_x = x_converter.convert(test_smp.x)
 
             csr_mapped_y = convert_y_to_csr(mapped_y)
-            print "num of labels in train set: {0}\nfeature count in train set: {2}\n" \
-                  "train set size: {1}\ntest set size:{3}".format(csr_mapped_y.shape[0], csr_mapped_y.shape[1],
+            print "num of labels in train set: {0}\n" \
+                  "\ntrain set size: {1}\ntest set size:{3}" \
+                  "\nfeature count: {2}\n".format(csr_mapped_y.shape[0], csr_mapped_y.shape[1],
                                                                   mapped_reduced_x.shape[1],
                                                                   mapped_reduced_test_x.shape[0])
 
-            print "\nmax size of y is {2}\nall y split into {0} parts, each with at most {1} label".format(
+            print "max size of y is {2}\nall y split into {0} parts, each with at most {1} labels\n".format(
                 int(math.ceil(min(csr_mapped_y.shape[0], self.max_label_size) / float(part_size))), part_size,
                 self.max_label_size)
             model = self._model(self.model_store_dir)
             model.fit(csr_mapped_y, mapped_reduced_x, part_size, self.max_label_size)
+
+            mapped_train_predicted_y = model.predict(mapped_reduced_x, predict_cnt)
             mapped_test_predicted_y = model.predict(mapped_reduced_test_x, predict_cnt)
 
-            mpr_mre = macro_precision_recall(test_smp.y, y_converter.withdraw_convert(mapped_test_predicted_y),
-                                             min(self.max_label_size, common_labels_cnt))
-            f_score = 1. / (1. / mpr_mre[0] + 1. / mpr_mre[1]) if mpr_mre[0] != 0. and mpr_mre[1] != 0. else float(
+            train_mpr_mre = macro_precision_recall(train_smp.y, y_converter.withdraw_convert(mapped_train_predicted_y),
+                                                   min(self.max_label_size, csr_mapped_y.shape[0]))
+            test_mpr_mre = macro_precision_recall(test_smp.y, y_converter.withdraw_convert(mapped_test_predicted_y),
+                                                  min(self.max_label_size, common_labels_cnt))
+            test_f_score = 1. / (1. / test_mpr_mre[0] + 1. / test_mpr_mre[1]) if test_mpr_mre[0] != 0. and test_mpr_mre[
+                                                                                                               1] != 0. else float(
                 "inf")
-            print mpr_mre
-            print f_score
+            train_f_score = 1. / (1. / train_mpr_mre[0] + 1. / train_mpr_mre[1]) if train_mpr_mre[0] != 0. and \
+                                                                                    train_mpr_mre[1] != 0. else float(
+                "inf")
 
-            if f_score > self.best_f_score:
-                self.best_f_score = round(f_score, 3)
+            print train_mpr_mre
+            print train_f_score
+
+            print test_mpr_mre
+            print test_f_score
+
+            if test_f_score > self.best_f_score:
+                self.best_f_score = round(test_f_score, 3)
                 self.best_x_converter = x_converter
                 self.best_y_converter = y_converter
                 self.best_threshold = tf_idf_threshold
                 self.best_predicted_cnt = predict_cnt
                 self.best_model = model
-
-    def submission(self, test_file_path, output_file_path, transformed_x_exited=False):
-        if not transformed_x_exited:
-            exam_smp = Sample()
-            exam_smp.read(test_file_path)
-            transformed_x = self.best_x_converter.convert(exam_smp.x)
-            with open('{0}/transformed_x.dat'.format(self.test_data_store_dir), 'wb') as transformed_x_f:
-                pickle.dump(transformed_x, transformed_x_f)
-            predicted_y = self.best_model.predict(transformed_x, self.best_predicted_cnt)
-            origin_predicted_y = self.best_y_converter.withdraw_convert(predicted_y)
-
-            with open(output_file_path, 'w') as out:
-                out.write('Id,Predicted' + '\n')
-                for i, each_predicted_y in enumerate(origin_predicted_y):
-                    out.write("{0},{1}\n".format(i, ' '.join([str(i) for i in each_predicted_y])))
-                out.flush()
-        else:
-            with open('{0}/transformed_x.dat'.format(self.test_data_store_dir), 'r') as transformed_x_f:
-                transformed_x = pickle.load(transformed_x_f)
-            predicted_y = self.best_model.predict(transformed_x, self.best_predicted_cnt)
-            origin_predicted_y = self.best_y_converter.withdraw_convert(predicted_y)
-
-            with open(output_file_path, 'w') as out:
-                out.write('Id,Predicted' + '\n')
-                for i, each_predicted_y in enumerate(origin_predicted_y):
-                    out.write("{0},{1}\n".format(i, ' '.join([str(i) for i in each_predicted_y])))
-                out.flush()
 
     def __repr__(self):
         return "best_threshold: {0}\nbest_predicted_cnt: {1}".format(self.best_threshold, self.best_predicted_cnt)
