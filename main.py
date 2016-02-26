@@ -26,7 +26,7 @@ if __name__ == '__main__':
               'model_save_dir': '/model',
               'max_num_label': 2000,
               'chuck_num_label': 1000,
-              'tf_idf_threshold': [99],
+              'tf_idf_threshold': [99.99],
               'num_predict': [5]
               }
 
