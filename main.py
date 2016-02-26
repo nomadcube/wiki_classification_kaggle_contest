@@ -6,24 +6,42 @@ import sys
 from time import time
 
 if __name__ == '__main__':
-    train_file = sys.argv[1] if len(
-        sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/input_data/sub_train.csv'
-    submission_infile = sys.argv[2] if len(
-        sys.argv) > 2 else '/Users/wumengling/PycharmProjects/kaggle/input_data/test_subset.csv'
-    submission_out_file = sys.argv[3] if len(
-        sys.argv) > 3 else '/Users/wumengling/PycharmProjects/kaggle/output_data/submission.csv'
-    model_file = sys.argv[4] if len(sys.argv) > 4 else '/Users/wumengling/PycharmProjects/kaggle/output_data'
-    submission_infile_save_dir = sys.argv[5] if len(
-        sys.argv) > 5 else '/Users/wumengling/PycharmProjects/kaggle/input_data'
-    chuck_size = int(sys.argv[6]) if len(sys.argv) > 6 else 400
-    tf_idf_thresholds = [int(t) for t in sys.argv[7].split(',')] if len(sys.argv) > 7 else [97]
+    debug = sys.argv[1] if len(sys.argv) > 1 else 'debug'
+
+    local = {'train_file': '/Users/wumengling/PycharmProjects/kaggle/input_data/sub_train.csv',
+             'submission_infile': '/Users/wumengling/PycharmProjects/kaggle/input_data/test_subset.csv',
+             'submission_out_file': '/Users/wumengling/PycharmProjects/kaggle/output_data/submission.csv',
+             'submission_save_dir': '/Users/wumengling/PycharmProjects/kaggle/input_data',
+             'model_save_dir': '/Users/wumengling/PycharmProjects/kaggle/output_data',
+             'max_num_label': 2000,
+             'chuck_num_label': 400,
+             'tf_idf_threshold': [97],
+             'num_predict': [5]
+             }
+
+    server = {'train_file': '/home/wml/wiki_classification_kaggle_contest/input_data/train.csv',
+              'submission_infile': '/home/wml/wiki_classification_kaggle_contest/input_data/test.csv',
+              'submission_out_file': '/home/wml/wiki_classification_kaggle_contest/output_data/submission.csv',
+              'submission_save_dir': '/home/wml/wiki_classification_kaggle_contest/input_data/',
+              'model_save_dir': '/model',
+              'max_num_label': 2000,
+              'chuck_num_label': 1000,
+              'tf_idf_threshold': [99],
+              'num_predict': [5]
+              }
 
     pr = cProfile.Profile()
     pr.enable()
     t = time()
 
-    pipeline = PipeLine(LaplaceSmoothedMNB, tf_idf_thresholds, [5], model_file, submission_infile_save_dir, 2000)
-    pipeline.model_selection(train_file, chuck_size)
+    config = local if debug == 'debug' else server
+    pipeline = PipeLine(LaplaceSmoothedMNB,
+                        config['tf_idf_threshold'],
+                        config['num_predict'],
+                        config['model_save_dir'],
+                        config['submission_save_dir'],
+                        config['max_num_label'])
+    pipeline.model_selection(config['train_file'], config['chuck_num_label'])
     print repr(pipeline)
     # pipeline.submission(exam_file, exam_out_file, transformed_x_exited=True)
 
@@ -34,5 +52,3 @@ if __name__ == '__main__':
     ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
     ps.print_stats()
     print s.getvalue()
-
-    # nohup python main.py /home/wml/wiki_classification_kaggle_contest/input_data/sub_train.csv /home/wml/wiki_classification_kaggle_contest/input_data/test.csv /home/wml/wiki_classification_kaggle_contest/output_data/submission.csv /model /home/wml/wiki_classification_kaggle_contest/input_data/ 1000 99
