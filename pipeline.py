@@ -30,7 +30,7 @@ class PipeLine:
     def model_selection(self, in_path, part_size):
         smp = Sample()
         smp.read(in_path)
-        # train_smp, test_smp, common_labels_cnt = smp.extract_and_update()
+        train_smp, test_smp, common_labels_cnt = smp.extract_and_update()
 
         # y_converter = YConverter()
         # y_converter.construct(train_smp.y)

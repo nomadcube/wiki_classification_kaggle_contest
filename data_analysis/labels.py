@@ -4,7 +4,7 @@ from collections import namedtuple
 def occurrence(y):
     res = dict()
     for i, labels in enumerate(y):
-        for each_label in labels:
+        for j, each_label in enumerate(labels):
             res.setdefault(each_label, set())
             res[each_label].add(i)
     return res
