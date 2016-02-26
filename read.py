@@ -13,14 +13,13 @@ class Sample:
         self._row_indptr = array('I')
         self._row_indptr.append(0)
         self._col_index = array('I')
-        self.label_old_new_relation = dict()
 
     def __len__(self):
         return len(self.y)
 
     def read(self, data_file_path):
         with open(data_file_path) as f:
-            for line_no, line in enumerate(f.__iter__()):
+            for line_no, line in enumerate(f):
                 self._read_one_line(line)
         self._convert_x_to_csr()
         return self
@@ -60,13 +59,11 @@ class Sample:
 
         all_labels = array('I', [int(l) for l in multi_label.split(',')])
         self.y.append(all_labels)
-        for label in all_labels:
-            if self.label_old_new_relation.get(label) is None:
-                self.label_old_new_relation[label] = len(self.label_old_new_relation)
 
         all_features = instance.split(' ')
         self._row_indptr.append(len(all_features) + self._row_indptr[-1])
-        for feature in all_features:
+
+        for i, feature in enumerate(all_features):
             column, element = feature.split(':')
             column = int(column)
             self._element.append(float(element))
