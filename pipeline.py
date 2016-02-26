@@ -52,24 +52,24 @@ class PipeLine:
 
             print "\nall y split into {0} parts, each with at most {1} label".format(
                 int(math.ceil(csr_mapped_y.shape[0] / float(part_size))), part_size)
-            #     model = self._model(self.model_store_dir)
-            #     model.fit(csr_mapped_y, mapped_reduced_x, part_size)
-            #     mapped_test_predicted_y = model.predict(mapped_reduced_test_x, predict_cnt)
+            # model = self._model(self.model_store_dir)
+            # model.fit(csr_mapped_y, mapped_reduced_x, part_size)
+            # mapped_test_predicted_y = model.predict(mapped_reduced_test_x, predict_cnt)
             #
-            #     mpr_mre = macro_precision_recall(test_smp.y, y_converter.withdraw_convert(mapped_test_predicted_y),
-            #                                      len(y_converter.label_old_new_relation), common_labels_cnt)
-            #     f_score = 1. / (1. / mpr_mre[0] + 1. / mpr_mre[1]) if mpr_mre[0] != 0. and mpr_mre[1] != 0. else float(
-            #         "inf")
-            #     print mpr_mre
-            #     print f_score
+            # mpr_mre = macro_precision_recall(test_smp.y, y_converter.withdraw_convert(mapped_test_predicted_y),
+            #                                  len(y_converter.label_old_new_relation), common_labels_cnt)
+            # f_score = 1. / (1. / mpr_mre[0] + 1. / mpr_mre[1]) if mpr_mre[0] != 0. and mpr_mre[1] != 0. else float(
+            #     "inf")
+            # print mpr_mre
+            # print f_score
             #
-            #     if f_score > self.best_f_score:
-            #         self.best_f_score = round(f_score, 3)
-            #         self.best_x_converter = x_converter
-            #         self.best_y_converter = y_converter
-            #         self.best_threshold = tf_idf_threshold
-            #         self.best_predicted_cnt = predict_cnt
-            #         self.best_model = model
+            # if f_score > self.best_f_score:
+            #     self.best_f_score = round(f_score, 3)
+            #     self.best_x_converter = x_converter
+            #     self.best_y_converter = y_converter
+            #     self.best_threshold = tf_idf_threshold
+            #     self.best_predicted_cnt = predict_cnt
+            #     self.best_model = model
 
     def submission(self, test_file_path, output_file_path, transformed_x_exited=False):
         if not transformed_x_exited:

@@ -9,13 +9,17 @@ def tf_idf(count_mat):
 
 def _counting_occurrence(arr):
     arr.sort()
+    features = np.unique(arr)
+    num_features = len(features
+                       )
     diff = np.ones(arr.shape, arr.dtype)
     diff[1:] = np.diff(arr)
-    idx = np.where(diff > 0)
-    vals = np.ones(idx[0].shape[0])
-    vals[0:idx[0].shape[0] - 1] = np.diff(idx)[0]
-    vals[-1] = arr.shape[0] - idx[0].shape[0]
-    return arr[idx], vals
+    idx = np.where(diff > 0)[0]
+
+    occurrence = np.ones(num_features)
+    occurrence[0:num_features - 1] = np.diff(idx)[0]
+    occurrence[-1] = arr.shape[0] - idx.shape[0]
+    return features, occurrence
 
 
 def _tf(count_mat):
