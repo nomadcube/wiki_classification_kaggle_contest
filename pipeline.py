@@ -33,9 +33,9 @@ class PipeLine:
         train_smp, test_smp, common_labels_cnt = smp.extract_and_update()
         # 35053209 function calls in 278.926 seconds (on train.csv)
 
-        # y_converter = YConverter()
-        # y_converter.construct(train_smp.y)
-        # mapped_y = y_converter.convert(train_smp.y)
+        y_converter = YConverter()
+        y_converter.construct(train_smp.y)
+        mapped_y = y_converter.convert(train_smp.y)
         #
         # for param in product(self._threshold, self._predict_cnt):
         #     tf_idf_threshold, predict_cnt = param
