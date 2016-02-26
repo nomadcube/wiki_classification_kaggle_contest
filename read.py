@@ -3,6 +3,7 @@ from array import array
 from memory_profiler import profile
 from scipy.sparse import csr_matrix
 from data_analysis.labels import occurrence
+from itertools import imap, ifilter, compress
 
 
 class Sample:
@@ -57,17 +58,14 @@ class Sample:
     def _read_one_line(self, line):
         multi_label, instance = line.strip().split(' ', 1)
 
-        all_labels = array('I', [int(l) for l in multi_label.split(',')])
+        all_labels = array('I', imap(int, multi_label.split(',')))
         self.y.append(all_labels)
 
-        all_features = instance.split(' ')
-        self._row_indptr.append(len(all_features) + self._row_indptr[-1])
-
-        for i, feature in enumerate(all_features):
-            column, element = feature.split(':')
-            column = int(column)
-            self._element.append(float(element))
-            self._col_index.append(column)
+        all_features = instance.replace(r':', ' ').split(' ')
+        one_line_feature_len = len(all_features) / 2
+        self._row_indptr.append(one_line_feature_len + self._row_indptr[-1])
+        self._element.extend([float(i) for i in compress(all_features, [0, 1] * one_line_feature_len)])
+        self._col_index.extend([int(i) for i in compress(all_features, [1, 0] * one_line_feature_len)])
         return self
 
     def _convert_x_to_csr(self):
