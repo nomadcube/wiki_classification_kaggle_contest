@@ -30,8 +30,8 @@ if __name__ == '__main__':
               'num_predict': [5]
               }
 
-    pr = cProfile.Profile()
-    pr.enable()
+    # pr = cProfile.Profile()
+    # pr.enable()
     t = time()
 
     config = local if debug == 'debug' else server
@@ -46,9 +46,9 @@ if __name__ == '__main__':
     # pipeline.submission(exam_file, exam_out_file, transformed_x_exited=True)
 
     print time() - t
-    pr.disable()
-    s = StringIO.StringIO()
-    sortby = 'cumtime'
-    ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
-    ps.print_stats()
-    print s.getvalue()
+    # pr.disable()
+    # s = StringIO.StringIO()
+    # sortby = 'cumtime'
+    # ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+    # ps.print_stats()
+    # print s.getvalue()
