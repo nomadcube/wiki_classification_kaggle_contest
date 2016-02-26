@@ -4,6 +4,7 @@ from scipy.sparse import coo_matrix, csr_matrix
 from tf_idf import tf_idf
 import math
 from memory_profiler import profile
+from itertools import chain
 
 
 class XConverter:
@@ -50,17 +51,13 @@ class YConverter:
         self.label_old_new_relation = dict()
 
     def construct(self, y):
-        a = [each_label for labels in y for each_label in labels]
-        for i, each_label in enumerate(a):
-            self.label_old_new_relation.setdefault(each_label, len(self.label_old_new_relation))
+        a = np.unique([each_y for each_y in chain.from_iterable(y)])
+        self.label_old_new_relation = dict(zip(a, range(len(a))))
 
     def convert(self, y):
         new_y = list()
-        for labels in y:
-            new_labels = array('I')
-            for each_label in labels:
-                new_labels.append(self.label_old_new_relation[each_label])
-            new_y.append(new_labels)
+        for i, labels in enumerate(y):
+            new_y.append(array('I', [self.label_old_new_relation[each_label] for j, each_label in enumerate(labels)]))
         return new_y
 
     def withdraw_convert(self, new_y):

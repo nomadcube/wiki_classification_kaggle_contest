@@ -10,52 +10,40 @@ class Sample:
     def __init__(self):
         self.y = list()
         self.x = None
-        self._element = array('f')
-        self._row_indptr = array('I')
-        self._row_indptr.append(0)
-        self._col_index = array('I')
 
     def __len__(self):
         return len(self.y)
 
     def read(self, data_file_path):
+        _element = array('f')
+        _row_indptr = array('I')
+        _col_index = array('I')
+        _row_indptr.append(0)
         with open(data_file_path) as f:
             for line_no, line in enumerate(f):
-                self._read_one_line(line)
-        self._convert_x_to_csr()
+                self._read_one_line(line, _element, _row_indptr, _col_index)
+        self.x = csr_matrix((_element, _col_index, _row_indptr), shape=(len(_row_indptr) - 1, max(_col_index) + 1),
+                            dtype='float')
         return self
 
     def extract_and_update(self):
         test_instances, common_labels_cnt = self._select_instances()
+        max_test_row_cnt = 1000
+        test_instances = list(test_instances)[:min(max_test_row_cnt, len(test_instances))]
+        train_instances = list(set(range(len(self.y))).difference(test_instances))
 
         test_smp = Sample()
         train_smp = Sample()
 
-        row_cnt, feature_dimension = self.x.shape
+        test_smp.y = [i for i in compress(self.y, [(k in test_instances) for k in range(len(self.y))])]
+        test_smp.x = self.x[test_instances, :]
 
-        max_test_row_cnt = 1000
-        for row_no in range(len(self.y)):
-            begin, end = self._row_indptr[row_no], self._row_indptr[row_no + 1]
-            selected_test_instances = set(list(test_instances)[:min(max_test_row_cnt, len(test_instances))])
-            if row_no in selected_test_instances:
-                test_smp.y.append(self.y[row_no])
-                test_smp._element.extend(self._element[begin: end])
-                test_smp._col_index.extend(self._col_index[begin: end])
-                test_smp._row_indptr.append(test_smp._row_indptr[-1] + (end - begin))
-            else:
-                train_smp.y.append(self.y[row_no])
-                train_smp._element.extend(self._element[begin: end])
-                train_smp._col_index.extend(self._col_index[begin: end])
-                train_smp._row_indptr.append(train_smp._row_indptr[-1] + (end - begin))
+        train_smp.y = [j for j in compress(self.y, [(k in train_instances) for k in range(len(self.y))])]
+        train_smp.x = self.x[train_instances, :]
 
-        test_smp.x = csr_matrix((test_smp._element, test_smp._col_index, test_smp._row_indptr),
-                                shape=(min(max_test_row_cnt, len(test_instances)), feature_dimension), dtype='float')
-        train_smp.x = csr_matrix((train_smp._element, train_smp._col_index, train_smp._row_indptr),
-                                 shape=(len(self.y) - min(max_test_row_cnt, len(test_instances)), feature_dimension),
-                                 dtype='float')
         return train_smp, test_smp, common_labels_cnt
 
-    def _read_one_line(self, line):
+    def _read_one_line(self, line, _element, _row_indptr, _col_index):
         multi_label, instance = line.strip().split(' ', 1)
 
         all_labels = array('I', imap(int, multi_label.split(',')))
@@ -63,14 +51,9 @@ class Sample:
 
         all_features = instance.replace(r':', ' ').split(' ')
         one_line_feature_len = len(all_features) / 2
-        self._row_indptr.append(one_line_feature_len + self._row_indptr[-1])
-        self._element.extend([float(i) for i in compress(all_features, [0, 1] * one_line_feature_len)])
-        self._col_index.extend([int(i) for i in compress(all_features, [1, 0] * one_line_feature_len)])
-        return self
-
-    def _convert_x_to_csr(self):
-        self.x = csr_matrix((self._element, self._col_index, self._row_indptr),
-                            shape=(len(self._row_indptr) - 1, max(self._col_index) + 1), dtype='float')
+        _row_indptr.append(one_line_feature_len + _row_indptr[-1])
+        _element.extend([float(i) for i in compress(all_features, [0, 1] * one_line_feature_len)])
+        _col_index.extend([int(i) for i in compress(all_features, [1, 0] * one_line_feature_len)])
 
     def _select_instances(self):
         test_instances = set()
