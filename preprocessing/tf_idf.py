@@ -7,12 +7,15 @@ def tf_idf(count_mat):
     return _tf(count_mat).dot(_idf(count_mat))
 
 
-def _counting_occurrence(array_like):
-    occurrence = dict()
-    for each_element in array_like:
-        occurrence.setdefault(each_element, 0)
-        occurrence[each_element] += 1
-    return occurrence
+def _counting_occurrence(arr):
+    arr.sort()
+    diff = np.ones(arr.shape, arr.dtype)
+    diff[1:] = np.diff(arr)
+    idx = np.where(diff > 0)
+    vals = np.ones(idx[0].shape[0])
+    vals[0:idx[0].shape[0] - 1] = np.diff(idx)[0]
+    vals[-1] = arr.shape[0] - idx[0].shape[0]
+    return arr[idx], vals
 
 
 def _tf(count_mat):
@@ -26,12 +29,10 @@ def _tf(count_mat):
 
 def _idf(count_mat):
     total_doc_count = count_mat.shape[0]
-    feature_occurrence = _counting_occurrence(count_mat.indices)
-    init_row = list()
-    init_element = list()
-    for feature, occurrence in feature_occurrence.items():
-        init_row.append(feature)
-        init_element.append(math.log(float(total_doc_count) / occurrence))
+    features = np.array(count_mat.indices)
+    feature, occurrence = _counting_occurrence(features)
+    init_row = feature
+    init_element = [math.log(float(total_doc_count) / occ) for occ in occurrence]
     return csr_matrix((init_element, (init_row, init_row)), shape=(count_mat.shape[1], count_mat.shape[1]))
 
 
