@@ -16,7 +16,7 @@ if __name__ == '__main__':
              'model_save_dir': '/Users/wumengling/PycharmProjects/kaggle/output_data',
              'max_num_label': 2000,
              'chuck_num_label': 400,
-             'tf_idf_threshold': [99.9],
+             'tf_idf_threshold': [0],
              'num_predict': [2]
              }
 
