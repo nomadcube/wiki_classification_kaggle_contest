@@ -1,6 +1,7 @@
 # coding=utf-8
 from pipeline import PipeLine
 from models.mnb import LaplaceSmoothedMNB
+from models.lr import LR
 import cProfile, pstats, StringIO
 import sys
 from time import time
@@ -16,7 +17,7 @@ if __name__ == '__main__':
              'max_num_label': 2000,
              'chuck_num_label': 400,
              'tf_idf_threshold': [99.9],
-             'num_predict': [5]
+             'num_predict': [2]
              }
 
     server = {'train_file': '/home/wml/wiki_classification_kaggle_contest/input_data/train.csv',

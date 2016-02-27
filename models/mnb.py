@@ -1,93 +1,44 @@
 # coding=utf-8
-import numpy as np
-from numpy.ma import masked_values
-from scipy.sparse import csr_matrix, csc_matrix
-from abc import abstractmethod
-from memory_profiler import profile
 import math
-import heapq
-from pickle import dump, load
+import numpy as np
+
+from scipy.sparse import csc_matrix
+from memory_profiler import profile
+
+from divide_conquer_predict import AllSamplePrediction, OneLabelScore
+from model_serialization import save_with_protocol2, load_with_protocol2
 
 
-class OnePrediction(object):
-    __slots__ = ('label', 'score')
-
-    def __init__(self, label, score):
-        self.label = label
-        self.score = score
-
-    def __le__(self, other):
-        return self.score > other.score
-
-
-class BaseMNB:
+class LaplaceSmoothedMNB:
     def __init__(self, model_store_dir):
         self.model_store_dir = model_store_dir
+        self._alpha = 1.
         self.num_model = None
 
     def fit(self, train_y, train_x, part_size, max_y_size):
-        b = self._estimate_b(train_y)
-        with open('{0}/b.dat'.format(self.model_store_dir), 'wb') as b_f:
-            dump(b, b_f, protocol=2)
-        part_gen = self._y_split(train_y, part_size, max_y_size)
-        for j, (part_y, label_list) in enumerate(part_gen):
+        b = self.estimate_b(train_y)
+        save_with_protocol2(b, self.model_store_dir, 'b.dat')
+
+        all_part_y = self.split(train_y, part_size, max_y_size)
+        for j, (part_y, label_list) in enumerate(all_part_y):
             print "{0} parts have been trained.".format(j)
-            part_w = self._part_estimate_w(part_y, train_x)
-            with open('{0}/w_{1}.dat'.format(self.model_store_dir, j), 'wb') as w_f:
-                dump(part_w, w_f, protocol=2)
-            with open('{0}/label_list_{1}.dat'.format(self.model_store_dir, j), 'wb') as label_list_f:
-                dump(label_list, label_list_f, protocol=2)
+            part_w = self.estimate_w(part_y, train_x)
+            save_with_protocol2(part_w, self.model_store_dir, 'w_{0}.dat'.format(j))
+            save_with_protocol2(label_list, self.model_store_dir, 'label_list_{0}.dat'.format(j))
             self.num_model = j + 1
 
     def predict(self, test_x, predict_cnt):
         cnt_instance = test_x.shape[0]
-        all_part_predict = [[] for _ in range(cnt_instance)]
-        with open('{0}/b.dat'.format(self.model_store_dir), 'r') as b_f:
-            b = load(b_f)
+        all_sample_predict = AllSamplePrediction(cnt_instance)
+        b = load_with_protocol2(self.model_store_dir, 'b.dat')
         for j in xrange(self.num_model):
             print "{0} parts have been scored.".format(j)
-            with open('{0}/w_{1}.dat'.format(self.model_store_dir, j), 'r') as w_f:
-                part_w = load(w_f)
-            with open('{0}/label_list_{1}.dat'.format(self.model_store_dir, j), 'r') as label_list_f:
-                label_list = load(label_list_f)
-            self._part_scoring(b, part_w, all_part_predict, label_list, test_x, predict_cnt)
-        return [[heapq.heappop(part_pred).label for _ in range(min(predict_cnt, len(part_pred)))] for part_pred in
-                all_part_predict]
+            part_w = load_with_protocol2(self.model_store_dir, 'w_{0}.dat'.format(j))
+            label_list = load_with_protocol2(self.model_store_dir, 'label_list_{0}.dat'.format(j))
+            self.label_scoring(b, part_w, all_sample_predict, label_list, test_x, predict_cnt)
+        return all_sample_predict.pop_max(predict_cnt)
 
-    @staticmethod
-    def _estimate_b(y):
-        each_label_occurrence = np.array(y.sum(axis=1).ravel())[0]
-        total_occurrence = each_label_occurrence.sum()
-        each_label_occurrence /= total_occurrence
-        each_label_occurrence = np.log(each_label_occurrence)
-        return each_label_occurrence
-
-    @staticmethod
-    def _y_split(whole_y, part_size, max_y_size):
-        total_label_list = range(whole_y.shape[0])
-        total_size = min(whole_y.shape[0], max_y_size)
-        part_cnt = int(math.ceil(float(total_size) / part_size))
-        for p in xrange(part_cnt):
-            begin = p * part_size
-            end = min(total_size, (p + 1) * part_size)
-            yield whole_y[begin: end, :], total_label_list[begin: end]
-
-    @abstractmethod
-    def _part_estimate_w(self, part_y, x):
-        pass
-
-    @abstractmethod
-    def _part_scoring(self, b, w, all_part_predict, real_labels, x):
-        pass
-
-
-class LaplaceSmoothedMNB(BaseMNB):
-    def __init__(self, model_store_dir):
-        BaseMNB.__init__(self, model_store_dir)
-        self._alpha = 1.
-
-    # @profile
-    def _part_estimate_w(self, part_y, x):  # 10.0906298161
+    def estimate_w(self, part_y, x):
         y_x_param = part_y.dot(x).todense()
         y_x_param += self._alpha
         tmp = np.array(y_x_param.sum(axis=1).ravel())[0]
@@ -96,48 +47,32 @@ class LaplaceSmoothedMNB(BaseMNB):
         y_x_param = np.log(y_x_param)
         return csc_matrix(y_x_param.transpose())
 
-    # @profile
-    def _part_scoring(self, b, part_w, all_part_predict, real_labels, x, k=1):
+    @staticmethod
+    def estimate_b(y):
+        each_label_occurrence = np.array(y.sum(axis=1).ravel())[0]
+        total_occurrence = each_label_occurrence.sum()
+        each_label_occurrence /= total_occurrence
+        each_label_occurrence = np.log(each_label_occurrence)
+        return each_label_occurrence
+
+    def label_scoring(self, b, part_w, all_part_predict, real_labels, x, k=1):
         log_likelihood_mat = x.dot(part_w.transpose())
         part_b = np.array([b[label] for label in real_labels])
         for i, each_x in enumerate(log_likelihood_mat):
             tmp = np.array(each_x.todense())[0] + part_b
-            for j, max_label in enumerate(self._top_k_argmax(tmp, k)):
-                all_part_predict[i].append(OnePrediction(real_labels[max_label], tmp[max_label]))
+            for j, max_label in enumerate(self.top_k_label(tmp, k)):
+                all_part_predict.push(i, OneLabelScore(real_labels[max_label], tmp[max_label]))
 
     @staticmethod
-    def _top_k_argmax(arr, k):
+    def top_k_label(arr, k):
         return np.argsort(arr)[-k:]
 
-
-if __name__ == '__main__':
-    # from preprocessing import transforming
-    #
-    # y = transforming.convert_y_to_csr(np.array([[0], [0], [1], [1], [0],
-    #                                             [0], [0], [1], [1], [1],
-    #                                             [1], [1], [1], [1], [0]]))
-    # element = [1.] * 30
-    # row_index = list()
-    # for i in range(15):
-    #     row_index.extend([i] * 2)
-    # col_index = [0, 3,
-    #              0, 4,
-    #              0, 4,
-    #              0, 3,
-    #              0, 3,
-    #              1, 3,
-    #              1, 4,
-    #              1, 4,
-    #              1, 5,
-    #              1, 5,
-    #              2, 5,
-    #              2, 4,
-    #              2, 4,
-    #              2, 5,
-    #              2, 5]
-    # x = csr_matrix((element, (row_index, col_index)), shape=(15, 6))
-    # m = LaplaceSmoothedMNB()
-    # print m.fit(y, x, x, 2, 1)
-    # print m.fit(y, x, x, 1, 1)
-    arr = np.array([2, 3, 5, 1])
-    print _top_k_argmax(arr, 2)
+    @staticmethod
+    def split(whole_y, part_size, max_y_size):
+        total_label_list = range(whole_y.shape[0])
+        total_size = min(whole_y.shape[0], max_y_size)
+        part_cnt = int(math.ceil(float(total_size) / part_size))
+        for p in xrange(part_cnt):
+            begin = p * part_size
+            end = min(total_size, (p + 1) * part_size)
+            yield whole_y[begin: end, :], total_label_list[begin: end]

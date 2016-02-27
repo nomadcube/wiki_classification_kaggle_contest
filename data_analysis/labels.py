@@ -22,5 +22,5 @@ if __name__ == '__main__':
     print distribution(oy)
     for label, instances in oy.items():
         if len(instances) > 1:
-            print instances.pop()
+            print instances.pop_max()
     print oy
