@@ -1,4 +1,6 @@
 # coding=utf-8
+import numpy as np
+
 from array import array
 from numpy.ma import masked_values
 from collections import namedtuple
@@ -10,7 +12,8 @@ def get_evaluation_metrics(y, predicted_y):
     # 若某个类别只在y_mat中出现或只在pred_mat中出现，对应的precision和recall都设置成0
     evaluation_metrics = namedtuple('evaluation_metrics', 'mpr mre f_score')
     y_mat = convert_y_to_csr(y, element_dtype='float')
-    num_y_label = y_mat.shape[0]
+    non_empty_rows_no = np.diff(y_mat.indptr)
+    num_y_label = np.where(non_empty_rows_no > 0)[0].shape[0]
     pred_mat = convert_y_to_csr(predicted_y, element_dtype='float', total_label_cnt=num_y_label)
 
     inter_mat = y_mat.multiply(pred_mat)
