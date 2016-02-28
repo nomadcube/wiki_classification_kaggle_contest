@@ -14,7 +14,7 @@ def get_evaluation_metrics(y, predicted_y):
     y_mat = convert_y_to_csr(y, element_dtype='float')
     non_empty_rows_no = np.diff(y_mat.indptr)
     num_y_label = np.where(non_empty_rows_no > 0)[0].shape[0]
-    pred_mat = convert_y_to_csr(predicted_y, element_dtype='float', total_label_cnt=num_y_label)
+    pred_mat = convert_y_to_csr(predicted_y, element_dtype='float', total_label_cnt=y_mat.shape[0])
 
     inter_mat = y_mat.multiply(pred_mat)
     y_pos = masked_values(y_mat.sum(axis=1), 0.)
