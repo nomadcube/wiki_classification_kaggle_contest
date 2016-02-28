@@ -21,7 +21,7 @@ class LaplaceSmoothedMNB:
 
         all_part_y = self.split(train_y, part_size, max_y_size)
         for j, (part_y, label_list) in enumerate(all_part_y):
-            print "{0} parts have been trained.".format(j)
+            # print "{0} parts have been trained.".format(j)
             part_w = self.estimate_w(part_y, train_x)
             save_with_protocol2(part_w, self.model_store_dir, 'w_{0}.dat'.format(j))
             save_with_protocol2(label_list, self.model_store_dir, 'label_list_{0}.dat'.format(j))
@@ -32,7 +32,7 @@ class LaplaceSmoothedMNB:
         all_sample_predict = AllSamplePrediction(cnt_instance)
         b = load_with_protocol2(self.model_store_dir, 'b.dat')
         for j in xrange(self.num_model):
-            print "{0} parts have been scored.".format(j)
+            # print "{0} parts have been scored.".format(j)
             part_w = load_with_protocol2(self.model_store_dir, 'w_{0}.dat'.format(j))
             label_list = load_with_protocol2(self.model_store_dir, 'label_list_{0}.dat'.format(j))
             self.label_scoring(b, part_w, all_sample_predict, label_list, test_x, predict_cnt)

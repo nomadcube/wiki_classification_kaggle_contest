@@ -1,13 +1,14 @@
 # coding=utf-8
+import sys
+import math
+from memory_profiler import profile
 from itertools import product
+
 from read import Sample
 from preprocessing.transforming import YConverter, XConverter, convert_y_to_csr
 from metrics import get_evaluation_metrics
 from preprocessing.tf_idf import tf_idf
-from memory_profiler import profile
-import sys
-import math
-import pickle
+from data_analysis.labels import most_frequent_label
 
 
 class PipeLine:
@@ -31,7 +32,9 @@ class PipeLine:
     def model_selection(self, in_path, part_size, test_path):
         smp = Sample()
         smp.read(in_path)
-        train_smp, test_smp, common_labels_cnt = smp.extract_and_update()
+        train_smp, cv_smp, common_labels_cnt = smp.extract_and_update()
+        print most_frequent_label(train_smp.y, 10)
+        print most_frequent_label(cv_smp.y, 10)
 
         y_converter = YConverter()
         y_converter.construct(train_smp.y)
@@ -44,14 +47,14 @@ class PipeLine:
             x_converter.construct(smp.x)
 
             x_train = x_converter.convert(train_smp.x)
-            x_test = x_converter.convert(test_smp.x)
+            x_cv = x_converter.convert(cv_smp.x)
 
             y_train_csr = convert_y_to_csr(y_train)
             print "num of labels in train set: {0}\n" \
                   "\ntrain set size: {1}\ntest set size:{3}" \
                   "\nfeature count: {2}\n".format(y_train_csr.shape[0], y_train_csr.shape[1],
                                                   x_train.shape[1],
-                                                  x_test.shape[0])
+                                                  x_cv.shape[0])
             print "max size of y is {2}\nall y split into {0} parts, each with at most {1} labels\n".format(
                 int(math.ceil(min(y_train_csr.shape[0], self.max_label_size) / float(part_size))), part_size,
                 self.max_label_size)
@@ -59,11 +62,13 @@ class PipeLine:
             model = self._model(self.model_store_dir)
             model.fit(y_train_csr, x_train, part_size, self.max_label_size)
 
-            prediction_train = model.predict(x_train, predict_cnt)
-            prediction_test = model.predict(x_test, predict_cnt)
+            prediction_train = y_converter.withdraw_convert(model.predict(x_train, predict_cnt))
+            prediction_cv = y_converter.withdraw_convert(model.predict(x_cv, predict_cnt))
 
-            result_train = get_evaluation_metrics(train_smp.y, y_converter.withdraw_convert(prediction_train))
-            result_cv = get_evaluation_metrics(test_smp.y, y_converter.withdraw_convert(prediction_test))
+            print most_frequent_label(prediction_cv, 10)
+
+            result_train = get_evaluation_metrics(train_smp.y, prediction_train)
+            result_cv = get_evaluation_metrics(cv_smp.y, prediction_cv)
 
             print result_train
             print result_cv
