@@ -33,8 +33,8 @@ class PipeLine:
         smp = Sample()
         smp.read(in_path)
         train_smp, cv_smp, common_labels_cnt = smp.extract_and_update()
-        print most_frequent_label(train_smp.y, 10)
-        print most_frequent_label(cv_smp.y, 10)
+        # print most_frequent_label(train_smp.y, 10)
+        # print most_frequent_label(cv_smp.y, 10)
 
         y_converter = YConverter()
         y_converter.construct(train_smp.y)
@@ -65,7 +65,7 @@ class PipeLine:
             prediction_train = y_converter.withdraw_convert(model.predict(x_train, predict_cnt))
             prediction_cv = y_converter.withdraw_convert(model.predict(x_cv, predict_cnt))
 
-            print most_frequent_label(prediction_cv, 10)
+            # print most_frequent_label(prediction_cv, 10)
 
             result_train = get_evaluation_metrics(train_smp.y, prediction_train)
             result_cv = get_evaluation_metrics(cv_smp.y, prediction_cv)
