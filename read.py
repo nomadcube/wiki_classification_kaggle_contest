@@ -61,8 +61,8 @@ class Sample:
         common_labels_cnt = 0.
         for label, instance_of_label in label_occurrence.items():
             if len(instance_of_label) > 2:
-                test_instances.add(instance_of_label.pop())
-                test_instances.add(instance_of_label.pop())
+                for i in range(int(len(instance_of_label) * 0.5)):
+                    test_instances.add(instance_of_label.pop())
                 common_labels_cnt += 1.
         return test_instances, common_labels_cnt
 
