@@ -10,13 +10,13 @@ if __name__ == '__main__':
     debug = sys.argv[1] if len(sys.argv) > 1 else 'debug'
 
     local = {'train_file': '/Users/wumengling/PycharmProjects/kaggle/input_data/sub_train.csv',
-             'submission_infile': '/Users/wumengling/PycharmProjects/kaggle/input_data/test_subset.csv',
+             'submission_infile': '/Users/wumengling/PycharmProjects/kaggle/input_data/test.csv',
              'submission_out_file': '/Users/wumengling/PycharmProjects/kaggle/output_data/submission.csv',
              'submission_save_dir': '/Users/wumengling/PycharmProjects/kaggle/input_data',
              'model_save_dir': '/Users/wumengling/PycharmProjects/kaggle/output_data',
-             'max_num_label': 2000,
+             'max_num_label': 400000,
              'chuck_num_label': 400,
-             'tf_idf_threshold': [90],
+             'tf_idf_threshold': [95],
              'num_predict': [2]
              }
 
@@ -42,9 +42,8 @@ if __name__ == '__main__':
                         config['model_save_dir'],
                         config['submission_save_dir'],
                         config['max_num_label'])
-    pipeline.model_selection(config['train_file'], config['chuck_num_label'])
+    pipeline.model_selection(config['train_file'], config['chuck_num_label'], config['submission_infile'])
     print repr(pipeline)
-    # pipeline.submission(exam_file, exam_out_file, transformed_x_exited=True)
 
     print time() - t
     # pr.disable()

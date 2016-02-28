@@ -2,7 +2,7 @@
 from itertools import product
 from read import Sample
 from preprocessing.transforming import YConverter, XConverter, convert_y_to_csr
-from metrics import macro_precision_recall
+from metrics import get_evaluation_metrics
 from preprocessing.tf_idf import tf_idf
 from memory_profiler import profile
 import sys
@@ -25,18 +25,17 @@ class PipeLine:
 
         self.model_store_dir = model_save_dir
         self.test_data_store_dir = submission_infile_save_dir
-        self.max_label_size = max_label_size
+        self.max_label_size = max_label_size  # 用来限制测试程序时的类别个数，正式预测时设为40w
 
     # @profile
-    def model_selection(self, in_path, part_size):
+    def model_selection(self, in_path, part_size, test_path):
         smp = Sample()
         smp.read(in_path)
         train_smp, test_smp, common_labels_cnt = smp.extract_and_update()
 
         y_converter = YConverter()
         y_converter.construct(train_smp.y)
-        mapped_y = y_converter.convert(train_smp.y)
-        # 26019898 function calls in 251.062 seconds
+        y_train = y_converter.convert(train_smp.y)
 
         for param in product(self._threshold, self._predict_cnt):
             tf_idf_threshold, predict_cnt = param
@@ -44,49 +43,57 @@ class PipeLine:
             x_converter = XConverter(tf_idf_threshold)
             x_converter.construct(smp.x)
 
-            mapped_reduced_x = x_converter.convert(train_smp.x)
-            mapped_reduced_test_x = x_converter.convert(test_smp.x)
+            x_train = x_converter.convert(train_smp.x)
+            x_test = x_converter.convert(test_smp.x)
 
-            csr_mapped_y = convert_y_to_csr(mapped_y)
+            y_train_csr = convert_y_to_csr(y_train)
             print "num of labels in train set: {0}\n" \
                   "\ntrain set size: {1}\ntest set size:{3}" \
-                  "\nfeature count: {2}\n".format(csr_mapped_y.shape[0], csr_mapped_y.shape[1],
-                                                                  mapped_reduced_x.shape[1],
-                                                                  mapped_reduced_test_x.shape[0])
-
+                  "\nfeature count: {2}\n".format(y_train_csr.shape[0], y_train_csr.shape[1],
+                                                  x_train.shape[1],
+                                                  x_test.shape[0])
             print "max size of y is {2}\nall y split into {0} parts, each with at most {1} labels\n".format(
-                int(math.ceil(min(csr_mapped_y.shape[0], self.max_label_size) / float(part_size))), part_size,
+                int(math.ceil(min(y_train_csr.shape[0], self.max_label_size) / float(part_size))), part_size,
                 self.max_label_size)
+
             model = self._model(self.model_store_dir)
-            model.fit(csr_mapped_y, mapped_reduced_x, part_size, self.max_label_size)
+            model.fit(y_train_csr, x_train, part_size, self.max_label_size)
 
-            mapped_train_predicted_y = model.predict(mapped_reduced_x, predict_cnt)
-            mapped_test_predicted_y = model.predict(mapped_reduced_test_x, predict_cnt)
+            prediction_train = model.predict(x_train, predict_cnt)
+            prediction_test = model.predict(x_test, predict_cnt)
 
-            train_mpr_mre = macro_precision_recall(train_smp.y, y_converter.withdraw_convert(mapped_train_predicted_y),
-                                                   min(self.max_label_size, csr_mapped_y.shape[0]))
-            test_mpr_mre = macro_precision_recall(test_smp.y, y_converter.withdraw_convert(mapped_test_predicted_y),
-                                                  min(self.max_label_size, csr_mapped_y.shape[0]))
-            test_f_score = 1. / (1. / test_mpr_mre[0] + 1. / test_mpr_mre[1]) if test_mpr_mre[0] != 0. and test_mpr_mre[
-                                                                                                               1] != 0. else float(
-                "inf")
-            train_f_score = 1. / (1. / train_mpr_mre[0] + 1. / train_mpr_mre[1]) if train_mpr_mre[0] != 0. and \
-                                                                                    train_mpr_mre[1] != 0. else float(
-                "inf")
+            result_train = get_evaluation_metrics(train_smp.y, y_converter.withdraw_convert(prediction_train))
+            result_cv = get_evaluation_metrics(test_smp.y, y_converter.withdraw_convert(prediction_test))
 
-            print train_mpr_mre
-            print train_f_score
+            print result_train
+            print result_cv
 
-            print test_mpr_mre
-            print test_f_score
-
-            if test_f_score > self.best_f_score:
-                self.best_f_score = round(test_f_score, 3)
+            if result_cv.f_score > self.best_f_score:
+                self.best_f_score = round(result_cv.f_score, 3)
                 self.best_x_converter = x_converter
                 self.best_y_converter = y_converter
                 self.best_threshold = tf_idf_threshold
                 self.best_predicted_cnt = predict_cnt
                 self.best_model = model
+
+        result_test = self._evaluation(test_path)
+        print result_test
+
+    def _evaluation(self, test_file_path):
+        exam_smp = Sample()
+        exam_smp.read(test_file_path)
+        transformed_x = self.best_x_converter.convert(exam_smp.x)
+        predicted_y = self.best_model.predict(transformed_x, self.best_predicted_cnt)
+        origin_predicted_y = self.best_y_converter.withdraw_convert(predicted_y)
+        return get_evaluation_metrics(exam_smp.y, origin_predicted_y)
+
+    @staticmethod
+    def submission(origin_predicted_y, output_file_path):
+        with open(output_file_path, 'w') as out:
+            out.write('Id,Predicted' + '\n')
+            for i, each_predicted_y in enumerate(origin_predicted_y):
+                out.write("{0},{1}\n".format(i, ' '.join([str(i) for i in each_predicted_y])))
+            out.flush()
 
     def __repr__(self):
         return "best_threshold: {0}\nbest_predicted_cnt: {1}".format(self.best_threshold, self.best_predicted_cnt)
