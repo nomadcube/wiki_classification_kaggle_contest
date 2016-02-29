@@ -1,9 +1,11 @@
 # coding=utf-8
+import math
 from array import array
 from memory_profiler import profile
 from scipy.sparse import csr_matrix
-from data_analysis.labels import occurrence
 from itertools import imap, ifilter, compress
+
+from data_analysis.labels import occurrence
 
 
 class Sample:
@@ -43,25 +45,36 @@ class Sample:
         return train_smp, test_smp, common_labels_cnt
 
     def _read_one_line(self, line, _element, _row_indptr, _col_index):
+        """
+        将输入文件中的任意一行作处理后追加到输出对象中
+        现在改成将multi-label展开，对应的x重复地加入到self.x中
+        """
         multi_label, instance = line.strip().split(' ', 1)
 
         all_labels = array('I', imap(int, multi_label.split(',')))
-        self.y.append(all_labels)
+        self.y.extend([[label] for label in all_labels])
+        num_repeat = len(all_labels)
 
         all_features = instance.replace(r':', ' ').split(' ')
         one_line_feature_len = len(all_features) / 2
-        _row_indptr.append(one_line_feature_len + _row_indptr[-1])
-        _element.extend([float(i) for i in compress(all_features, [0, 1] * one_line_feature_len)])
-        _col_index.extend([int(i) for i in compress(all_features, [1, 0] * one_line_feature_len)])
+
+        _element.extend([float(i) for i in compress(all_features, [0, 1] * one_line_feature_len)] * num_repeat)
+        _col_index.extend([int(i) for i in compress(all_features, [1, 0] * one_line_feature_len)] * num_repeat)
+
+        for repeat_time in xrange(num_repeat):
+            _row_indptr.extend([one_line_feature_len + _row_indptr[-1]])
 
     def _select_instances(self):
-        # todo: common_labels_cnt只是个大概的估计，并不是准确的"训练集和测试集共有的label个数"
+        """
+        和extract_and_update一起，用于分割train, cv, test集
+        若某个label所包含的instance数为m， 那么将其中的floor(m/2)个分作cv集，其它的作为train集
+        """
         test_instances = set()
         label_occurrence = occurrence(self.y)
         common_labels_cnt = 0.
         for label, instance_of_label in label_occurrence.items():
             if len(instance_of_label) > 1:
-                for i in range(int(len(instance_of_label) * 0.5)):
+                for i in range(int(math.ceil(len(instance_of_label) * 0.2))):
                     test_instances.add(instance_of_label.pop())
                 common_labels_cnt += 1.
         return test_instances, common_labels_cnt
