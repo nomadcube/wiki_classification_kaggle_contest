@@ -102,7 +102,7 @@ class Sample:
                 if num_in_cv > 0:
                     for i in range(num_in_cv):
                         test_instances.add(instance_of_label.pop())
-                    common_labels_cnt += 1.
+                common_labels_cnt += 1.
         return test_instances, common_labels_cnt
 
 

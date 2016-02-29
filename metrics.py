@@ -50,7 +50,7 @@ def get_evaluation_metrics(y, predicted_y, mat_shape, metrics_denominator=None):
     true_positive = inter_mat.sum(axis=1)
     precision = true_positive / y_pos
     recall = true_positive / pred_pos
-    metrics_denominator = metrics_denominator if metrics_denominator is not None else num_y_label
+    metrics_denominator = min(metrics_denominator, num_y_label) if metrics_denominator is not None else num_y_label
     m_precision = precision.sum() / metrics_denominator
     m_recall = recall.sum() / metrics_denominator
     f_score = 1. / (1. / m_precision + 1. / m_recall) if m_precision != 0. and m_recall != 0. else float("inf")

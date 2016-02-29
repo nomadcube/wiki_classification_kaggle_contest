@@ -71,9 +71,8 @@ class PipeLine:
             # print most_frequent_label(prediction_cv, 10)
 
             mat_shape = max_label_in_smp
-            metrics_denominator = min(common_labels_cnt, len(np.unique([label[0] for label in train_smp.y])))
-            result_train = get_evaluation_metrics(train_smp.y, prediction_train, mat_shape, metrics_denominator)
-            result_cv = get_evaluation_metrics(cv_smp.y, prediction_cv, mat_shape, metrics_denominator)
+            result_train = get_evaluation_metrics(train_smp.y, prediction_train, mat_shape, self.max_label_size)
+            result_cv = get_evaluation_metrics(cv_smp.y, prediction_cv, mat_shape, self.max_label_size)
 
             print result_train
             print result_cv
