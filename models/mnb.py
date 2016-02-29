@@ -53,6 +53,7 @@ class LaplaceSmoothedMNB:
         y_x_param = y_x_param.transpose()
         y_x_param /= tmp
         y_x_param = np.log(y_x_param)
+        # y_x_param /= y_x_param.sum(axis=0)
         return csc_matrix(y_x_param.transpose())
 
     @staticmethod
