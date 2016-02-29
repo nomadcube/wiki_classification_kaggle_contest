@@ -54,7 +54,7 @@ class PipeLine:
 
             y_train_csr = convert_y_to_csr(y_train)
             print "num of labels in train set: {0}\n" \
-                  "\ntrain set size: {1}\ntest set size:{3}" \
+                  "\ntrain set size: {1}\ncv set size:{3}" \
                   "\nfeature count: {2}\n".format(y_train_csr.shape[0], y_train_csr.shape[1],
                                                   x_train.shape[1],
                                                   x_cv.shape[0])

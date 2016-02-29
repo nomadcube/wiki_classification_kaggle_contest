@@ -97,7 +97,7 @@ class Sample:
         label_occurrence = occurrence(self.y)
         common_labels_cnt = 0.
         for label, instance_of_label in label_occurrence.items():
-            if instance_of_label > 1:
+            if len(instance_of_label) > 1:
                 num_in_cv = int(math.ceil(len(instance_of_label) * 0.2))
                 if num_in_cv > 0:
                     for i in range(num_in_cv):
