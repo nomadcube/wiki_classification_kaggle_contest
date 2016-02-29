@@ -46,7 +46,7 @@ def get_evaluation_metrics(y, predicted_y, mat_shape, metrics_denominator=None):
 
     inter_mat = y_mat.multiply(pred_mat)
     y_pos = masked_values(y_mat.sum(axis=1), 0.)
-    pred_pos = masked_values(y_mat.sum(axis=1), 0.)
+    pred_pos = masked_values(pred_mat.sum(axis=1), 0.)
     true_positive = inter_mat.sum(axis=1)
     precision = true_positive / y_pos
     recall = true_positive / pred_pos
