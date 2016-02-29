@@ -36,8 +36,8 @@ class PipeLine:
         smp.read(in_path)
         max_label_in_smp = max([l[0] for l in smp.y])
         train_smp, cv_smp, common_labels_cnt = smp.extract_and_update()
-        print most_frequent_label(train_smp.y, 10)
-        print most_frequent_label(cv_smp.y, 10)
+        # print most_frequent_label(train_smp.y, 10)
+        # print most_frequent_label(cv_smp.y, 10)
 
         y_converter = YConverter()
         y_converter.construct(train_smp.y)
@@ -65,16 +65,16 @@ class PipeLine:
             model = self._model(self.model_store_dir)
             model.fit(y_train_csr, x_train, part_size, self.max_label_size)
 
-            prediction_train = y_converter.withdraw_convert(model.predict(x_train, predict_cnt))
+            # prediction_train = y_converter.withdraw_convert(model.predict(x_train, predict_cnt))
             prediction_cv = y_converter.withdraw_convert(model.predict(x_cv, predict_cnt))
 
-            print most_frequent_label(prediction_cv, 10)
+            # print most_frequent_label(prediction_cv, 10)
 
             mat_shape = max_label_in_smp
-            result_train = get_evaluation_metrics(train_smp.y, prediction_train, mat_shape, self.max_label_size)
+            # result_train = get_evaluation_metrics(train_smp.y, prediction_train, mat_shape, self.max_label_size)
             result_cv = get_evaluation_metrics(cv_smp.y, prediction_cv, mat_shape, self.max_label_size)
 
-            print result_train
+            # print result_train
             print result_cv
 
             if result_cv.f_score > self.best_f_score:
@@ -85,8 +85,8 @@ class PipeLine:
                 self.best_predicted_cnt = predict_cnt
                 self.best_model = model
 
-        result_test = self._evaluation(test_path, max_label_in_smp)
-        print result_test
+                # result_test = self._evaluation(test_path, max_label_in_smp)
+                # print result_test
 
     def _evaluation(self, test_file_path, max_label_in_smp):
         """
