@@ -2,7 +2,7 @@
 import numpy as np
 
 from array import array
-from numpy.ma import masked_values
+from numpy.ma import masked_values, masked_array
 from collections import namedtuple
 
 from preprocessing.transforming import convert_y_to_csr
@@ -35,7 +35,6 @@ def get_evaluation_metrics(y, predicted_y, mat_shape, metrics_denominator=None):
 
 
     """
-    # 若某个类别只在y_mat中出现或只在pred_mat中出现，对应的precision和recall都设置成0
     evaluation_metrics = namedtuple('evaluation_metrics', 'mpr mre f_score')
 
     y_mat = convert_y_to_csr(y, element_dtype='float', total_label_cnt=mat_shape + 1)
@@ -45,9 +44,11 @@ def get_evaluation_metrics(y, predicted_y, mat_shape, metrics_denominator=None):
     num_y_label = np.where(non_empty_rows_no > 0)[0].shape[0]
 
     inter_mat = y_mat.multiply(pred_mat)
-    y_pos = masked_values(y_mat.sum(axis=1), 0.)
-    pred_pos = masked_values(pred_mat.sum(axis=1), 0.)
     true_positive = inter_mat.sum(axis=1)
+
+    y_pos = masked_values(y_mat.sum(axis=1), 0.)
+    pred_pos = masked_array(pred_mat.sum(axis=1), y_pos.mask)
+
     precision = true_positive / y_pos
     recall = true_positive / pred_pos
     metrics_denominator = min(metrics_denominator, num_y_label) if metrics_denominator is not None else num_y_label
