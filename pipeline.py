@@ -33,7 +33,7 @@ class PipeLine:
     # @profile
     def model_selection(self, in_path, part_size, test_path):
         smp = Sample('model_selection')
-        smp.read(in_path)
+        smp.read_as_binary_class(in_path, '314523')
         max_label_in_smp = max([l[0] for l in smp.y])
         train_smp, cv_smp, common_labels_cnt = smp.extract_and_update()
         # print most_frequent_label(train_smp.y, 10)

@@ -17,6 +17,29 @@ class Sample:
     def __len__(self):
         return len(self.y)
 
+    def read_as_binary_class(self, data_file_path, target_class):
+        _element = array('f')
+        _row_indptr = array('I')
+        _col_index = array('I')
+        _row_indptr.append(0)
+        with open(data_file_path) as f:
+            for line_no, line in enumerate(f):
+                self._binary_class_read_one_line(line, _element, _row_indptr, _col_index, target_class)
+        self.x = csr_matrix((_element, _col_index, _row_indptr), shape=(len(_row_indptr) - 1, max(_col_index) + 1),
+                            dtype='float')
+        return self
+
+    def _binary_class_read_one_line(self, line, _element, _row_indptr, _col_index, target_class):
+        multi_label, instance = line.strip().split(' ', 1)
+
+        self.y.append([1]) if target_class in multi_label.split(',') else self.y.append([0])
+
+        all_features = instance.replace(r':', ' ').split(' ')
+        one_line_feature_len = len(all_features) / 2
+        _row_indptr.append(one_line_feature_len + _row_indptr[-1])
+        _element.extend([float(i) for i in compress(all_features, [0, 1] * one_line_feature_len)])
+        _col_index.extend([int(i) for i in compress(all_features, [1, 0] * one_line_feature_len)])
+
     def read(self, data_file_path):
         """
         :param data_file_path:string
