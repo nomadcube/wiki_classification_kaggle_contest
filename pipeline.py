@@ -9,7 +9,7 @@ from itertools import product
 from read import Sample
 from preprocessing.transforming import YConverter, XConverter, convert_y_to_csr
 from metrics import get_evaluation_metrics
-from preprocessing.tf_idf import tf_idf
+from preprocessing.tf_idf import tf_idf, _tf
 from data_analysis.labels import most_frequent_label
 
 
@@ -49,8 +49,8 @@ class PipeLine:
             x_converter = XConverter(tf_idf_threshold)
             x_converter.construct(smp.x)
 
-            x_train = x_converter.convert(train_smp.x)
-            x_cv = x_converter.convert(cv_smp.x)
+            x_train = tf_idf(x_converter.convert(train_smp.x))
+            x_cv = tf_idf(x_converter.convert(cv_smp.x))
 
             y_train_csr = convert_y_to_csr(y_train)
             print "num of labels in train set: {0}\n" \
@@ -68,7 +68,7 @@ class PipeLine:
             prediction_train = y_converter.withdraw_convert(model.predict(x_train, predict_cnt))
             prediction_cv = y_converter.withdraw_convert(model.predict(x_cv, predict_cnt))
 
-            # print most_frequent_label(prediction_cv, 10)
+            print most_frequent_label(prediction_cv, 10)
 
             mat_shape = max_label_in_smp
             result_train = get_evaluation_metrics(train_smp.y, prediction_train, mat_shape, self.max_label_size)

@@ -1,3 +1,4 @@
+# coding=utf-8
 import numpy as np
 import math
 from scipy.sparse import csr_matrix
@@ -17,7 +18,7 @@ def _counting_occurrence(arr):
 
     occurrence = np.ones(num_features)
     occurrence[0:num_features - 1] = np.diff(idx)
-    occurrence[-1] = arr.shape[0] + 1 - idx.shape[0]
+    occurrence[-1] = arr.shape[0] - np.diff(idx).sum()
     return features, occurrence
 
 
@@ -31,6 +32,14 @@ def _tf(count_mat):
 
 
 def _idf(count_mat):
+    """
+    :param count_mat: x, 即样本-特征-频数矩阵
+    :return: 各特征对应的idf值，值域在[0, 正无穷)
+
+    将multi-label展开与否，_idf的算法也相应地不一样
+    1. 不展开multi-label，则只需要对count_mat.indices计算各feature的出现次数
+    2. 展开的话，则
+    """
     total_doc_count = count_mat.shape[0]
     features = np.array(count_mat.indices)
     feature, occurrence = _counting_occurrence(features)
