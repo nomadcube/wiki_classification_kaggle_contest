@@ -67,8 +67,7 @@ class LaplaceSmoothedMNB:
         log_likelihood_mat = x.dot(part_w.transpose())
         part_b = np.array([b[label] for label in real_labels])
         for i, each_x in enumerate(log_likelihood_mat):
-            # tmp = np.array(each_x.todense())[0] + part_b
-            tmp = np.array(each_x.todense())[0]
+            tmp = np.array(each_x.todense())[0] + part_b
             for j, max_label in enumerate(self.top_k_label(tmp, k)):
                 all_part_predict.push(i, OneLabelScore(real_labels[max_label], tmp[max_label]))
 
