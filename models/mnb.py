@@ -32,6 +32,9 @@ class LaplaceSmoothedMNB:
         :param test_x: csr矩阵
         :param predict_cnt: int
         :return: test_x的各个instance对应的predict_cnt个预测结果
+
+        当test_x为展开label的状态，即如314523,165538,416827 1250536:1这一行会展开为3个相同的instance， 这3个instance的预测结果是一样的
+        这并不影响模型评估指标的计算，因为这相当于将预测结果按instance group by 之后，以其中的一个预测结果作为group by 后的预测结果
         """
         cnt_instance = test_x.shape[0]
         all_sample_predict = AllSamplePrediction(cnt_instance)
