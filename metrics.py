@@ -8,19 +8,30 @@ from collections import namedtuple
 from preprocessing.transforming import convert_y_to_csr
 
 
-def get_evaluation_metrics(y, predicted_y):
+def get_evaluation_metrics(y, predicted_y, metrics_denominator=None):
     """
     :param y: list of array, list长度为样本量，array长度为各自包含的label数
     :param predicted_y: list of array, list长度为样本量，array长度为各自包含的预测label数
+    :param metrics_denominator: float/int, 计算平均precision和recall时的分母，默认为None, 这时用的是y中的label数
     :return: 由y和predicted_y算出来的平均precision, recall和f-score
 
+    ### train和cv
     y_mat和pred_mat所包含label的关系：
-    交集不为空，各自也可能包含不在交集中的label。
+    1. 若没有限制w所能包含的最大label数max_num_label，则{y_mat}是{pred_mat}的子集
+    2. 否则{y_mat}和{pred_mat}都只能包含最多max_num_label个label
+    因此在算平均precision和recall时，分母应该是min(max_num_label, y_mat所包含的label个数)
+    另外，由于y_mat和pred_mat的行号都是原label，而由于pred_mat一定是大于等于y_mat的，因此可以将它们的行数即shape[0]都设为y_mat中的最大label.
 
-    另外：
-    1. 若训练时没有限定模型所能包含的最大label数，那么理想状态下，cv集所包含的label都能出现在cv对应的predicted_y里
-    2. 若训练时限定了模型所能包含的最大label数max_num_label, 那么cv集所包含的label不一定能出现在cv对应的predicted_y里
+    ### test和cv
+    y_mat和pred_mat所包含label的关系：
+    各自和对方都有相交和不相交的部分
+    在算平均precision和recall时，以y_mat为主，因此分母应该是y_mat所包含的label个数
+    另外，由于y_mat和pred_mat的行号都是原label，而由于pred_mat不一定大于等于y_mat的，因此需要将行数设为smp中的全局最大label.
 
+    结论：
+    1. y_mat和pred_mat的total_label_cnt都要设为smp中的最大label
+    2. 对于train和cv, 将算平均precision和recall时的分母设为min(max_num_label, y_mat所包含的label个数)
+    3. 对于test, 将算平均precision和recall时的分母设为y_mat所包含的label个数
 
 
     """
@@ -39,8 +50,9 @@ def get_evaluation_metrics(y, predicted_y):
     true_positive = inter_mat.sum(axis=1)
     precision = true_positive / y_pos
     recall = true_positive / pred_pos
-    m_precision = precision.sum() / num_y_label
-    m_recall = recall.sum() / num_y_label
+    metrics_denominator = metrics_denominator if metrics_denominator is not None else num_y_label
+    m_precision = precision.sum() / metrics_denominator
+    m_recall = recall.sum() / metrics_denominator
     f_score = 1. / (1. / m_precision + 1. / m_recall) if m_precision != 0. and m_recall != 0. else float("inf")
     return evaluation_metrics(m_precision, m_recall, f_score)
 

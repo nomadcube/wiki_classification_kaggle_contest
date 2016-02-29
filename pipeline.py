@@ -1,4 +1,6 @@
 # coding=utf-8
+
+import numpy as np
 import sys
 import math
 from memory_profiler import profile
@@ -67,8 +69,9 @@ class PipeLine:
 
             # print most_frequent_label(prediction_cv, 10)
 
-            result_train = get_evaluation_metrics(train_smp.y, prediction_train)
-            result_cv = get_evaluation_metrics(cv_smp.y, prediction_cv)
+            metrics_denominator = min(common_labels_cnt, len(np.unique([label[0] for label in train_smp.y])))
+            result_train = get_evaluation_metrics(train_smp.y, prediction_train, metrics_denominator)
+            result_cv = get_evaluation_metrics(cv_smp.y, prediction_cv, metrics_denominator)
 
             print result_train
             print result_cv
