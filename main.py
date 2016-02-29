@@ -20,7 +20,7 @@ if __name__ == '__main__':
              'num_predict': [1]
              }
 
-    server = {'train_file': '/home/wml/wiki_classification_kaggle_contest/input_data/train.csv',
+    server = {'train_file': '/home/wml/wiki_classification_kaggle_contest/input_data/sub_train.csv',
               'submission_infile': '/home/wml/wiki_classification_kaggle_contest/input_data/sub_test.csv',
               'submission_out_file': '/home/wml/wiki_classification_kaggle_contest/output_data/submission.csv',
               'submission_save_dir': '/home/wml/wiki_classification_kaggle_contest/input_data/',

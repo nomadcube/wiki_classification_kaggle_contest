@@ -98,7 +98,7 @@ class PipeLine:
         因此如果选出来的最优模型并不是最后个模型，那么会出错
         """
         exam_smp = Sample('submission')
-        exam_smp.read(test_file_path)
+        exam_smp.read_as_binary_class(test_file_path, '314523')
         transformed_x = self.best_x_converter.convert(exam_smp.x)
         predicted_y = self.best_model.predict(transformed_x, self.best_predicted_cnt)
         origin_predicted_y = self.best_y_converter.withdraw_convert(predicted_y)
