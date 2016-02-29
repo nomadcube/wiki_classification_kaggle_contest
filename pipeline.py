@@ -34,9 +34,10 @@ class PipeLine:
     def model_selection(self, in_path, part_size, test_path):
         smp = Sample()
         smp.read(in_path)
+        max_label_in_smp = max([l[0] for l in smp.y])
         train_smp, cv_smp, common_labels_cnt = smp.extract_and_update()
-        # print most_frequent_label(train_smp.y, 10)
-        # print most_frequent_label(cv_smp.y, 10)
+        print most_frequent_label(train_smp.y, 10)
+        print most_frequent_label(cv_smp.y, 10)
 
         y_converter = YConverter()
         y_converter.construct(train_smp.y)
@@ -69,9 +70,10 @@ class PipeLine:
 
             # print most_frequent_label(prediction_cv, 10)
 
+            mat_shape = max_label_in_smp
             metrics_denominator = min(common_labels_cnt, len(np.unique([label[0] for label in train_smp.y])))
-            result_train = get_evaluation_metrics(train_smp.y, prediction_train, metrics_denominator)
-            result_cv = get_evaluation_metrics(cv_smp.y, prediction_cv, metrics_denominator)
+            result_train = get_evaluation_metrics(train_smp.y, prediction_train, mat_shape, metrics_denominator)
+            result_cv = get_evaluation_metrics(cv_smp.y, prediction_cv, mat_shape, metrics_denominator)
 
             print result_train
             print result_cv
@@ -84,16 +86,16 @@ class PipeLine:
                 self.best_predicted_cnt = predict_cnt
                 self.best_model = model
 
-        result_test = self._evaluation(test_path)
+        result_test = self._evaluation(test_path, max_label_in_smp)
         print result_test
 
-    def _evaluation(self, test_file_path):
+    def _evaluation(self, test_file_path, max_label_in_smp):
         exam_smp = Sample()
         exam_smp.read(test_file_path)
         transformed_x = self.best_x_converter.convert(exam_smp.x)
         predicted_y = self.best_model.predict(transformed_x, self.best_predicted_cnt)
         origin_predicted_y = self.best_y_converter.withdraw_convert(predicted_y)
-        return get_evaluation_metrics(exam_smp.y, origin_predicted_y)
+        return get_evaluation_metrics(exam_smp.y, origin_predicted_y, max_label_in_smp)
 
     @staticmethod
     def submission(origin_predicted_y, output_file_path):

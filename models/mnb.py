@@ -28,6 +28,11 @@ class LaplaceSmoothedMNB:
             self.num_model = j + 1
 
     def predict(self, test_x, predict_cnt):
+        """
+        :param test_x: csr矩阵
+        :param predict_cnt: int
+        :return: test_x的各个instance对应的predict_cnt个预测结果
+        """
         cnt_instance = test_x.shape[0]
         all_sample_predict = AllSamplePrediction(cnt_instance)
         b = load_with_protocol2(self.model_store_dir, 'b.dat')

@@ -8,7 +8,7 @@ from collections import namedtuple
 from preprocessing.transforming import convert_y_to_csr
 
 
-def get_evaluation_metrics(y, predicted_y, metrics_denominator=None):
+def get_evaluation_metrics(y, predicted_y, mat_shape, metrics_denominator=None):
     """
     :param y: list of array, list长度为样本量，array长度为各自包含的label数
     :param predicted_y: list of array, list长度为样本量，array长度为各自包含的预测label数
@@ -38,8 +38,8 @@ def get_evaluation_metrics(y, predicted_y, metrics_denominator=None):
     # 若某个类别只在y_mat中出现或只在pred_mat中出现，对应的precision和recall都设置成0
     evaluation_metrics = namedtuple('evaluation_metrics', 'mpr mre f_score')
 
-    y_mat = convert_y_to_csr(y, element_dtype='float')
-    pred_mat = convert_y_to_csr(predicted_y, element_dtype='float', total_label_cnt=y_mat.shape[0])
+    y_mat = convert_y_to_csr(y, element_dtype='float', total_label_cnt=mat_shape + 1)
+    pred_mat = convert_y_to_csr(predicted_y, element_dtype='float', total_label_cnt=mat_shape + 1)
 
     non_empty_rows_no = np.diff(y_mat.indptr)
     num_y_label = np.where(non_empty_rows_no > 0)[0].shape[0]

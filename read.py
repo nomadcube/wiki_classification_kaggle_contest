@@ -66,17 +66,21 @@ class Sample:
 
     def _select_instances(self):
         """
-        和extract_and_update一起，用于分割train, cv, test集
-        若某个label所包含的instance数为m， 那么将其中的floor(m/2)个分作cv集，其它的作为train集
+        和extract_and_update一起，用于分割train, cv集
+        若某个label所包含的instance数为m，
+        1. 若m=1, 则该label只会在train中出现
+        2. 若m > 1, 则其中的ceil(m * 0.2)个放入cv集，其它的放入train集
         """
         test_instances = set()
         label_occurrence = occurrence(self.y)
         common_labels_cnt = 0.
         for label, instance_of_label in label_occurrence.items():
-            if len(instance_of_label) > 1:
-                for i in range(int(math.ceil(len(instance_of_label) * 0.2))):
-                    test_instances.add(instance_of_label.pop())
-                common_labels_cnt += 1.
+            if instance_of_label > 1:
+                num_in_cv = int(math.ceil(len(instance_of_label) * 0.2))
+                if num_in_cv > 0:
+                    for i in range(num_in_cv):
+                        test_instances.add(instance_of_label.pop())
+                    common_labels_cnt += 1.
         return test_instances, common_labels_cnt
 
 
