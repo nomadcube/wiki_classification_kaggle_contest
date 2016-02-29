@@ -89,6 +89,14 @@ class PipeLine:
         print result_test
 
     def _evaluation(self, test_file_path, max_label_in_smp):
+        """
+        :param test_file_path: test集的路径
+        :param max_label_in_smp: 截取的label最大数目
+        :return: 在test集上的预测效果
+
+        由于pipeline只存储product(self._threshold, self._predict_cnt)对应最后一组参数的模型序列化数据
+        因此如果选出来的最优模型并不是最后个模型，那么会出错
+        """
         exam_smp = Sample('submission')
         exam_smp.read(test_file_path)
         transformed_x = self.best_x_converter.convert(exam_smp.x)

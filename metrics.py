@@ -46,6 +46,7 @@ def get_evaluation_metrics(y, predicted_y, mat_shape, metrics_denominator=None):
     inter_mat = y_mat.multiply(pred_mat)
     true_positive = inter_mat.sum(axis=1)
 
+    # 将不在y_mat中出现的label行都masked掉，此逻辑同时作用于真实的y和对y的预测值
     y_pos = masked_values(y_mat.sum(axis=1), 0.)
     pred_pos = masked_array(pred_mat.sum(axis=1), y_pos.mask)
 
