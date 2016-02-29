@@ -9,14 +9,23 @@ from data_analysis.labels import occurrence
 
 
 class Sample:
-    def __init__(self):
+    def __init__(self, mod):
         self.y = list()
         self.x = None
+        self._mod = mod
 
     def __len__(self):
         return len(self.y)
 
     def read(self, data_file_path):
+        """
+        :param data_file_path:string
+        :return: Sample对象
+
+        分两种模式：
+        1. model_selection模式，这时候需要将multi-label展开，对应的x有重，便于切分train,cv集
+        2. submission模式，这时候不需要展开，否则会加大不必要的预测计算量
+        """
         _element = array('f')
         _row_indptr = array('I')
         _col_index = array('I')
@@ -33,8 +42,8 @@ class Sample:
         test_instances = list(test_instances)
         train_instances = list(set(range(len(self.y))).difference(test_instances))
 
-        test_smp = Sample()
-        train_smp = Sample()
+        test_smp = Sample(self._mod)
+        train_smp = Sample(self._mod)
 
         test_smp.y = [self.y[i] for i in test_instances]
         test_smp.x = self.x[test_instances, :]
@@ -49,20 +58,33 @@ class Sample:
         将输入文件中的任意一行作处理后追加到输出对象中
         现在改成将multi-label展开，对应的x重复地加入到self.x中
         """
-        multi_label, instance = line.strip().split(' ', 1)
+        if self._mod == 'model_selection':
+            multi_label, instance = line.strip().split(' ', 1)
 
-        all_labels = array('I', imap(int, multi_label.split(',')))
-        self.y.extend([[label] for label in all_labels])
-        num_repeat = len(all_labels)
+            all_labels = array('I', imap(int, multi_label.split(',')))
+            self.y.extend([[label] for label in all_labels])
+            num_repeat = len(all_labels)
 
-        all_features = instance.replace(r':', ' ').split(' ')
-        one_line_feature_len = len(all_features) / 2
+            all_features = instance.replace(r':', ' ').split(' ')
+            one_line_feature_len = len(all_features) / 2
 
-        _element.extend([float(i) for i in compress(all_features, [0, 1] * one_line_feature_len)] * num_repeat)
-        _col_index.extend([int(i) for i in compress(all_features, [1, 0] * one_line_feature_len)] * num_repeat)
+            _element.extend([float(i) for i in compress(all_features, [0, 1] * one_line_feature_len)] * num_repeat)
+            _col_index.extend([int(i) for i in compress(all_features, [1, 0] * one_line_feature_len)] * num_repeat)
 
-        for repeat_time in xrange(num_repeat):
-            _row_indptr.extend([one_line_feature_len + _row_indptr[-1]])
+            for repeat_time in xrange(num_repeat):
+                _row_indptr.extend([one_line_feature_len + _row_indptr[-1]])
+
+        if self._mod == 'submission':
+            multi_label, instance = line.strip().split(' ', 1)
+
+            all_labels = array('I', imap(int, multi_label.split(',')))
+            self.y.append(all_labels)
+
+            all_features = instance.replace(r':', ' ').split(' ')
+            one_line_feature_len = len(all_features) / 2
+            _row_indptr.append(one_line_feature_len + _row_indptr[-1])
+            _element.extend([float(i) for i in compress(all_features, [0, 1] * one_line_feature_len)])
+            _col_index.extend([int(i) for i in compress(all_features, [1, 0] * one_line_feature_len)])
 
     def _select_instances(self):
         """

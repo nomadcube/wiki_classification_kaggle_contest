@@ -32,7 +32,7 @@ class PipeLine:
 
     # @profile
     def model_selection(self, in_path, part_size, test_path):
-        smp = Sample()
+        smp = Sample('model_selection')
         smp.read(in_path)
         max_label_in_smp = max([l[0] for l in smp.y])
         train_smp, cv_smp, common_labels_cnt = smp.extract_and_update()
@@ -90,7 +90,7 @@ class PipeLine:
         print result_test
 
     def _evaluation(self, test_file_path, max_label_in_smp):
-        exam_smp = Sample()
+        exam_smp = Sample('submission')
         exam_smp.read(test_file_path)
         transformed_x = self.best_x_converter.convert(exam_smp.x)
         predicted_y = self.best_model.predict(transformed_x, self.best_predicted_cnt)
