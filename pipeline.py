@@ -3,6 +3,7 @@
 import numpy as np
 import sys
 import math
+import random
 from memory_profiler import profile
 from itertools import product
 
@@ -10,7 +11,7 @@ from read import Sample
 from preprocessing.transforming import YConverter, XConverter, convert_y_to_csr
 from metrics import get_evaluation_metrics
 from preprocessing.tf_idf import tf_idf, _tf
-from data_analysis.labels import most_frequent_label
+from data_analysis.labels import most_frequent_label, occurrence
 
 
 class PipeLine:
@@ -33,7 +34,7 @@ class PipeLine:
     # @profile
     def model_selection(self, in_path, part_size, test_path):
         smp = Sample('model_selection')
-        smp.read_as_binary_class(in_path, '314523')
+        smp.read(in_path)
         max_label_in_smp = max([l[0] for l in smp.y])
         train_smp, cv_smp, common_labels_cnt = smp.extract_and_update()
         # print most_frequent_label(train_smp.y, 10)
@@ -65,16 +66,16 @@ class PipeLine:
             model = self._model(self.model_store_dir)
             model.fit(y_train_csr, x_train, part_size, self.max_label_size)
 
-            # prediction_train = y_converter.withdraw_convert(model.predict(x_train, predict_cnt))
+            prediction_train = y_converter.withdraw_convert(model.predict(x_train, predict_cnt))
             prediction_cv = y_converter.withdraw_convert(model.predict(x_cv, predict_cnt))
 
             # print most_frequent_label(prediction_cv, 10)
 
             mat_shape = max_label_in_smp
-            # result_train = get_evaluation_metrics(train_smp.y, prediction_train, mat_shape, self.max_label_size)
+            result_train = get_evaluation_metrics(train_smp.y, prediction_train, mat_shape, self.max_label_size)
             result_cv = get_evaluation_metrics(cv_smp.y, prediction_cv, mat_shape, self.max_label_size)
 
-            # print result_train
+            print result_train
             print result_cv
 
             if result_cv.f_score > self.best_f_score:
@@ -85,8 +86,8 @@ class PipeLine:
                 self.best_predicted_cnt = predict_cnt
                 self.best_model = model
 
-                # result_test = self._evaluation(test_path, max_label_in_smp)
-                # print result_test
+                result_test = self._evaluation(test_path, max_label_in_smp)
+                print result_test
 
     def _evaluation(self, test_file_path, max_label_in_smp):
         """
@@ -98,7 +99,7 @@ class PipeLine:
         因此如果选出来的最优模型并不是最后个模型，那么会出错
         """
         exam_smp = Sample('submission')
-        exam_smp.read_as_binary_class(test_file_path, '314523')
+        exam_smp.read(test_file_path)
         transformed_x = self.best_x_converter.convert(exam_smp.x)
         predicted_y = self.best_model.predict(transformed_x, self.best_predicted_cnt)
         origin_predicted_y = self.best_y_converter.withdraw_convert(predicted_y)

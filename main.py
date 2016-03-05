@@ -17,7 +17,7 @@ if __name__ == '__main__':
              'max_num_label': 400000,
              'chuck_num_label': 400,
              'tf_idf_threshold': [99.9],
-             'num_predict': [1]
+             'num_predict': [5]
              }
 
     server = {'train_file': '/home/wml/wiki_classification_kaggle_contest/input_data/train.csv',
