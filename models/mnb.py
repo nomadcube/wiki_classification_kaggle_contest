@@ -5,7 +5,7 @@ import numpy as np
 from scipy.sparse import csc_matrix
 from memory_profiler import profile
 
-from divide_conquer_predict import AllSamplePrediction, OneLabelScore
+from part_predict import AllSamplePrediction, OneLabelScore
 from model_serialization import save_with_protocol2, load_with_protocol2
 
 

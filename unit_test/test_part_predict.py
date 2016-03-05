@@ -1,7 +1,7 @@
 import heapq
 
 from test_config import TestBase
-from models.divide_conquer_predict import OneLabelScore, OneSamplePrediction, AllSamplePrediction
+from models.part_predict import OneLabelScore, OneSamplePrediction, AllSamplePrediction
 
 
 class TestMNB(TestBase):
