@@ -53,7 +53,10 @@ class LaplaceSmoothedMNB:
         y_x_param = y_x_param.transpose()
         y_x_param /= tmp
         y_x_param = np.log(y_x_param)
-        return csc_matrix(y_x_param.transpose())
+        contrast_y_x_param = np.array(
+            zip(list(np.array(y_x_param[:, 1]).ravel()), list(np.array(y_x_param[:, 0]).ravel()))).reshape(
+            y_x_param.shape)
+        return csc_matrix(contrast_y_x_param.transpose())
 
     @staticmethod
     def estimate_b(y):
@@ -67,8 +70,8 @@ class LaplaceSmoothedMNB:
         log_likelihood_mat = x.dot(part_w.transpose())
         part_b = np.array([b[label] for label in real_labels])
         for i, each_x in enumerate(log_likelihood_mat):
-            # tmp = np.array(each_x.todense())[0] + part_b
-            tmp = np.array(each_x.todense())[0]
+            tmp = (-1.) * np.array(each_x.todense())[0] + part_b
+            # tmp = np.array(each_x.todense())[0]
             for j, max_label in enumerate(self.top_k_label(tmp, k)):
                 all_part_predict.push(i, OneLabelScore(real_labels[max_label], tmp[max_label]))
 
