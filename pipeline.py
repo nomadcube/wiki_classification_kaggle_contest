@@ -34,11 +34,12 @@ class PipeLine:
     # @profile
     def model_selection(self, in_path, part_size, test_path):
         smp = Sample('model_selection')
-        smp.read(in_path)
+        smp.read_as_binary_class(in_path, '24177')
         max_label_in_smp = max([l[0] for l in smp.y])
         train_smp, cv_smp, common_labels_cnt = smp.extract_and_update()
-        # print most_frequent_label(train_smp.y, 10)
-        # print most_frequent_label(cv_smp.y, 10)
+
+        print occurrence(train_smp.y)[1]
+        print occurrence(cv_smp.y)[1]
 
         y_converter = YConverter()
         y_converter.construct(train_smp.y)
@@ -68,6 +69,9 @@ class PipeLine:
 
             prediction_train = y_converter.withdraw_convert(model.predict(x_train, predict_cnt))
             prediction_cv = y_converter.withdraw_convert(model.predict(x_cv, predict_cnt))
+
+            print occurrence(prediction_train)[1]
+            print occurrence(prediction_cv)[1]
 
             # print most_frequent_label(prediction_cv, 10)
 
@@ -99,7 +103,7 @@ class PipeLine:
         因此如果选出来的最优模型并不是最后个模型，那么会出错
         """
         exam_smp = Sample('submission')
-        exam_smp.read(test_file_path)
+        exam_smp.read_as_binary_class(test_file_path, '24177')
         transformed_x = self.best_x_converter.convert(exam_smp.x)
         predicted_y = self.best_model.predict(transformed_x, self.best_predicted_cnt)
         origin_predicted_y = self.best_y_converter.withdraw_convert(predicted_y)

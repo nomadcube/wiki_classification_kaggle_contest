@@ -16,8 +16,8 @@ if __name__ == '__main__':
              'model_save_dir': '/Users/wumengling/PycharmProjects/kaggle/output_data',
              'max_num_label': 400000,
              'chuck_num_label': 400,
-             'tf_idf_threshold': [99.9],
-             'num_predict': [5]
+             'tf_idf_threshold': [99.2],
+             'num_predict': [1]
              }
 
     server = {'train_file': '/home/wml/wiki_classification_kaggle_contest/input_data/train.csv',

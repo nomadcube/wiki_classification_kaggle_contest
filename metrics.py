@@ -37,10 +37,10 @@ def get_evaluation_metrics(y, predicted_y, mat_shape, metrics_denominator=None):
     """
     evaluation_metrics = namedtuple('evaluation_metrics', 'mpr mre f_score accuracy')
 
-    # num_right = 0.
-    # for i in range(len(y)):
-    #     if y[i][0] == predicted_y[i][0]:
-    #         num_right += 1.
+    num_right = 0.
+    for i in range(len(y)):
+        if y[i][0] == predicted_y[i][0]:
+            num_right += 1.
 
     y_mat = convert_y_to_csr(y, element_dtype='float', total_label_cnt=mat_shape + 1)
     pred_mat = convert_y_to_csr(predicted_y, element_dtype='float', total_label_cnt=mat_shape + 1)
@@ -61,7 +61,11 @@ def get_evaluation_metrics(y, predicted_y, mat_shape, metrics_denominator=None):
     m_precision = precision.sum() / metrics_denominator
     m_recall = recall.sum() / metrics_denominator
     f_score = 1. / (1. / m_precision + 1. / m_recall) if m_precision != 0. and m_recall != 0. else float("inf")
-    return evaluation_metrics(m_precision, m_recall, f_score, None)
+
+    print precision
+    print recall
+
+    return evaluation_metrics(m_precision, m_recall, f_score, num_right / len(y))
 
 
 if __name__ == '__main__':
