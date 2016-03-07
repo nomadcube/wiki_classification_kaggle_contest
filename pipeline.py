@@ -38,8 +38,8 @@ class PipeLine:
         max_label_in_smp = max([l[0] for l in smp.y])
         train_smp, cv_smp, common_labels_cnt = smp.extract_and_update()
 
-        print occurrence(train_smp.y)[1]
-        print occurrence(cv_smp.y)[1]
+        print len(occurrence(smp.y)[1])
+        print len(occurrence(train_smp.y)[1])
 
         y_converter = YConverter()
         y_converter.construct(train_smp.y)
@@ -104,6 +104,7 @@ class PipeLine:
         """
         exam_smp = Sample('submission')
         exam_smp.read_as_binary_class(test_file_path, '24177')
+        print len(occurrence(exam_smp.y)[1])
         transformed_x = self.best_x_converter.convert(exam_smp.x)
         predicted_y = self.best_model.predict(transformed_x, self.best_predicted_cnt)
         origin_predicted_y = self.best_y_converter.withdraw_convert(predicted_y)
