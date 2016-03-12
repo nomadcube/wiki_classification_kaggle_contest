@@ -17,7 +17,7 @@ class LaplaceSmoothedMNB:
         self.b = self.estimate_b(y_train_csr)
         self.w = self.estimate_w(y_train_csr, train_x)
 
-    def predict(self, test_x, predict_cnt):
+    def predict(self, test_x, predict_cnt=1):
         """
         :param test_x: csr矩阵
         :param predict_cnt: int
