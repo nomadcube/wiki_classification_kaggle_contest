@@ -15,7 +15,7 @@ from data_analysis.labels import most_frequent_label, occurrence
 
 
 class PipeLine:
-    def __init__(self, model_type, threshold, num_predict, model_save_dir, submission_infile_save_dir, max_label_size):
+    def __init__(self, model_type, threshold, num_predict):
         self._model = model_type
         self._threshold = threshold
         self._predict_cnt = num_predict
@@ -27,14 +27,12 @@ class PipeLine:
         self.best_predicted_cnt = None
         self.best_model = None
 
-        self.model_store_dir = model_save_dir
-        self.test_data_store_dir = submission_infile_save_dir
-        self.max_label_size = max_label_size  # 用来限制测试程序时的类别个数，正式预测时设为40w
+        self.max_label_size = 2  # 用来限制测试程序时的类别个数，正式预测时设为40w
 
     # @profile
-    def model_selection(self, in_path, part_size, test_path):
+    def model_selection(self, train_path, test_path):
         smp = Sample('model_selection')
-        smp.read_as_binary_class(in_path, '24177')
+        smp.read_as_binary_class(train_path, '24177')
         max_label_in_smp = max([l[0] for l in smp.y])
         train_smp, cv_smp, common_labels_cnt = smp.extract_and_update()
 
@@ -54,26 +52,14 @@ class PipeLine:
             x_train = tf_idf(x_converter.convert(train_smp.x))
             x_cv = tf_idf(x_converter.convert(cv_smp.x))
 
-            y_train_csr = convert_y_to_csr(y_train)
-            print "num of labels in train set: {0}\n" \
-                  "\ntrain set size: {1}\ncv set size:{3}" \
-                  "\nfeature count: {2}\n".format(y_train_csr.shape[0], y_train_csr.shape[1],
-                                                  x_train.shape[1],
-                                                  x_cv.shape[0])
-            print "max size of y is {2}\nall y split into {0} parts, each with at most {1} labels\n".format(
-                int(math.ceil(min(y_train_csr.shape[0], self.max_label_size) / float(part_size))), part_size,
-                self.max_label_size)
-
-            model = self._model(self.model_store_dir)
-            model.fit(y_train_csr, x_train, part_size, self.max_label_size)
+            model = self._model()
+            model.fit(y_train, x_train)
 
             prediction_train = y_converter.withdraw_convert(model.predict(x_train, predict_cnt))
             prediction_cv = y_converter.withdraw_convert(model.predict(x_cv, predict_cnt))
 
             print occurrence(prediction_train)[1]
             print occurrence(prediction_cv)[1]
-
-            # print most_frequent_label(prediction_cv, 10)
 
             mat_shape = max_label_in_smp
             result_train = get_evaluation_metrics(train_smp.y, prediction_train, mat_shape, self.max_label_size)
@@ -109,14 +95,6 @@ class PipeLine:
         predicted_y = self.best_model.predict(transformed_x, self.best_predicted_cnt)
         origin_predicted_y = self.best_y_converter.withdraw_convert(predicted_y)
         return get_evaluation_metrics(exam_smp.y, origin_predicted_y, max_label_in_smp)
-
-    @staticmethod
-    def submission(origin_predicted_y, output_file_path):
-        with open(output_file_path, 'w') as out:
-            out.write('Id,Predicted' + '\n')
-            for i, each_predicted_y in enumerate(origin_predicted_y):
-                out.write("{0},{1}\n".format(i, ' '.join([str(i) for i in each_predicted_y])))
-            out.flush()
 
     def __repr__(self):
         return "best_threshold: {0}\nbest_predicted_cnt: {1}".format(self.best_threshold, self.best_predicted_cnt)

@@ -1,5 +1,5 @@
 from array import array
-import lr
+import models.lr
 import numpy as np
 
 
@@ -16,7 +16,7 @@ class TestLR:
         return np.matrix(np.array(a).reshape((10, 5)))
 
     def test_fit(self, y, x):
-        m = lr.LR(0, 2)
+        m = models.lr.LR(0, 2)
         m.fit(y, x)
         assert abs(m.w[0][0] + 0.22692123) < 1e-5
         assert abs(m.w[0][1] + 15.21280659) < 1e-5
@@ -25,7 +25,7 @@ class TestLR:
         assert abs(m.w[0][4] + 0.08459288) < 1e-5
 
     def test_predict(self, y, x):
-        m = lr.LR(0, 2)
+        m = models.lr.LR(0, 2)
         m.fit(y, x)
         p = m.predict(x)
         assert p == [[0], [1], [0], [1], [0], [1], [0], [1], [1], [0]]

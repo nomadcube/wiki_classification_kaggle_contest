@@ -38,11 +38,8 @@ if __name__ == '__main__':
     config = local if debug == 'debug' else server
     pipeline = PipeLine(LaplaceSmoothedMNB,
                         config['tf_idf_threshold'],
-                        config['num_predict'],
-                        config['model_save_dir'],
-                        config['submission_save_dir'],
-                        config['max_num_label'])
-    pipeline.model_selection(config['train_file'], config['chuck_num_label'], config['submission_infile'])
+                        config['num_predict'])
+    pipeline.model_selection(config['train_file'], config['submission_infile'])
     print repr(pipeline)
 
     print time() - t
