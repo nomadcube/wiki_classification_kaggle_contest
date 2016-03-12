@@ -50,7 +50,6 @@ class AdaBoost:
 
 
 if __name__ == '__main__':
-    from sklearn.naive_bayes import MultinomialNB
     from scipy.sparse import csr_matrix
 
     sample_size = 10
@@ -60,7 +59,7 @@ if __name__ == '__main__':
 
     mnb = LaplaceSmoothedMNB()
     mnb.fit(y, x)
-    predicted_y = mnb.predict(x, 1)
+    predicted_y = mnb.predict(x)
 
     print np.array(predicted_y != y, dtype='int8').sum() / float(len(y))
 
