@@ -6,11 +6,11 @@ import math
 class AdaBoost:
     def __init__(self, classifier_type, num_classifiers):
         self._classifier_type = classifier_type
-        self._num_classifiers = 3
+        self._num_classifiers = num_classifiers
         self._models = list()
         self._coefs = list()
 
-    def fit(self, y, x, ):
+    def fit(self, y, x):
         num_smp = x.shape[0]
         smp_weight = np.ones(num_smp) / num_smp
         for _ in xrange(self._num_classifiers):

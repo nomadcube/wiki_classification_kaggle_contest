@@ -1,6 +1,7 @@
 # coding=utf-8
 import numpy as np
 
+from copy import deepcopy
 from scipy.sparse import csc_matrix
 from memory_profiler import profile
 
@@ -13,11 +14,12 @@ class LaplaceSmoothedMNB:
         self.w = None
 
     def fit(self, train_y, train_x, smp_weight=None):
+        weighted_train_x = deepcopy(train_x)
         if smp_weight is not None:
-            train_x.data *= smp_weight.repeat(np.diff(train_x.indptr))
+            weighted_train_x.data *= smp_weight.repeat(np.diff(train_x.indptr))
         y_train_csr = convert_y_to_csr(train_y)
         self.b = self.estimate_b(y_train_csr)
-        self.w = self.estimate_w(y_train_csr, train_x)
+        self.w = self.estimate_w(y_train_csr, weighted_train_x)
 
     def predict(self, x):
         prob = self.post_prob(x)
@@ -30,7 +32,8 @@ class LaplaceSmoothedMNB:
     @staticmethod
     def estimate_w(y, x):
         label_feature_coef = y.dot(x).todense()
-        label_feature_coef += 1.0
+        # todo: 若label_feature_coef各个值自增1会出错，因为这样会破坏"加权"的效果。需要考虑一个更好的加权方式
+        label_feature_coef += 0.0
         label_sum = np.array(label_feature_coef.sum(axis=1).ravel())[0]
         label_feature_coef = label_feature_coef.transpose()
         label_feature_coef /= label_sum
