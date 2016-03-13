@@ -2,7 +2,7 @@ import numpy as np
 
 from read import Sample
 from transformation.converter import XConverter
-from models.mnb import CNB, LaplaceSmoothedMNB
+from models.mnb import CNB, LaplaceSmoothedMNB, NonSmoothedMNB
 from models.adaboost import AdaBoost
 from metrics import evaluation
 
@@ -17,7 +17,7 @@ x_converter = XConverter(train_smp.x, tf_idf_threshold)
 train_x = x_converter.convert(train_smp.x)
 cv_x = x_converter.convert(cv_smp.x)
 
-model = AdaBoost(LaplaceSmoothedMNB, 11)
+model = AdaBoost(NonSmoothedMNB, 11)
 model.fit(train_smp.y, train_x)
 prediction = model.predict(cv_x)
 
