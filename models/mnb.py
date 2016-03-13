@@ -12,7 +12,9 @@ class LaplaceSmoothedMNB:
         self.b = None
         self.w = None
 
-    def fit(self, train_y, train_x):
+    def fit(self, train_y, train_x, smp_weight=None):
+        if smp_weight is not None:
+            train_x.data *= smp_weight.repeat(np.diff(train_x.indptr))
         y_train_csr = convert_y_to_csr(train_y)
         self.b = self.estimate_b(y_train_csr)
         self.w = self.estimate_w(y_train_csr, train_x)
@@ -59,5 +61,5 @@ class CNB(LaplaceSmoothedMNB):
         return csc_matrix(contrast_y_x_param.transpose())
 
     def post_prob(self, x):
-        prob = x.dot(self.w.transpose())
-        return self.b.take(np.diff(prob.indices)) + (-1.) * prob
+        prob = (-1.) * x.dot(self.w.transpose()).todense() + self.b
+        return prob

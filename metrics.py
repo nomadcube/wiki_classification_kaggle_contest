@@ -13,7 +13,7 @@ def evaluation(y, predicted_y):
 
     num_right = 0.
     for i in range(len(y)):
-        if y[0] == predicted_y[0]:
+        if y[i] == predicted_y[i]:
             num_right += 1.
 
     y_mat = convert_y_to_csr(y)
