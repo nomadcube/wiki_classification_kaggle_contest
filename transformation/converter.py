@@ -39,9 +39,9 @@ def convert_y_to_csr(y):
     elements = array('f')
     instance_nos = array('I')
     labels = array('I')
-    for row_index, row in enumerate(y):
-        row_size = len(row)
+    for i, one_y in enumerate(y):
+        row_size = 1
         elements.extend(array('f', [1.0] * row_size))
-        instance_nos.extend(array('I', [row_index] * row_size))
-        labels.extend(array('I', row))
+        instance_nos.extend(array('I', [i] * row_size))
+        labels.append(one_y)
     return csr_matrix((elements, (labels, instance_nos)), dtype='float')
