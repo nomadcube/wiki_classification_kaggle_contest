@@ -19,11 +19,11 @@ class LaplaceSmoothedMNB:
 
     def predict(self, x):
         prob = self.post_prob(x)
-        return [[pred] for pred in np.argmax(prob, axis=1)]
+        return np.array(np.argmax(prob, axis=1).ravel())[0]
 
     def post_prob(self, x):
-        prob = x.dot(self.w.transpose())
-        return self.b.take(np.diff(prob.indices)) + prob
+        prob = x.dot(self.w.transpose()).todense() + self.b
+        return prob
 
     @staticmethod
     def estimate_w(y, x):

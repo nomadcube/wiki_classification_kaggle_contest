@@ -9,7 +9,7 @@ from itertools import product
 
 from read import Sample
 from preprocessing.transforming import YConverter, XConverter, convert_y_to_csr
-from metrics import get_evaluation_metrics
+from metrics import evaluation
 from preprocessing.tf_idf import tf_idf, _tf
 from data_analysis.labels import most_frequent_label, occurrence
 
@@ -62,8 +62,8 @@ class PipeLine:
             print occurrence(prediction_cv)[1]
 
             mat_shape = max_label_in_smp
-            result_train = get_evaluation_metrics(train_smp.y, prediction_train, mat_shape, self.max_label_size)
-            result_cv = get_evaluation_metrics(cv_smp.y, prediction_cv, mat_shape, self.max_label_size)
+            result_train = evaluation(train_smp.y, prediction_train, mat_shape, self.max_label_size)
+            result_cv = evaluation(cv_smp.y, prediction_cv, mat_shape, self.max_label_size)
 
             print result_train
             print result_cv
@@ -94,7 +94,7 @@ class PipeLine:
         transformed_x = self.best_x_converter.convert(exam_smp.x)
         predicted_y = self.best_model.predict(transformed_x, self.best_predicted_cnt)
         origin_predicted_y = self.best_y_converter.withdraw_convert(predicted_y)
-        return get_evaluation_metrics(exam_smp.y, origin_predicted_y, max_label_in_smp)
+        return evaluation(exam_smp.y, origin_predicted_y, max_label_in_smp)
 
     def __repr__(self):
         return "best_threshold: {0}\nbest_predicted_cnt: {1}".format(self.best_threshold, self.best_predicted_cnt)
