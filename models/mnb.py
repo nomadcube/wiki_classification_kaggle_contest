@@ -46,18 +46,20 @@ class LaplaceSmoothedMNB:
 
 
 class CNB(LaplaceSmoothedMNB):
-    @staticmethod
-    def estimate_w(y, x):
-        y_x_param = y.dot(x).todense()
-        y_x_param += 1.0
-        tmp = np.array(y_x_param.sum(axis=1).ravel())[0]
-        y_x_param = y_x_param.transpose()
-        y_x_param /= tmp
-        y_x_param = np.log(y_x_param)
-        contrast_y_x_param = np.array(
-            zip(list(np.array(y_x_param[:, 1]).ravel()), list(np.array(y_x_param[:, 0]).ravel()))).reshape(
-            y_x_param.shape)
-        return csc_matrix(contrast_y_x_param.transpose())
+    def fit(self, train_y, train_x, smp_weight=None):
+        y_train_csr = convert_y_to_csr(train_y)
+        self.b = self.estimate_b(y_train_csr)
+        turned_train_y = list()
+        for each_label in train_y:
+            new_label = None
+            if each_label != 0:
+                new_label = 0
+            if each_label != 1:
+                new_label = 1
+            if each_label != 2:
+                new_label = 2
+            turned_train_y.append(new_label)
+        self.w = self.estimate_w(y_train_csr, train_x)
 
     def post_prob(self, x):
         prob = (-1.) * x.dot(self.w.transpose()).todense() + self.b

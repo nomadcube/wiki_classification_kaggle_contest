@@ -40,8 +40,22 @@ class Sample:
         return test_instances
 
     def convert_to_binary_class(self, target_label):
+        # ['24177', '203001', '391405']
         binary_y = list()
         for each_label in self.y:
             new_label = 1 if each_label == target_label else 0
             binary_y.append(new_label)
         self.y = binary_y
+
+    def convert_to_tri_class(self, first_target, second_target):
+        tri_y = list()
+        for each_label in self.y:
+            if each_label == first_target:
+                new_label = 0
+            else:
+                if each_label == second_target:
+                    new_label = 1
+                else:
+                    new_label = 2
+            tri_y.append(new_label)
+        self.y = tri_y

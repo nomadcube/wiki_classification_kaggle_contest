@@ -5,7 +5,7 @@ from sample import Sample
 from transformation.converter import XConverter
 from models.mnb import CNB, LaplaceSmoothedMNB, NonSmoothedMNB
 from models.adaboost import AdaBoost
-from metrics import evaluation
+from evaluation import evaluation
 
 train_file = sys.argv[1] if len(sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/input_data/sub_train.csv'
 test_file = sys.argv[2] if len(sys.argv) > 2 else '/Users/wumengling/PycharmProjects/kaggle/input_data/sub_test.csv'
