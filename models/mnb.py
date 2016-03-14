@@ -29,8 +29,7 @@ class LaplaceSmoothedMNB:
     @staticmethod
     def estimate_w(y, x):
         label_feature_coef = y.dot(x).todense()
-        # todo: 若label_feature_coef各个值自增1会出错，因为这样会破坏"加权"的效果。需要考虑一个更好的加权方式
-        label_feature_coef += 0.0
+        label_feature_coef += 1.0
         label_sum = np.array(label_feature_coef.sum(axis=1).ravel())[0]
         label_feature_coef = label_feature_coef.transpose()
         label_feature_coef /= label_sum
