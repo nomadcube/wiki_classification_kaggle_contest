@@ -1,3 +1,4 @@
+import sys
 import numpy as np
 
 from read import Sample
@@ -6,8 +7,8 @@ from models.mnb import CNB, LaplaceSmoothedMNB, NonSmoothedMNB
 from models.adaboost import AdaBoost
 from metrics import evaluation
 
-train_file = '/Users/wumengling/PycharmProjects/kaggle/input_data/sub_train.csv'
-test_file = '/Users/wumengling/PycharmProjects/kaggle/input_data/sub_test.csv'
+train_file = sys.argv[1] if len(sys.argv) > 1 else '/Users/wumengling/PycharmProjects/kaggle/input_data/sub_train.csv'
+test_file = sys.argv[2] if len(sys.argv) > 2 else '/Users/wumengling/PycharmProjects/kaggle/input_data/sub_test.csv'
 tf_idf_threshold = 99.2
 
 smp = Sample()
