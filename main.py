@@ -8,7 +8,7 @@ from metrics import evaluation
 
 train_file = '/Users/wumengling/PycharmProjects/kaggle/input_data/sub_train.csv'
 test_file = '/Users/wumengling/PycharmProjects/kaggle/input_data/sub_test.csv'
-tf_idf_threshold = 99
+tf_idf_threshold = 99.2
 
 smp = Sample()
 smp.read(train_file)
@@ -22,7 +22,7 @@ train_x = x_converter.convert(train_smp.x)
 cv_x = x_converter.convert(cv_smp.x)
 test_x = x_converter.convert(test_smp.x)
 
-model = AdaBoost(NonSmoothedMNB, 10)
+model = AdaBoost(NonSmoothedMNB, 1)
 model.fit(train_smp.y, train_x)
 prediction = model.predict(cv_x)
 print evaluation(cv_smp.y, prediction)
