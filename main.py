@@ -1,7 +1,7 @@
 import sys
 import numpy as np
 
-from read import Sample
+from sample import Sample
 from transformation.converter import XConverter
 from models.mnb import CNB, LaplaceSmoothedMNB, NonSmoothedMNB
 from models.adaboost import AdaBoost
@@ -16,7 +16,7 @@ smp.read(train_file)
 test_smp = Sample()
 test_smp.read(test_file)
 
-train_smp, cv_smp = smp.extract_and_update()
+train_smp, cv_smp = smp.train_cv_split()
 
 x_converter = XConverter(train_smp.x, tf_idf_threshold)
 train_x = x_converter.convert(train_smp.x)
