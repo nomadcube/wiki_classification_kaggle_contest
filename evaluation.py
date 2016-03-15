@@ -11,11 +11,6 @@ from transformation.converter import convert_y_to_csr
 def evaluation(y, predicted_y):
     evaluation_metrics = namedtuple('evaluation_metrics', 'mpr mre f_score accuracy')
 
-    num_right = 0.
-    for i in range(len(y)):
-        if y[i] == predicted_y[i]:
-            num_right += 1.
-
     y_mat = convert_y_to_csr(y)
     pred_mat = convert_y_to_csr(predicted_y)
 
@@ -24,6 +19,7 @@ def evaluation(y, predicted_y):
 
     inter_mat = y_mat.multiply(pred_mat)
     true_positive = inter_mat.sum(axis=1)
+    num_right = inter_mat.sum()
 
     # 将不在y_mat中出现的label行都masked掉，此逻辑同时作用于真实的y和对y的预测值
     y_pos = masked_values(y_mat.sum(axis=1), 0.)

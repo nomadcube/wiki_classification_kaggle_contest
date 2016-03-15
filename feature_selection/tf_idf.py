@@ -3,6 +3,8 @@ import numpy as np
 import math
 from scipy.sparse import csr_matrix
 
+from base import normalized_by_row_sum
+
 
 def tf_idf(count_mat):
     return _tf(count_mat).dot(_idf(count_mat))
@@ -23,12 +25,7 @@ def _counting_occurrence(arr):
 
 
 def _tf(count_mat):
-    updated_mat = csr_matrix(count_mat.shape)
-    row_sum = csr_matrix.sum(count_mat, axis=1).ravel()
-    updated_mat.data = count_mat.data / np.array(row_sum.repeat(np.diff(count_mat.indptr)))[0]
-    updated_mat.indptr = count_mat.indptr
-    updated_mat.indices = count_mat.indices
-    return updated_mat
+    return normalized_by_row_sum(count_mat)
 
 
 def _idf(count_mat):

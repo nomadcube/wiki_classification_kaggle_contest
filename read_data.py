@@ -2,7 +2,7 @@ from array import array
 from scipy.sparse import csr_matrix
 from itertools import compress
 
-from sample import Sample
+from Sample import Sample
 
 
 def read_sparse(data_file_path):

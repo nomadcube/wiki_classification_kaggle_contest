@@ -1,9 +1,9 @@
 import sys
 import numpy as np
 
-from sample import Sample
+from Sample import Sample
 from transformation.converter import XConverter
-from models.mnb import CNB, LaplaceSmoothedMNB, NonSmoothedMNB
+from models.mnb import CNB, LaplaceSmoothedMNB, WeightedNonSmoothedMNB
 from models.adaboost import AdaBoost
 from evaluation import evaluation
 
@@ -23,7 +23,7 @@ train_x = x_converter.convert(train_smp.x)
 cv_x = x_converter.convert(cv_smp.x)
 test_x = x_converter.convert(test_smp.x)
 
-model = AdaBoost(NonSmoothedMNB, 3)
+model = AdaBoost(WeightedNonSmoothedMNB, 3)
 model.fit(train_smp.y, train_x)
 prediction = model.predict(cv_x)
 print evaluation(cv_smp.y, prediction)
