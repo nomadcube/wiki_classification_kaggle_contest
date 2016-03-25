@@ -2,27 +2,12 @@
 from scipy.optimize import minimize
 import numpy as np
 
-
-def _max_class(y):
-    max_class = -1
-    for each_y in y:
-        for each_label in each_y:
-            if each_label > max_class:
-                max_class = each_label
-    return max_class
-
-
-def p_norm(w, p):
-    return abs(pow(sum(np.power(w, p)), 1. / p))
-
-
-def discrimination(one_w, one_x):
-    return one_w * one_x.transpose()
+from linear_base import vector_p_norm, discrimination
 
 
 def empirical_risk(w, y, x):
     res = 0.
-    C = _max_class(y)
+    C = max(y)
     w_mat = np.array(w).reshape((C, -1))
     denominator_mat = np.exp(np.dot(w_mat, x.transpose()))
     denominator = denominator_mat.sum(axis=0) + 1.
@@ -43,7 +28,7 @@ class LR:
         self.w = None
 
     def fit(self, y, X):
-        print _max_class(y)
+        print max(y)
         init_w = [[0.1] * X.shape[1] for _ in range(_max_class(y))]
         self.w = minimize(
             lambda w: empirical_risk(w, y, X),
