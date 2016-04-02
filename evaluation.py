@@ -30,6 +30,6 @@ def evaluation(y, predicted_y):
     metrics_denominator = num_y_label
     m_precision = precision.sum() / metrics_denominator
     m_recall = recall.sum() / metrics_denominator
-    f_score = 1. / (1. / m_precision + 1. / m_recall) if m_precision != 0. and m_recall != 0. else float("inf")
+    f_score = 2. / (1. / m_precision + 1. / m_recall) if m_precision != 0. and m_recall != 0. else float("inf")
 
     return evaluation_metrics(m_precision, m_recall, f_score, num_right / len(y))
